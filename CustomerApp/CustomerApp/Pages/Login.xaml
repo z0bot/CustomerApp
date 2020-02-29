@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="CustomerApp.Pages.Login"
+             BackgroundImageSource="backgroundImage.png">
+    <ContentPage.Content>
+        <StackLayout
+             x:Name= "loginLayout" 
+             VerticalOptions="CenterAndExpand"
+             >
+            <Label 
+                x:Name="loginGreetingText"
+                Text="Scan your seat's QR code to link to your table!"
+                Margin="40,0,40,0"
+                FontSize="Large"
+                VerticalTextAlignment="Center"
+                HorizontalTextAlignment="Center"
+                VerticalOptions="Center"
+                HorizontalOptions="Center" />
+            <Button
+                x:Name="loginButton"
+                Margin="0,15,0,0"
+                Text="Login"
+                FontAttributes="Bold"
+                TextColor="White"
+                BackgroundColor="#1fbd85"
+                FontSize="Medium"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                CornerRadius="15"
+                />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
