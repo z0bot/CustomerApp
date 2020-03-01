@@ -4,13 +4,12 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="CustomerApp.Pages.Login"
+             x:Class="CustomerApp.Pages.PushToQR"
              BackgroundImageSource="backgroundImage.png">
     <ContentPage.Content>
         <StackLayout
              x:Name= "loginLayout" 
-             VerticalOptions="CenterAndExpand"
-             >
+             VerticalOptions="CenterAndExpand">
             <Label 
                 x:Name="loginGreetingText"
                 Text="Scan your seat's QR code to link to your table!"
@@ -24,15 +23,14 @@
                 x:Name="loginButton"
                 Margin="0,15,0,0"
                 Text="Scan"
-                Clicked="LoginButton_Clicked"
+                Clicked="QRButton_Clicked"
                 FontAttributes="Bold"
                 TextColor="White"
                 BackgroundColor="#1fbd85"
                 FontSize="Medium"
                 VerticalOptions="Center"
                 HorizontalOptions="Center"
-                CornerRadius="15"
-                />
+                CornerRadius="15"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -11,14 +11,14 @@ using Xamarin.Forms.Xaml;
 namespace CustomerApp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Login : ContentPage
+    public partial class PushToQR : ContentPage
     {
-        public Login()
+        public PushToQR()
         {
             InitializeComponent();
         }
         //click to QR for now
-        private async void LoginButton_Clicked(object sender, EventArgs e)
+        private async void QRButton_Clicked(object sender, EventArgs e)
         {
             bool allowed = false;
             allowed = await GoogleVisionBarCodeScanner.Methods.AskForRequiredPermission();

@@ -11,7 +11,7 @@ namespace CustomerApp
         {
             InitializeComponent();
 
-            MainPage = new Login();
+            MainPage = new NavigationPage(new PushToQR());
         }
 
         protected override void OnStart()
