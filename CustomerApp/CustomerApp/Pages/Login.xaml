@@ -23,7 +23,8 @@
             <Button
                 x:Name="loginButton"
                 Margin="0,15,0,0"
-                Text="Login"
+                Text="Scan"
+                Clicked="LoginButton_Clicked"
                 FontAttributes="Bold"
                 TextColor="White"
                 BackgroundColor="#1fbd85"
