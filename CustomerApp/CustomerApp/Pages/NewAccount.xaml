@@ -9,52 +9,85 @@
              x:Class="CustomerApp.Pages.NewAccount">
     <ContentPage.Content>
         <StackLayout
-            HorizontalOptions="Center">
+            Orientation="Vertical">
+            <StackLayout
+            Orientation="Horizontal">
             <Frame
                 Padding="0"
                 CornerRadius="15"
-                WidthRequest="300"
-                HorizontalOptions="Center"
+                HorizontalOptions="CenterAndExpand"
+                WidthRequest="200"
                 Margin="0,170,0,0"
                 IsClippedToBounds="True">
                 <Entry
                     BackgroundColor="White"
                     HorizontalTextAlignment="Center"
-                    Placeholder="Create username"
-                    WidthRequest="250"
+                    Placeholder="First Name"
                     FontSize="Medium"/>
             </Frame>
             <Frame
                 Padding="0"
                 CornerRadius="15"
-                WidthRequest="300"
-                Margin="0,20,0,0"
-                HorizontalOptions="Center"
+                Margin="0,170,0,0"
+                HorizontalOptions="CenterAndExpand"
+                WidthRequest="200"
                 IsClippedToBounds="True">
                 <Entry
                     BackgroundColor="White"
-                    Placeholder="Create password"
+                    Placeholder="Last Name"
                     TextColor="Black"
-                    IsPassword="True"
                     HorizontalTextAlignment="Center"
-                    WidthRequest="250"
                     FontSize="Medium"/>
+            </Frame>
+            </StackLayout>
+            <StackLayout
+                HorizontalOptions="Start">
+            <Frame
+                Padding="0"
+                CornerRadius="15"
+                Margin="0,20,0,0"
+                WidthRequest="300"
+                HorizontalOptions="Center"
+                IsClippedToBounds="True">
+            <Entry
+                BackgroundColor="White"
+                Placeholder="Email address"
+                HorizontalTextAlignment="Center"
+                WidthRequest="250"
+                FontSize="Medium"/>
+            </Frame>
+            </StackLayout>
+            <StackLayout
+                Orientation="Horizontal">
+                <Frame
+                Padding="0"
+                CornerRadius="15"
+                WidthRequest="200"
+                HorizontalOptions="CenterAndExpand"
+                Margin="0,20,0,0"
+                IsClippedToBounds="True">
+            <Entry
+                BackgroundColor="White"
+                Placeholder="Create password"
+                HorizontalTextAlignment="Center"
+                IsPassword="True"
+                FontSize="Medium"/>
             </Frame>
             <Frame
                 Padding="0"
                 CornerRadius="15"
-                WidthRequest="300"
+                HorizontalOptions="CenterAndExpand"
+                WidthRequest="200"
                 Margin="0,20,0,0"
-                HorizontalOptions="Center"
                 IsClippedToBounds="True">
             <Entry
                 BackgroundColor="White"
                 Placeholder="Reenter password"
                 HorizontalTextAlignment="Center"
                 IsPassword="True"
-                WidthRequest="250"
                 FontSize="Medium"/>
             </Frame>
+            </StackLayout>
             <Button
                 x:Name="RegisterAcctButton"
                 Clicked="RegisterAcctButton_Clicked"

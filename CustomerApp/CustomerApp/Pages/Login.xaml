@@ -18,7 +18,7 @@
                 Margin="50,0,50,0"
                 IsClippedToBounds="True">
                 <Entry
-                    Placeholder="Username"
+                    Placeholder="Email address"
                     HorizontalTextAlignment="Center"
                     BackgroundColor="White"
                     WidthRequest="300"
