@@ -61,8 +61,10 @@
                 Text="Register"
                 FontAttributes="Bold"
                 TextColor="White"
+                FontSize="Medium"
                 BackgroundColor="#1fbd85"
                 CornerRadius="15"
+                Padding="100,0,100,0"
                 Margin="0,0,0,300"
                 VerticalOptions="EndAndExpand"
                 HorizontalOptions="Center"/>

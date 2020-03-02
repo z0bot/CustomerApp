@@ -14,7 +14,7 @@
             <Frame
                 Padding="0"
                 CornerRadius="15"
-                WidthRequest="300"
+                WidthRequest="120"
                 Margin="50,0,50,0"
                 IsClippedToBounds="True">
                 <Entry
@@ -28,7 +28,7 @@
             <Frame
                 Padding="0"
                 CornerRadius="15"
-                WidthRequest="300"
+                WidthRequest="120"
                 Margin="50,0,50,0"
                 IsClippedToBounds="True">
                 <Entry
@@ -41,7 +41,10 @@
                     HorizontalOptions="Center"
                 />
             </Frame>
-            <Button
+            <StackLayout
+                Orientation="Horizontal"
+                HorizontalOptions="Center">
+                <Button
                 x:Name="loginButton"
                 Margin="0,15,0,0"
                 Text="Login"
@@ -49,22 +52,23 @@
                 FontAttributes="Bold"
                 TextColor="White"
                 BackgroundColor="#1fbd85"
+                WidthRequest="150"
                 FontSize="Medium"
-                VerticalOptions="Center"
                 HorizontalOptions="Center"
                 CornerRadius="15"/>
-            <Button
+                <Button
                 x:Name="newAccountButton"
-                Margin="0,25,0,0"
+                Margin="0,15,0,0"
                 Text="Create Account"
                 Clicked="NewAccountButton_Clicked"
                 FontAttributes="Bold"
-                TextColor="White"
-                BackgroundColor="#1fbd85"
+                WidthRequest="150"
+                BackgroundColor="White"
+                TextColor="#1fbd85"
                 CornerRadius="15"
                 FontSize="Medium"
-                VerticalOptions="Center"
                 HorizontalOptions="Center"/>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
