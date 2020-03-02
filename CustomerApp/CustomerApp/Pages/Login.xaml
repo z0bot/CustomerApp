@@ -10,22 +10,37 @@
     <ContentPage.Content>
         <StackLayout
              x:Name= "loginLayout" 
-             VerticalOptions="CenterAndExpand">
-            <Entry
-                Placeholder="Username"
-                BackgroundColor="White"
+             VerticalOptions="Center">
+            <Frame
+                Padding="0"
+                CornerRadius="15"
                 WidthRequest="300"
-                FontSize="Medium"
-                HorizontalOptions="Center"
-                />
-            <Entry
-                Placeholder="Password"
-                BackgroundColor="White"
-                IsPassword="True"
+                Margin="50,0,50,0"
+                IsClippedToBounds="True">
+                <Entry
+                    Placeholder="Username"
+                    HorizontalTextAlignment="Center"
+                    BackgroundColor="White"
+                    WidthRequest="300"
+                    FontSize="Medium"
+                    HorizontalOptions="Center"/>
+            </Frame>
+            <Frame
+                Padding="0"
+                CornerRadius="15"
                 WidthRequest="300"
-                FontSize="Medium"
-                HorizontalOptions="Center"
+                Margin="50,0,50,0"
+                IsClippedToBounds="True">
+                <Entry
+                    Placeholder="Password"
+                    BackgroundColor="White"
+                    HorizontalTextAlignment="Center"
+                    IsPassword="True"
+                    WidthRequest="300"
+                    FontSize="Medium"
+                    HorizontalOptions="Center"
                 />
+            </Frame>
             <Button
                 x:Name="loginButton"
                 Margin="0,15,0,0"

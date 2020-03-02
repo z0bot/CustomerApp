@@ -41,7 +41,7 @@ namespace CustomerApp.Pages
 
         private void NewAccountButton_Clicked(object sender, EventArgs e)
         {
-
+            Navigation.PushModalAsync(new NavigationPage(new NewAccount()));
         }
     }
 }
