@@ -11,7 +11,8 @@ namespace CustomerApp
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new QRScannerPage());
+            //MainPage = new NavigationPage(new QRScannerPage());
+            MainPage = new NavigationPage(new Login());
         }
 
         protected override void OnStart()

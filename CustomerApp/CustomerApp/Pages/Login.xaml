@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             NavigationPage.HasNavigationBar="False"
+             x:Class="CustomerApp.Pages.Login"
+             BackgroundImageSource="loginBackground.png">
+    <ContentPage.Content>
+        <StackLayout
+             x:Name= "loginLayout" 
+             VerticalOptions="CenterAndExpand">
+            <Entry
+                Placeholder="Username"
+                BackgroundColor="White"
+                WidthRequest="300"
+                FontSize="Medium"
+                HorizontalOptions="Center"
+                />
+            <Entry
+                Placeholder="Password"
+                BackgroundColor="White"
+                IsPassword="True"
+                WidthRequest="300"
+                FontSize="Medium"
+                HorizontalOptions="Center"
+                />
+            <Button
+                x:Name="loginButton"
+                Margin="0,15,0,0"
+                Text="Login"
+                Clicked="LoginButton_Clicked"
+                FontAttributes="Bold"
+                TextColor="White"
+                BackgroundColor="#1fbd85"
+                FontSize="Medium"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                CornerRadius="15"/>
+            <Button
+                x:Name="newAccountButton"
+                Margin="0,25,0,0"
+                Text="Create Account"
+                Clicked="NewAccountButton_Clicked"
+                FontAttributes="Bold"
+                TextColor="White"
+                BackgroundColor="#1fbd85"
+                CornerRadius="15"
+                FontSize="Medium"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
