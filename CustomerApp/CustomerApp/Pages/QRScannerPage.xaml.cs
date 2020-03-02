@@ -19,16 +19,28 @@ namespace CustomerApp.Pages
             InitializeComponent();
             GoogleVisionBarCodeScanner.Methods.SetSupportBarcodeFormat(BarcodeFormats.QRCode);
         }
+        //cancel navigates back to PushToQR page
         private async void CancelButton_Clicked(object sender, EventArgs e)
         {
             await Navigation.PopModalAsync();
         }
 
+        /// <summary>
+        /// initialize device flashlight
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FlashlightButton_Clicked(object sender, EventArgs e)
         {
             GoogleVisionBarCodeScanner.Methods.ToggleFlashlight();
         }
 
+        /// <summary>
+        /// Once barcode detected, "OnDetected" event will be triggered, 
+        /// do the stuff with the barcode, it will contain type and display value of QR
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void CameraView_OnDetected(object sender, GoogleVisionBarCodeScanner.OnDetectedEventArg e)
         {
             List<GoogleVisionBarCodeScanner.BarcodeResult> obj = e.BarcodeResults;
