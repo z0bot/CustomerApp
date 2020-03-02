@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="CustomerApp.Pages.YourOrderPage"
+             BackgroundImageSource="YourOrderPage">
+    <ContentPage.Content>
+        <StackLayout
+            VerticalOptions="End">
+            
+            <!---->
+            <StackLayout
+                    Orientation="Vertical"
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="EndAndExpand"
+                    WidthRequest="220">
+            </StackLayout>
+            
+            <!--Grid storing control options, including refill/help buttons-->
+            <Grid
+                x:Name="orderHereLayout"
+                VerticalOptions="EndAndExpand"
+                HorizontalOptions="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="180" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+
+                <!--Stack layout for add item and send order buttons-->
+                <StackLayout
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    x:Name="orderControlLayout"
+                    Orientation="Vertical">
+                    <Button
+                        x:Name="addItemButton"
+                        Margin="0,15,0,0"
+                        VerticalOptions="CenterAndExpand"
+                        Text="Add Item"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="#1fbd85"
+                        FontSize="Medium"
+                        CornerRadius="15"
+                        Clicked="OnAddItemClicked"
+                        />
+                    
+                    <Button
+                        x:Name="sendOrderButton"
+                        Margin="0,15,0,0"
+                        VerticalOptions="CenterAndExpand"
+                        Text="Send Order"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="#1fbd85"
+                        FontSize="Medium"
+                        CornerRadius="15"
+                        Clicked="OnSendOrderClicked"
+                        />
+                </StackLayout>
+
+                <!--Refill/help buttons-->
+                <StackLayout
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        x:Name="refillLayout"
+                        Orientation="Vertical"
+                        VerticalOptions="CenterAndExpand">
+                    <Label
+                            Text="Refill"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalTextAlignment="Center"
+                            FontAttributes="Bold"
+                            TextColor="Black"
+                            BackgroundColor="White"/>
+                    <ImageButton
+                            x:Name="refillButton"
+                            VerticalOptions="CenterAndExpand"
+                            CornerRadius="15"
+                            Source="plusButton"
+                            BackgroundColor="Transparent"
+                            WidthRequest="70"
+                            HeightRequest="70"
+                            Clicked="OnRefillButtonClicked"/>
+                </StackLayout>
+
+                <StackLayout
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        x:Name="serverButtonLayout"
+                        Orientation="Vertical"
+                        VerticalOptions="CenterAndExpand">
+                    <Label
+                            Text="Call Server"
+                            HorizontalTextAlignment="Center"
+                            VerticalOptions="CenterAndExpand"
+                            FontAttributes="Bold"
+                            TextColor="Black"
+                            BackgroundColor="White"/>
+                    <ImageButton
+                            x:Name="serverButton"
+                            VerticalOptions="CenterAndExpand"
+                            CornerRadius="15"
+                            BackgroundColor="Transparent"
+                            WidthRequest="70"
+                            HeightRequest="70"
+                            Source="plusButton"
+                            Clicked="OnServerButtonClicked"/>
+                </StackLayout>
+            </Grid>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

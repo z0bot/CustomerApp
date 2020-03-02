@@ -5,7 +5,7 @@
 //     Runtime Version:4.0.30319.42000
 //
 //     Changes to this file may cause incorrect behavior and will be lost if
-//     the code is regenerated.landiubg
+//     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
 
@@ -9006,10 +9006,19 @@ namespace CustomerApp.Droid
 			public const int notify_panel_notification_icon_bg = 2131165497;
 			
 			// aapt resource value: 0x7F07013A
-			public const int tooltip_frame_dark = 2131165498;
+			public const int orderHerePage = 2131165498;
 			
 			// aapt resource value: 0x7F07013B
-			public const int tooltip_frame_light = 2131165499;
+			public const int plusButton = 2131165499;
+			
+			// aapt resource value: 0x7F07013C
+			public const int tooltip_frame_dark = 2131165500;
+			
+			// aapt resource value: 0x7F07013D
+			public const int tooltip_frame_light = 2131165501;
+			
+			// aapt resource value: 0x7F07013E
+			public const int YourOrderPage = 2131165502;
 			
 			static Drawable()
 			{

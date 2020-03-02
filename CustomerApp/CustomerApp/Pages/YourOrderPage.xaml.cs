@@ -10,17 +10,22 @@ using Xamarin.Forms.Xaml;
 namespace CustomerApp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class orderHerePage : ContentPage
+    public partial class YourOrderPage : ContentPage
     {
-        public orderHerePage()
+        public YourOrderPage()
         {
             InitializeComponent();
         }
 
-        async void OnOrderHereButtonClicked(object sender, EventArgs e)
+        async void OnSendOrderClicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new YourOrderPage());
+            //Navigate to order confirmation page
 
+        }
+
+        async void OnAddItemClicked(object sender, EventArgs e)
+        {
+            //Navigate to menu
         }
 
         async void OnRefillButtonClicked(object sender, EventArgs e)
@@ -37,5 +42,9 @@ namespace CustomerApp.Pages
 
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
+
+        // Disable back button for this page
+        protected override bool OnBackButtonPressed() { return true; }
     }
+
 }
