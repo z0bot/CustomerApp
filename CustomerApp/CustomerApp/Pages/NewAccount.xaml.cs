@@ -17,9 +17,12 @@ namespace CustomerApp.Pages
             InitializeComponent();
         }
 
-        private void RegisterAcctButton_Clicked(object sender, EventArgs e)
+        private async void RegisterAcctButton_Clicked(object sender, EventArgs e)
         {
-            Navigation.PopModalAsync();
+                if(userPassword.Text==userPasswordReentry.Text)
+                    await Navigation.PopModalAsync();
+                else
+                    await DisplayAlert("Error", "Passwords must match!", "Continue");
         }
     }
 }
