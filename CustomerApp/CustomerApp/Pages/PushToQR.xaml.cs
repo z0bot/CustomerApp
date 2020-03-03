@@ -11,10 +11,10 @@ using Xamarin.Forms.Xaml;
 namespace CustomerApp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Login : ContentPage
+    public partial class PushToQR : ContentPage
     {
         //page constructor
-        public Login()
+        public PushToQR()
         {
             InitializeComponent();
         }
@@ -22,7 +22,7 @@ namespace CustomerApp.Pages
         /// <summary>
         /// Method that dictates what happens when QR scan button is pressed
         /// </summary>
-        private async void LoginButton_Clicked(object sender, EventArgs e)
+        private async void QRButton_Clicked(object sender, EventArgs e)
         {
             //captures users response to camera permission request
             bool allowed = false;
@@ -37,11 +37,6 @@ namespace CustomerApp.Pages
             else
                 await DisplayAlert("Alert", "You have to provide Camera permission", "Ok");
 
-        }
-
-        private void NewAccountButton_Clicked(object sender, EventArgs e)
-        {
-            Navigation.PushModalAsync(new NavigationPage(new NewAccount()));
         }
     }
 }
