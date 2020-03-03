@@ -19,6 +19,11 @@ namespace CustomerApp.Droid
 
             base.OnCreate(savedInstanceState);
 
+            //added for scanner capabilities
+            GoogleVisionBarCodeScanner.Droid.RendererInitializer.Init();
+            Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, savedInstanceState);
+            //finish google plugin
+
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
@@ -26,7 +31,9 @@ namespace CustomerApp.Droid
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
+            //added for google plugin
+            Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            //finish add
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }

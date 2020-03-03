@@ -25,6 +25,11 @@ namespace CustomerApp.iOS
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
 
+            //added google service dependencies for qr scanner
+            GoogleVisionBarCodeScanner.iOS.Initializer.Init();
+            Firebase.Core.App.Configure();
+            //finish google
+
             return base.FinishedLaunching(app, options);
         }
     }
