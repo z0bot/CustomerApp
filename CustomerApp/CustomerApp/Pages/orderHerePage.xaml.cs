@@ -14,6 +14,7 @@ namespace CustomerApp.Pages
     {
         public orderHerePage()
         {
+            NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
         }
 
