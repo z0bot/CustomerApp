@@ -37,5 +37,8 @@ namespace CustomerApp.Pages
 
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
+
+        // Disable back button for this page
+        protected override bool OnBackButtonPressed() { return true; }
     }
 }

@@ -53,9 +53,11 @@ namespace CustomerApp.Pages
             Device.BeginInvokeOnMainThread(async() =>
             {
                 await DisplayAlert("Result", result, "OK");
-                GoogleVisionBarCodeScanner.Methods.SetIsScanning(true);
+                GoogleVisionBarCodeScanner.Methods.SetIsScanning(false);
+                
                 //await Navigation.PopModalAsync();
             });
+            await Navigation.PushModalAsync(new NavigationPage(new orderHerePage()));
         }
     }
 }
