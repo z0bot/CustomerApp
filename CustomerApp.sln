@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerApp.Android", "Cust
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerApp.iOS", "CustomerApp\CustomerApp.iOS\CustomerApp.iOS.csproj", "{AA76DE94-F6CF-4B63-A107-A1EBEDD43DFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerApp", "CustomerApp\CustomerApp\CustomerApp.csproj", "{2273296A-41B1-4587-9257-7BC00F5CE9E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerApp", "CustomerApp\CustomerApp\CustomerApp.csproj", "{2273296A-41B1-4587-9257-7BC00F5CE9E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

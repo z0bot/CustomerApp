@@ -14,7 +14,9 @@ namespace CustomerApp.Pages
     {
         public YourOrderPage()
         {
+            NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
+
         }
 
         async void OnSendOrderClicked(object sender, EventArgs e)
@@ -26,6 +28,7 @@ namespace CustomerApp.Pages
         async void OnAddItemClicked(object sender, EventArgs e)
         {
             //Navigate to menu
+
         }
 
         async void OnRefillButtonClicked(object sender, EventArgs e)

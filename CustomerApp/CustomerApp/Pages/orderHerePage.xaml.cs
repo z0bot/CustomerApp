@@ -19,8 +19,7 @@ namespace CustomerApp.Pages
 
         async void OnOrderHereButtonClicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new YourOrderPage());
-
+            await Navigation.PushModalAsync(new NavigationPage(new YourOrderPage()));
         }
 
         async void OnRefillButtonClicked(object sender, EventArgs e)
