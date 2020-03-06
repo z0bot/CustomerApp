@@ -41,7 +41,7 @@
 
             <!--Refill/help buttons-->
             <StackLayout
-                    Grid.Row="3"
+                    Grid.Row="2"
                     Grid.Column="0"
                     x:Name="refillLayout"
                     Orientation="Vertical"
@@ -65,7 +65,7 @@
             </StackLayout>
 
             <StackLayout
-                    Grid.Row="3"
+                    Grid.Row="2"
                     Grid.Column="2"
                     x:Name="serverButtonLayout"
                     Orientation="Vertical"
