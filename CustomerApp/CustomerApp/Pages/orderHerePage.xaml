@@ -13,11 +13,12 @@
             HorizontalOptions="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="380" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="140" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
 
@@ -40,7 +41,7 @@
 
             <!--Refill/help buttons-->
             <StackLayout
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Grid.Column="0"
                     x:Name="refillLayout"
                     Orientation="Vertical"
@@ -64,7 +65,7 @@
             </StackLayout>
 
             <StackLayout
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Grid.Column="2"
                     x:Name="serverButtonLayout"
                     Orientation="Vertical"

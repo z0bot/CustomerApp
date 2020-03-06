@@ -10,13 +10,13 @@
         <Grid
             x:Name="yourOrderLayout">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" />
+                <RowDefinition Height="50*" />
                 <RowDefinition Height="400" />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="180" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="360"/>
+                <ColumnDefinition Width="360*"/>
             </Grid.ColumnDefinitions>
             
             <!--Scroll view to display order items-->
@@ -48,7 +48,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
 
