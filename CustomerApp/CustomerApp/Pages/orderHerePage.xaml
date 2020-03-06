@@ -12,9 +12,9 @@
             VerticalOptions="CenterAndExpand"
             HorizontalOptions="Center">
             <Grid.RowDefinitions>
-                <RowDefinition Height="380" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="140" />
+                <RowDefinition Height="200" />
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="10*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
@@ -27,7 +27,7 @@
                 Grid.Row="0"
                 Grid.Column="1"
                 x:Name="orderHereButton"
-                VerticalOptions="CenterAndExpand"
+                VerticalOptions="StartAndExpand"
                 Margin="0,15,0,0"
                 Text="Order Here"
                 FontAttributes="Bold"
@@ -45,7 +45,7 @@
                     Grid.Column="0"
                     x:Name="refillLayout"
                     Orientation="Vertical"
-                    VerticalOptions="CenterAndExpand">
+                    VerticalOptions="EndAndExpand">
                 <Label
                         Text="Refill"
                         VerticalOptions="CenterAndExpand"
@@ -69,7 +69,7 @@
                     Grid.Column="2"
                     x:Name="serverButtonLayout"
                     Orientation="Vertical"
-                    VerticalOptions="CenterAndExpand">
+                    VerticalOptions="EndAndExpand">
                 <Label
                         Text="Call Server"
                         HorizontalTextAlignment="Center"
