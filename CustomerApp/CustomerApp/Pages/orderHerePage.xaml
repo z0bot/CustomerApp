@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="CustomerApp.Pages.orderHerePage"
+             BackgroundImageSource="orderHerePage.png">
+    <ContentPage.Content>
+        <Grid
+            x:Name="orderHereLayout"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="380" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="140" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <!--Order here button-->
+            <Button
+                Grid.Row="0"
+                Grid.Column="1"
+                x:Name="orderHereButton"
+                VerticalOptions="CenterAndExpand"
+                Margin="0,15,0,0"
+                Text="Order Here"
+                FontAttributes="Bold"
+                TextColor="White"
+                BackgroundColor="#1fbd85"
+                FontSize="Medium"
+                CornerRadius="15"
+                Clicked="OnOrderHereButtonClicked"
+                />
+
+
+            <!--Refill/help buttons-->
+            <StackLayout
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    x:Name="refillLayout"
+                    Orientation="Vertical"
+                    VerticalOptions="CenterAndExpand">
+                <Label
+                        Text="Refill"
+                        VerticalOptions="CenterAndExpand"
+                        HorizontalTextAlignment="Center"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        BackgroundColor="White"/>
+                <ImageButton
+                        x:Name="refillButton"
+                        VerticalOptions="CenterAndExpand"
+                        CornerRadius="15"
+                        Source="plusButton"
+                        BackgroundColor="Transparent"
+                        WidthRequest="70"
+                        HeightRequest="70"
+                        Clicked="OnRefillButtonClicked"/>
+            </StackLayout>
+
+            <StackLayout
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    x:Name="serverButtonLayout"
+                    Orientation="Vertical"
+                    VerticalOptions="CenterAndExpand">
+                <Label
+                        Text="Call Server"
+                        HorizontalTextAlignment="Center"
+                        VerticalOptions="CenterAndExpand"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        BackgroundColor="White"/>
+                <ImageButton
+                        x:Name="serverButton"
+                        VerticalOptions="CenterAndExpand"
+                        CornerRadius="15"
+                        BackgroundColor="Transparent"
+                        WidthRequest="70"
+                        HeightRequest="70"
+                        Source="plusButton"
+                        Clicked="OnServerButtonClicked"/>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
