@@ -7,85 +7,69 @@
              x:Class="CustomerApp.Pages.orderHerePage"
              BackgroundImageSource="orderHerePage.png">
     <ContentPage.Content>
-        <Grid
-            x:Name="orderHereLayout"
-            VerticalOptions="CenterAndExpand"
-            HorizontalOptions="Center">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="200" />
-                <RowDefinition Height="100"/>
-                <RowDefinition Height="10*" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="100"/>
-            </Grid.ColumnDefinitions>
-
             <!--Order here button-->
             <Button
-                Grid.Row="0"
-                Grid.Column="1"
                 x:Name="orderHereButton"
-                VerticalOptions="StartAndExpand"
-                Margin="0,15,0,0"
+                Grid.Row="1"
+                Margin="100,0,100,0"
                 Text="Order Here"
                 FontAttributes="Bold"
                 TextColor="White"
                 BackgroundColor="#1fbd85"
                 FontSize="Medium"
                 CornerRadius="15"
-                Clicked="OnOrderHereButtonClicked"
-                />
-
-
-            <!--Refill/help buttons-->
+                Clicked="OnOrderHereButtonClicked"/>
             <StackLayout
-                    Grid.Row="2"
-                    Grid.Column="0"
+                Orientation="Horizontal"
+                Grid.Row="2"
+                VerticalOptions="EndAndExpand">
+                <StackLayout
                     x:Name="refillLayout"
                     Orientation="Vertical"
-                    VerticalOptions="EndAndExpand">
-                <Label
+                    Margin="25,0,0,0"
+                    HorizontalOptions="Start">
+                    <Label
                         Text="Refill"
-                        VerticalOptions="CenterAndExpand"
                         HorizontalTextAlignment="Center"
                         FontAttributes="Bold"
                         TextColor="Black"
-                        BackgroundColor="White"/>
-                <ImageButton
+                        BackgroundColor="Transparent"/>
+                    <ImageButton
                         x:Name="refillButton"
-                        VerticalOptions="CenterAndExpand"
                         CornerRadius="15"
                         Source="plusButton"
                         BackgroundColor="Transparent"
                         WidthRequest="70"
                         HeightRequest="70"
                         Clicked="OnRefillButtonClicked"/>
-            </StackLayout>
-
-            <StackLayout
-                    Grid.Row="2"
-                    Grid.Column="2"
-                    x:Name="serverButtonLayout"
+                </StackLayout>
+            <!--Refill/help buttons-->
+                <StackLayout
+                    x:Name="callServerLayout"
                     Orientation="Vertical"
-                    VerticalOptions="EndAndExpand">
-                <Label
+                    Margin="0,0,25,0"
+                    HorizontalOptions="EndAndExpand">
+                    <Label
                         Text="Call Server"
                         HorizontalTextAlignment="Center"
-                        VerticalOptions="CenterAndExpand"
                         FontAttributes="Bold"
                         TextColor="Black"
-                        BackgroundColor="White"/>
-                <ImageButton
-                        x:Name="serverButton"
-                        VerticalOptions="CenterAndExpand"
+                        BackgroundColor="Transparent"/>
+                    <ImageButton
+                        x:Name="callServerButton"
                         CornerRadius="15"
                         BackgroundColor="Transparent"
                         WidthRequest="70"
                         HeightRequest="70"
                         Source="plusButton"
                         Clicked="OnServerButtonClicked"/>
+                </StackLayout>
             </StackLayout>
         </Grid>
     </ContentPage.Content>
