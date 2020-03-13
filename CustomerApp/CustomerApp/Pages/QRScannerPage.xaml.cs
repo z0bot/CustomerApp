@@ -19,11 +19,6 @@ namespace CustomerApp.Pages
             InitializeComponent();
             GoogleVisionBarCodeScanner.Methods.SetSupportBarcodeFormat(BarcodeFormats.QRCode);
         }
-        //cancel navigates back to PushToQR page
-        private async void CancelButton_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PopModalAsync();
-        }
 
         /// <summary>
         /// initialize device flashlight
@@ -50,14 +45,11 @@ namespace CustomerApp.Pages
             {
                 result += $"Type : {obj[i].BarcodeType}, Value : {obj[i].DisplayValue}{Environment.NewLine}";
             }
-            Device.BeginInvokeOnMainThread(async() =>
-            {
-                await DisplayAlert("Result", result, "OK");
-                GoogleVisionBarCodeScanner.Methods.SetIsScanning(false);
-                
-                //await Navigation.PopModalAsync();
-            });
-            await Navigation.PushModalAsync(new NavigationPage(new orderHerePage()));
+
+            await DisplayAlert("Result", result, "OK");
+            GoogleVisionBarCodeScanner.Methods.SetIsScanning(false);
+
+            await Navigation.PushAsync(new orderHerePage());
         }
     }
 }

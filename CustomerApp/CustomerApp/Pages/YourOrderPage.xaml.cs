@@ -49,15 +49,14 @@ namespace CustomerApp.Pages
         // Disable back button for this page with a confirmation warning
         protected override bool OnBackButtonPressed()
         {
-            Task<bool> answer = DisplayAlert("WARNING: Changes will be lost", "Are you sure you want to leave this page?", "Yes", "No");
-            answer.ContinueWith(task =>
+            Device.BeginInvokeOnMainThread(async () =>
             {
-                if(answer.Result)
+                if(await DisplayAlert("LOGOUT", "Are you sure you want to logout from this table?", "Yes", "No"))
                 {
-                    Navigation.PopModalAsync();
+                    await Navigation.PopAsync();
                 }
             });
-            return true;
+            return true; 
         }
     }
 

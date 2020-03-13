@@ -6,7 +6,7 @@
              NavigationPage.HasNavigationBar="False"
              mc:Ignorable="d"
              x:Class="CustomerApp.Pages.orderHerePage"
-             BackgroundImageSource="orderHerePage.png">
+             BackgroundImageSource="orderHerePage">
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
