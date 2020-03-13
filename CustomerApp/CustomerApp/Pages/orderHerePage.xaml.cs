@@ -39,6 +39,17 @@ namespace CustomerApp.Pages
         }
 
         // Disable back button for this page
-        protected override bool OnBackButtonPressed() { return true; }
+        protected override bool OnBackButtonPressed()
+        { 
+            Task<bool> answer = DisplayAlert("LOGOUT", "Are you sure you want to logout from this table?", "Yes", "No");
+            answer.ContinueWith(task =>
+            {
+                if(answer.Result)
+                {
+                    Navigation.PopToRootAsync();
+                }
+            });
+            return true; 
+        }
     }
 }
