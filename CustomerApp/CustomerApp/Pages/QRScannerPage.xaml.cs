@@ -46,7 +46,7 @@ namespace CustomerApp.Pages
                 result += $"Type : {obj[i].BarcodeType}, Value : {obj[i].DisplayValue}{Environment.NewLine}";
             }
 
-            await DisplayAlert("Result", result, "OK");
+            await DisplayAlert("You're signed in!", result, "OK");
             GoogleVisionBarCodeScanner.Methods.SetIsScanning(false);
 
             await Navigation.PushAsync(new orderHerePage());

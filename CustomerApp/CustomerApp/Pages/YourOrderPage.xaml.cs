@@ -51,7 +51,7 @@ namespace CustomerApp.Pages
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
-                if(await DisplayAlert("LOGOUT", "Are you sure you want to logout from this table?", "Yes", "No"))
+                if(await DisplayAlert("WARNING: Changes will be lost", "Are you sure you want to leave this page?", "Yes", "No"))
                 {
                     await Navigation.PopAsync();
                 }
