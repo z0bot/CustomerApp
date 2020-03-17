@@ -14,13 +14,12 @@ namespace CustomerApp.Pages
     {
         public orderHerePage()
         {
-            NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
         }
 
         async void OnOrderHereButtonClicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new YourOrderPage()));
+            await Navigation.PushAsync(new YourOrderPage());
         }
 
         async void OnRefillButtonClicked(object sender, EventArgs e)
@@ -39,6 +38,16 @@ namespace CustomerApp.Pages
         }
 
         // Disable back button for this page
-        protected override bool OnBackButtonPressed() { return true; }
+        protected override bool OnBackButtonPressed()
+        { 
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                if(await DisplayAlert("LOGOUT", "Are you sure you want to logout from this table?", "Yes", "No"))
+                {
+                    await Navigation.PopToRootAsync();
+                }
+            });
+            return true; 
+        }
     }
 }
