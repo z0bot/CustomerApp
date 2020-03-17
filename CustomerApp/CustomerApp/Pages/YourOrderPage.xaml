@@ -37,18 +37,18 @@
                     
                     <StackLayout
                             x:Name="refillLayout"
+                            Margin="0,0,50,0"
                             Orientation="Vertical"
-                            HorizontalOptions="StartAndExpand">
+                            VerticalOptions="EndAndExpand"
+                            HorizontalOptions="Start">
                         <Label
                                 Text="Refill"
-                                VerticalOptions="CenterAndExpand"
                                 HorizontalTextAlignment="Center"
                                 FontAttributes="Bold"
                                 TextColor="Black"
                                 BackgroundColor="White"/>
                         <ImageButton
                                 x:Name="refillButton"
-                                VerticalOptions="CenterAndExpand"
                                 CornerRadius="15"
                                 Source="plusButton"
                                 BackgroundColor="Transparent"
@@ -91,17 +91,17 @@
                     <StackLayout
                             x:Name="serverButtonLayout"
                             Orientation="Vertical"
+                            Margin="50,0,0,0"
+                            VerticalOptions="EndAndExpand"
                             HorizontalOptions="EndAndExpand">
                         <Label
                                 Text="Call Server"
                                 HorizontalTextAlignment="Center"
-                                VerticalOptions="CenterAndExpand"
                                 FontAttributes="Bold"
                                 TextColor="Black"
                                 BackgroundColor="White"/>
                         <ImageButton
                                 x:Name="serverButton"
-                                VerticalOptions="CenterAndExpand"
                                 CornerRadius="15"
                                 BackgroundColor="Transparent"
                                 WidthRequest="70"
