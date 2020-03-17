@@ -6,15 +6,17 @@ namespace CustomerApp.Models
 {
     class MenuItem
     {
-        public string name { get; set; }
+        public string Name { get; set; }
 
         // Picture?
 
-        public float price { get; set; }
+        // Nutritional info? Can this just be an image or something?
 
-        public string description { get; set; }
+        public float Price { get; set; }
 
-        public string specialInstructions { get; set; }
+        public string Description { get; set; }
+
+        public string SpecialInstructions { get; set; }
 
     }
 }

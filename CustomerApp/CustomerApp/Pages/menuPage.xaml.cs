@@ -13,7 +13,7 @@ namespace CustomerApp.Pages
     {
         public string name;
 
-        public Button buttonInfo { get; set; }
+        public Button ButtonInfo { get; set; }
     }
 
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -33,11 +33,12 @@ namespace CustomerApp.Pages
 
             for (int i = 0; i < categoryNames.Count; ++i)
             {
-                categoryLink newCat = new categoryLink();
+                categoryLink newCat = new categoryLink
+                {
+                    name = categoryNames[i]
+                };
 
-                newCat.name = categoryNames[i];
-
-                categoryList.Children.Add(newCat.buttonInfo = (new Button()
+                categoryList.Children.Add(newCat.ButtonInfo = (new Button()
                 {
                     Text = newCat.name,
                     Margin = new Thickness(30, 0, 30, 20),
@@ -48,7 +49,7 @@ namespace CustomerApp.Pages
                     CornerRadius = 15
                 }));
 
-                newCat.buttonInfo.Clicked += async (sender, args) => await DisplayAlert("Navigation", newCat.name, "OK");
+                newCat.ButtonInfo.Clicked += async (sender, args) => await DisplayAlert("Navigation", newCat.name, "OK");
 
                 category.Add(newCat);
             }

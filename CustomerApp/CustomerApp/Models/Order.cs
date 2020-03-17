@@ -6,8 +6,8 @@ namespace CustomerApp.Models
 {
     class Order
     {
-        public List<MenuItem> contents { get; set; }
+        public List<MenuItem> Contents { get; set; }
 
-        public double unpaidBalance { get; set; }
+        public double UnpaidBalance { get; set; }
     }
 }
