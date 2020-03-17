@@ -8,9 +8,9 @@ namespace CustomerApp.Models
     {
         public string Name { get; set; }
 
-        // Picture?
+        public string Picture { get; set; }
 
-        // Nutritional info? Can this just be an image or something?
+        public string Nutrition { get; set; } // Just manually input formatted text to be displayed in an alert, lmao
 
         public double Price { get; set; }
 

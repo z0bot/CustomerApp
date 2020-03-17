@@ -38,6 +38,7 @@ namespace CustomerApp.Pages
             for(int i = 0; i < members.Count; ++i)
             {
                 Button temp;
+                string itemName = members[i].Name;
                 menuItemList.Children.Add(temp = (new Button()
                 {
                     Text = members[i].Name + " | $" + members[i].Price,
@@ -46,8 +47,11 @@ namespace CustomerApp.Pages
                     TextColor = Color.White,
                     WidthRequest = 140,
                     BackgroundColor = Color.FromHex("1fbd85"),
-                    CornerRadius = 15
+                    CornerRadius = 15                    
                 }));
+
+                temp.Clicked += async (sender, args) => await Navigation.PushAsync(new menuItemPage(itemName));
+
                 buttons.Add(temp);
             }
         }
