@@ -9,40 +9,46 @@ using Xamarin.Forms.Xaml;
 
 namespace CustomerApp.Pages
 {
+    public class categoryLink
+    {
+        public string name;
+
+        public Button buttonInfo { get; set; }
+    }
+
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class menuPage : ContentPage
     {
-        public class categoryLink
-        {
-            public string name;
-
-            public Button buttonInfo { get; set; }
-        }
+        
 
         public List<categoryLink> category;
         public menuPage()
         {
+            NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
-            List<string> categoryNames = new List<string>() { "Appetizers", "Entrees", "Sides", "Desserts", "Beverages" }; // *** Temporary categories
+            category = new List<categoryLink>();
 
-            for(int i = 0; i < categoryNames.Count(); ++i)
+            List<string> categoryNames = new List<string>() { "Appetizers", "Entrees", "Sides", "Desserts", "Beverages", "Appetizers", "Entrees", "Sides", "Desserts", "Beverages" }; // *** Temporary categories. Doubled up to demonstrate scrollview
+
+            for (int i = 0; i < categoryNames.Count; ++i)
             {
                 categoryLink newCat = new categoryLink();
 
-                categoryList.Children.Add(newCat.buttonInfo = (new Button() 
-                    { 
-                        Text = categoryNames[i], 
-                        Margin = new Thickness(30,0,30,20),
-                        FontAttributes = FontAttributes.Bold,
-                        TextColor = Color.White,
-                        WidthRequest = 140,
-                        BackgroundColor = Color.FromHex("0x1fbd85")
-                    }));
-
                 newCat.name = categoryNames[i];
 
-                newCat.buttonInfo.Clicked += async (sender, args) => DisplayAlert("Navigation", newCat.name, "OK");
+                categoryList.Children.Add(newCat.buttonInfo = (new Button()
+                {
+                    Text = newCat.name,
+                    Margin = new Thickness(30, 0, 30, 20),
+                    FontAttributes = FontAttributes.Bold,
+                    TextColor = Color.White,
+                    WidthRequest = 140,
+                    BackgroundColor = Color.FromHex("1fbd85"),
+                    CornerRadius = 15
+                }));
+
+                newCat.buttonInfo.Clicked += async (sender, args) => await DisplayAlert("Navigation", newCat.name, "OK");
 
                 category.Add(newCat);
             }
