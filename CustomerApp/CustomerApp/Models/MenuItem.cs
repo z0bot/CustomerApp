@@ -12,7 +12,7 @@ namespace CustomerApp.Models
 
         // Nutritional info? Can this just be an image or something?
 
-        public float Price { get; set; }
+        public double Price { get; set; }
 
         public string Description { get; set; }
 

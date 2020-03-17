@@ -9,38 +9,38 @@ using Xamarin.Forms.Xaml;
 
 namespace CustomerApp.Pages
 {
-    public class categoryLink
-    {
-        public string name;
-
-        public Button ButtonInfo { get; set; }
-    }
-
+    
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class menuPage : ContentPage
+    public partial class categoryPage : ContentPage
     {
-        
+        List<Models.MenuItem> members;
+        List<Button> buttons;
 
-        public List<categoryLink> category;
-        public menuPage()
+        public categoryPage(string categoryName)
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
-            category = new List<categoryLink>();
+            categoryLabel.Text = categoryName;
 
-            List<string> categoryNames = new List<string>() { "Appetizers", "Entrees", "Sides", "Desserts", "Beverages", "Appetizers", "Entrees", "Sides", "Desserts", "Beverages" }; // *** Temporary categories. Doubled up to demonstrate scrollview
+            buttons = new List<Button>();
 
-            for (int i = 0; i < categoryNames.Count; ++i)
+            // Get menu items within this category.
+
+            // Generate fake members until database can be used
+            members = new List<Models.MenuItem>();
+            for (int i = 0; i < 10; ++i) 
             {
-                categoryLink newCat = new categoryLink
-                {
-                    name = categoryNames[i]
-                };
+                members.Add(new Models.MenuItem() { Name = categoryName + i.ToString(), Price = 3.50, Description = "Ehhh", SpecialInstructions = null });
+            }
 
-                categoryList.Children.Add(newCat.ButtonInfo = (new Button()
+            // Create buttons for each category member
+            for(int i = 0; i < members.Count; ++i)
+            {
+                Button temp;
+                menuItemList.Children.Add(temp = (new Button()
                 {
-                    Text = newCat.name,
+                    Text = members[i].Name + " | $" + members[i].Price,
                     Margin = new Thickness(30, 0, 30, 20),
                     FontAttributes = FontAttributes.Bold,
                     TextColor = Color.White,
@@ -48,10 +48,7 @@ namespace CustomerApp.Pages
                     BackgroundColor = Color.FromHex("1fbd85"),
                     CornerRadius = 15
                 }));
-
-                //newCat.ButtonInfo.Clicked += async (sender, args) => await DisplayAlert("Navigation", newCat.name, "OK");
-                newCat.ButtonInfo.Clicked += async (sender, args) => await Navigation.PushAsync(new categoryPage(newCat.name));
-                category.Add(newCat);
+                buttons.Add(temp);
             }
         }
 

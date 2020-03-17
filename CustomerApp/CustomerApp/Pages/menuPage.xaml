@@ -8,6 +8,16 @@
              BackgroundImageSource="backgroundImage">
     <ContentPage.Content>
         <StackLayout>
+            <Label
+                x:Name="categoryLabel"
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Title"
+                FontAttributes="Bold"
+                Margin="15,0,0,15"
+                Text="Categories"/>
+            
             <!--Scroll view to display menu categories-->
             <ScrollView
                 x:Name="categoryScroll"

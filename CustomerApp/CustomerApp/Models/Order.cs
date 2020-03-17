@@ -9,5 +9,7 @@ namespace CustomerApp.Models
         public List<MenuItem> Contents { get; set; }
 
         public double UnpaidBalance { get; set; }
+
+        public string WaitstaffEmail { get; set; }
     }
 }

@@ -12,8 +12,9 @@
 
             <!--Scroll view to display order items-->
             <ScrollView
-                HorizontalOptions="Center"
                 VerticalOptions="EndAndExpand"
+                HorizontalOptions="Center"
+                
                 WidthRequest="260"
                 HeightRequest="400">
                 <!--Stack layout to place items into-->
