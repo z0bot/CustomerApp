@@ -27,6 +27,7 @@ namespace CustomerApp.Pages
             nameLabel.Text = item.Name;
             descLabel.Text = item.Description;
             itemPic.Source = item.Picture;
+            priceLabel.Text = "$" + item.Price.ToString();
         }
 
         async void OnNutritionButtonClicked(object sender, EventArgs e)

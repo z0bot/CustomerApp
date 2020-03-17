@@ -15,7 +15,7 @@
                 TextColor="Black"
                 FontSize="Title"
                 FontAttributes="Bold"
-                Margin="15,0,0,15"
+                Margin="15,15,0,15"
                 Text="Categories"/>
             
             <!--Scroll view to display menu categories-->
@@ -24,7 +24,7 @@
                 HorizontalOptions="Center"
                 VerticalOptions="EndAndExpand"
                 WidthRequest="260"
-                HeightRequest="400">
+                HeightRequest="500">
                 <!--Stack layout to place items into-->
                 <StackLayout
                     x:Name="categoryList">

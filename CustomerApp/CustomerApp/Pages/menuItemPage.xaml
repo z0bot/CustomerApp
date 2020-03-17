@@ -59,7 +59,14 @@
                     FontAttributes="Bold"
                     Text="Description Goes Here"
                     LineBreakMode="WordWrap"/>
-                
+
+                <Label
+                    Margin="30,0,30,0"
+                    x:Name="priceLabel"
+                    TextColor="Black"
+                    FontSize="Medium"
+                    FontAttributes="Bold"
+                    Text="price"/>
 
             </StackLayout>
 

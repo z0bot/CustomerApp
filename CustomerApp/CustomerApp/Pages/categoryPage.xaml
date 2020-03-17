@@ -15,14 +15,14 @@
                 TextColor="Black"
                 FontSize="Title"
                 FontAttributes="Bold"
-                Margin="15,0,0,15"
+                Margin="15,15,0,15"
                 Text="TEMP"/>
             
                 <ScrollView
                 VerticalOptions="EndAndExpand" 
                 HorizontalOptions="Center"
                 WidthRequest="260"
-                HeightRequest="400">
+                HeightRequest="500">
                 <StackLayout
                     x:Name="menuItemList">
                     
