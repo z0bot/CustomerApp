@@ -49,6 +49,10 @@ namespace CustomerApp.Pages
             await DisplayAlert("You're signed in!", result, "OK");
             GoogleVisionBarCodeScanner.Methods.SetIsScanning(false);
 
+            // Turn off flashlight if it is on
+            if (GoogleVisionBarCodeScanner.Methods.IsTorchOn())
+                GoogleVisionBarCodeScanner.Methods.ToggleFlashlight();
+
             await Navigation.PushAsync(new orderHerePage());
         }
     }

@@ -14,7 +14,7 @@
                 HorizontalOptions="Center"
                 VerticalOptions="EndAndExpand"
                 WidthRequest="260"
-                HeightRequest="500">
+                HeightRequest="400">
                 <!--Stack layout to place items into-->
                 <StackLayout
                     x:Name="categoryList">
@@ -30,7 +30,9 @@
                 <StackLayout
                             x:Name="refillLayout"
                             Orientation="Vertical"
-                            HorizontalOptions="StartAndExpand">
+                            Margin="25,0,25,0"
+                            HorizontalOptions="Start"
+                            VerticalOptions="EndAndExpand">
                     <Label
                                 Text="Refill"
                                 VerticalOptions="CenterAndExpand"
@@ -52,7 +54,9 @@
                 <StackLayout
                             x:Name="serverButtonLayout"
                             Orientation="Vertical"
-                            HorizontalOptions="EndAndExpand">
+                            Margin="25,0,25,0"
+                            HorizontalOptions="EndAndExpand"
+                            VerticalOptions="EndAndExpand">
                     <Label
                                 Text="Call Server"
                                 HorizontalTextAlignment="Center"
