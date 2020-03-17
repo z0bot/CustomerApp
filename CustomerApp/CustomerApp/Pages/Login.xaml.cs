@@ -33,7 +33,7 @@ namespace CustomerApp.Pages
             //if T then push to QRScanner page
             //else display alert
             if (allowed)
-                await Navigation.PushModalAsync(new NavigationPage(new QRScannerPage()));
+                await Navigation.PushAsync(new QRScannerPage());
             else
                 await DisplayAlert("Alert", "You have to provide Camera permission", "Ok");
 
