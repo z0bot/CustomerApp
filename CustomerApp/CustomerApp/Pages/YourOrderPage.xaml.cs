@@ -29,6 +29,7 @@ namespace CustomerApp.Pages
         {
             //Navigate to menu
 
+            await Navigation.PushAsync(new menuPage());
         }
 
         async void OnRefillButtonClicked(object sender, EventArgs e)

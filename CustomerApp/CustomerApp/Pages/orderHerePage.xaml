@@ -26,21 +26,30 @@
                 FontSize="Medium"
                 CornerRadius="15"
                 Clicked="OnOrderHereButtonClicked"/>
+
+            <!--Refill/help buttons-->
             <StackLayout
                 Orientation="Horizontal"
                 Grid.Row="2"
-                VerticalOptions="EndAndExpand">
+                VerticalOptions="EndAndExpand"
+                HorizontalOptions="Fill">
                 <StackLayout
                     x:Name="refillLayout"
                     Orientation="Vertical"
                     Margin="25,0,0,0"
                     HorizontalOptions="Start">
-                    <Label
-                        Text="Refill"
-                        HorizontalTextAlignment="Center"
-                        FontAttributes="Bold"
-                        TextColor="Black"
-                        BackgroundColor="Transparent"/>
+                    <Frame
+                        CornerRadius="15"
+                        Padding="0"
+                        BackgroundColor="White"
+                        HasShadow="False">
+                        <Label
+                            Text="Refill"
+                            HorizontalTextAlignment="Center"
+                            FontAttributes="Bold"
+                            TextColor="Black"
+                            BackgroundColor="Transparent"/>
+                    </Frame>
                     <ImageButton
                         x:Name="refillButton"
                         CornerRadius="15"
@@ -50,7 +59,7 @@
                         HeightRequest="70"
                         Clicked="OnRefillButtonClicked"/>
                 </StackLayout>
-            <!--Refill/help buttons-->
+            
                 <StackLayout
                     x:Name="callServerLayout"
                     Orientation="Vertical"
