@@ -31,7 +31,7 @@ namespace CustomerApp.Pages
             members = new List<Models.MenuItem>();
             for (int i = 0; i < 10; ++i) 
             {
-                members.Add(new Models.MenuItem() { Name = categoryName + i.ToString(), Price = 3.50, Description = "Ehhh", SpecialInstructions = null });
+                members.Add(new Models.MenuItem() { Name = categoryName + i.ToString(), Price = 3.50 });
             }
 
             // Create buttons for each category member
@@ -41,8 +41,8 @@ namespace CustomerApp.Pages
                 string itemName = members[i].Name;
                 menuItemList.Children.Add(temp = (new Button()
                 {
-                    Text = members[i].Name + " | $" + members[i].Price,
-                    Margin = new Thickness(30, 0, 30, 20),
+                    Text = members[i].Name + " | " + members[i].Price.ToString("C"),
+                    Margin = new Thickness(20, 0, 20, 20),
                     FontAttributes = FontAttributes.Bold,
                     TextColor = Color.White,
                     WidthRequest = 140,

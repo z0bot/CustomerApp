@@ -19,60 +19,62 @@
                 Text="TEMP"/>
             
                 <ScrollView
-                VerticalOptions="EndAndExpand" 
-                HorizontalOptions="Center"
-                WidthRequest="260"
-                HeightRequest="500">
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                Margin="20,20,20,20">
                 <StackLayout
                     x:Name="menuItemList">
                     
                 </StackLayout>
                 
             </ScrollView>
-
-            <StackLayout
-                Orientation="Horizontal"
-                VerticalOptions="End">
-                <StackLayout
-                    x:Name="refillLayout"
-                    Orientation="Vertical"
-                    Margin="25,0,0,0"
-                    HorizontalOptions="Start">
-                    <Label
-                        Text="Refill"
-                        HorizontalTextAlignment="Center"
-                        FontAttributes="Bold"
-                        TextColor="Black"
-                        BackgroundColor="Transparent"/>
-                    <ImageButton
-                        x:Name="refillButton"
-                        CornerRadius="15"
-                        Source="plusButton"
-                        BackgroundColor="Transparent"
-                        WidthRequest="70"
-                        HeightRequest="70"
-                        Clicked="OnRefillButtonClicked"/>
-                </StackLayout>
+            <StackLayout>
                 <!--Refill/help buttons-->
                 <StackLayout
-                    x:Name="callServerLayout"
-                    Orientation="Vertical"
-                    Margin="0,0,25,0"
-                    HorizontalOptions="EndAndExpand">
-                    <Label
-                        Text="Call Server"
-                        HorizontalTextAlignment="Center"
-                        FontAttributes="Bold"
-                        TextColor="Black"
-                        BackgroundColor="Transparent"/>
-                    <ImageButton
-                        x:Name="callServerButton"
-                        CornerRadius="15"
-                        BackgroundColor="Transparent"
-                        WidthRequest="70"
-                        HeightRequest="70"
-                        Source="plusButton"
-                        Clicked="OnServerButtonClicked"/>
+                    Orientation="Horizontal"
+                    VerticalOptions="End"
+                    HorizontalOptions="Fill">
+                    <StackLayout
+                        x:Name="refillLayout"
+                        Orientation="Vertical"
+                        Margin="25,0,10,0"
+                        HorizontalOptions="StartAndExpand">
+                        <Label
+                            Text="Refill"
+                            HorizontalTextAlignment="Center"
+                            FontAttributes="Bold"
+                            TextColor="Black"
+                            BackgroundColor="Transparent"/>
+                        <ImageButton
+                            x:Name="refillButton"
+                            CornerRadius="15"
+                            Source="plusButton"
+                            BackgroundColor="Transparent"
+                            WidthRequest="70"
+                            HeightRequest="70"
+                            Clicked="OnRefillButtonClicked"/>
+                    </StackLayout>
+                
+                    <StackLayout
+                        x:Name="callServerLayout"
+                        Orientation="Vertical"
+                        Margin="10,0,25,0"
+                        HorizontalOptions="EndAndExpand">
+                        <Label
+                            Text="Call Server"
+                            HorizontalTextAlignment="Center"
+                            FontAttributes="Bold"
+                            TextColor="Black"
+                            BackgroundColor="Transparent"/>
+                        <ImageButton
+                            x:Name="callServerButton"
+                            CornerRadius="15"
+                            BackgroundColor="Transparent"
+                            WidthRequest="70"
+                            HeightRequest="70"
+                            Source="plusButton"
+                            Clicked="OnServerButtonClicked"/>
+                    </StackLayout>
                 </StackLayout>
             </StackLayout>
         </StackLayout>

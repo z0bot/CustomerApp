@@ -12,16 +12,14 @@
 
             <!--Scroll view to display order items-->
             <ScrollView
-                VerticalOptions="EndAndExpand"
-                HorizontalOptions="Center"
-                
-                WidthRequest="260"
-                HeightRequest="400">
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="CenterAndExpand"
+                Margin="40,60,40,20">
                 <!--Stack layout to place items into-->
                 <StackLayout>
                     <!--Temp scroll view items. Delete later-->
-                    <BoxView BackgroundColor="Red" HeightRequest="300" WidthRequest="150" />
-                    <BoxView BackgroundColor="Green" HeightRequest="300" WidthRequest="150" />
+                    <BoxView BackgroundColor="Red" HeightRequest="300" WidthRequest="600" />
+                    <BoxView BackgroundColor="Green" HeightRequest="300" WidthRequest="600" />
                 </StackLayout>
             </ScrollView>
 
@@ -30,18 +28,19 @@
                 x:Name="controlLayout"
 
                 VerticalOptions="EndAndExpand"
-                HorizontalOptions="Center">
+                HorizontalOptions="Fill">
 
                 <!--Refill/help buttons-->
                 <StackLayout
-                    Orientation="Horizontal">
+                    Orientation="Horizontal"
+                    HorizontalOptions="FillAndExpand">
                     
                     <StackLayout
                             x:Name="refillLayout"
-                            Margin="25,0,25,0"
+                            Margin="25,0,10,0"
                             Orientation="Vertical"
                             VerticalOptions="EndAndExpand"
-                            HorizontalOptions="Start">
+                            HorizontalOptions="StartAndExpand">
                         <Label
                                 Text="Refill"
                                 HorizontalTextAlignment="Center"
@@ -92,7 +91,7 @@
                     <StackLayout
                             x:Name="serverButtonLayout"
                             Orientation="Vertical"
-                            Margin="25,0,25,0"
+                            Margin="10,0,25,0"
                             VerticalOptions="EndAndExpand"
                             HorizontalOptions="EndAndExpand">
                         <Label

@@ -76,18 +76,19 @@
                 x:Name="controlLayout"
 
                 VerticalOptions="EndAndExpand"
-                HorizontalOptions="Center">
+                HorizontalOptions="Fill">
 
                 <!--Refill/help buttons-->
                 <StackLayout
-                    Orientation="Horizontal">
+                    Orientation="Horizontal"
+                    HorizontalOptions="FillAndExpand">
 
                     <StackLayout
                             x:Name="refillLayout"
-                            Margin="10,0,10,0"
+                            Margin="25,0,10,0"
                             Orientation="Vertical"
                             VerticalOptions="EndAndExpand"
-                            HorizontalOptions="Start">
+                            HorizontalOptions="StartAndExpand">
                         <Label
                                 Text="Refill"
                                 HorizontalTextAlignment="Center"
@@ -123,9 +124,9 @@
 
                         <Button
                             x:Name="addInstructionsButton"
-                            Margin="0,10,0,10"
+                            Margin="0,10,0,25"
                             VerticalOptions="Center"
-                            Text="Add Instructions"
+                            Text="Instructions"
                             FontAttributes="Bold"
                             TextColor="White"
                             BackgroundColor="#1fbd85"
@@ -138,7 +139,7 @@
                     <StackLayout
                             x:Name="serverButtonLayout"
                             Orientation="Vertical"
-                            Margin="10,0,10,0"
+                            Margin="10,0,25,0"
                             VerticalOptions="EndAndExpand"
                             HorizontalOptions="EndAndExpand">
                         <Label
