@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="CustomerApp.Pages.paymentPage"
+             BackgroundImageSource="backgroundImage">
+    <ContentPage.Content>
+        <StackLayout
+            x:Name="mainStack">
+            <Label
+                x:Name="titleLabel"
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Title"
+                FontAttributes="Bold"
+                Margin="15,15,15,15"
+                Text="Payment"/>
+            <Label
+                x:Name="descLabel"
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Medium"
+                Margin="15,15,15,15"
+                Text="Take a picture of your card to pay for your meal"/>
+
+
+            <Button x:Name="scanCardButton" 
+                            Text="Scan Card"
+                            BackgroundColor="#1fbd85"
+                            TextColor="White" 
+                            Margin="0,30,0,0"
+                            FontSize="Large"
+                            WidthRequest="300"
+                            Clicked="scanCard"
+                            HorizontalOptions="Center"
+                            CornerRadius="15"/>
+
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

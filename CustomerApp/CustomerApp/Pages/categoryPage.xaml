@@ -15,7 +15,7 @@
                 TextColor="Black"
                 FontSize="Title"
                 FontAttributes="Bold"
-                Margin="15,15,0,15"
+                Margin="15,15,15,15"
                 Text="TEMP"/>
             
                 <ScrollView

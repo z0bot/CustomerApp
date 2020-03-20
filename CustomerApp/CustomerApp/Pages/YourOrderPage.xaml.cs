@@ -22,7 +22,7 @@ namespace CustomerApp.Pages
         async void OnSendOrderClicked(object sender, EventArgs e)
         {
             //Navigate to order confirmation page
-
+            await Navigation.PushAsync(new paymentPage());
         }
 
         async void OnAddItemClicked(object sender, EventArgs e)

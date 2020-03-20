@@ -57,6 +57,9 @@
     <PackageReference Include="BarcodeScanner.XF">
       <Version>4.2.2.2</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.CardIO.Android">
+      <Version>5.5.1</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.356" />
     <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.3" />
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.3" />
@@ -68,6 +71,7 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.5.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DependencyService\CardService.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
