@@ -4,24 +4,72 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="CustomerApp.Pages.YourOrderPage"
-             BackgroundImageSource="YourOrderPage.png">
+             x:Class="CustomerApp.Pages.menuItemPage"
+             BackgroundImageSource="backgroundImage">
     <ContentPage.Content>
-        <StackLayout
-            x:Name="yourOrderLayout">
+        <StackLayout>
+            <Label
+                x:Name="nameLabel"
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Title"
+                FontAttributes="Bold"
+                Margin="15,15,0,15"
+                Text="NAME"/>
 
-            <!--Scroll view to display order items-->
-            <ScrollView
-                VerticalOptions="FillAndExpand"
-                HorizontalOptions="CenterAndExpand"
-                Margin="40,60,40,20">
-                <!--Stack layout to place items into-->
-                <StackLayout>
-                    <!--Temp scroll view items. Delete later-->
-                    <BoxView BackgroundColor="Red" HeightRequest="300" WidthRequest="600" />
-                    <BoxView BackgroundColor="Green" HeightRequest="300" WidthRequest="600" />
+            <StackLayout
+                HorizontalOptions="Center">
+
+                <StackLayout
+                    Orientation="Horizontal"
+                    Margin="30,0,30,0">
+                    <Image
+                        x:Name="itemPic"
+                        WidthRequest="260"
+                        HeightRequest="300"
+                        HorizontalOptions="Center"/>
+
+                    <ImageButton
+                        x:Name="nutritionButton"
+                        Source="detailsIcon"
+                        HeightRequest="60"
+                        WidthRequest="50"
+                        Clicked="OnNutritionButtonClicked"
+                        BackgroundColor="Transparent"
+                        
+                        HorizontalOptions="EndAndExpand"
+                        VerticalOptions="Center"
+                        />
                 </StackLayout>
-            </ScrollView>
+                
+                <Label
+                    Margin="30,0,30,0"
+                    TextColor="Black"
+                    FontSize="Medium"
+                    TextDecorations="Underline"
+                    FontAttributes="Bold"
+                    Text="Description"/>
+                
+                <Label
+                    Margin="30,0,30,0"
+                    x:Name="descLabel"
+                    TextColor="Black"
+                    FontSize="Medium"
+                    FontAttributes="Bold"
+                    Text="Description Goes Here"
+                    LineBreakMode="WordWrap"/>
+
+                <Label
+                    Margin="30,0,30,0"
+                    x:Name="priceLabel"
+                    TextColor="Black"
+                    FontSize="Medium"
+                    FontAttributes="Bold"
+                    Text="price"/>
+
+            </StackLayout>
+
 
             <!--Stacklayout storing control options, including refill/help buttons-->
             <StackLayout
@@ -34,7 +82,7 @@
                 <StackLayout
                     Orientation="Horizontal"
                     HorizontalOptions="FillAndExpand">
-                    
+
                     <StackLayout
                             x:Name="refillLayout"
                             Margin="25,0,10,0"
@@ -57,7 +105,7 @@
                                 Clicked="OnRefillButtonClicked"/>
                     </StackLayout>
 
-                    <!--Stack layout for add item and send order buttons-->
+                    <!--Stack layout for add item to order and add special instructions buttons-->
                     <StackLayout
                         x:Name="orderControlLayout"
                         Orientation="Vertical"
@@ -75,16 +123,16 @@
                             />
 
                         <Button
-                            x:Name="sendOrderButton"
-                            Margin="0,10,0,10"
+                            x:Name="addInstructionsButton"
+                            Margin="0,10,0,25"
                             VerticalOptions="Center"
-                            Text="Send Order"
+                            Text="Instructions"
                             FontAttributes="Bold"
                             TextColor="White"
                             BackgroundColor="#1fbd85"
                             FontSize="Medium"
                             CornerRadius="15"
-                            Clicked="OnSendOrderClicked"
+                            Clicked="OnAddInstructionsClicked" 
                             />
                     </StackLayout>
 
@@ -111,7 +159,6 @@
                     </StackLayout>
                 </StackLayout>
             </StackLayout>
-
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
