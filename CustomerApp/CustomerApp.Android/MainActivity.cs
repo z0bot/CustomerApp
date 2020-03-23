@@ -32,14 +32,12 @@ namespace CustomerApp.Droid
             LoadApplication(new App());
         }
 
-        // I have no clue what I'm doing but this is related to the credit card scanner via Card.IO
+        // Added for Card.IO credit card scanner
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
 
-            if (data == null)
-                Console.WriteLine("Canceled scan");
-            else
+            if (data != null)
             {
                 InfoSharer.Instance.Card = data.GetParcelableExtra(CardIOActivity.ExtraScanResult).JavaCast<CreditCard>();
             }

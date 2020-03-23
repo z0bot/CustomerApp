@@ -20,14 +20,17 @@ namespace CustomerApp.Pages
 
             // Pull unpaid balance from database
             // Faked for now
-
             unpaid = 100;
 
+            System.Windows.Input.ICommand cmd = new Command(onRefresh);
+            refresher.Command = cmd;
             updateLabel();
         }
 
         async void continueButtonPressed(object sender, EventArgs e)
         {
+            updateLabel();
+
             if (unpaid > 0)
             {
                 if (await DisplayAlert("Unpaid balance remaining", "Your balance has not yet been fully paid. Would you like to make an additional payment?", "Yes", "No"))
@@ -37,20 +40,32 @@ namespace CustomerApp.Pages
             }
             else
             {
-                await Navigation.PopToRootAsync();
+                if (await DisplayAlert("Log out confirmation", "Once logged out, you will not be able to request refills until a new order is started. Are you sure you want to leave the table?", "Yes", "No"))
+                {
+                    await Navigation.PopToRootAsync();
+                }
             }
         }
 
-        // Need to call this regularly somehow
+        void onRefresh()
+        {
+            updateLabel();
+            refresher.IsRefreshing = false;
+        }
+
+        // Need to call this regularly via onRefresh
         void updateLabel()
         {
             // Pull unpaid from server
-
+            // Currently decrement every time triggered
+            unpaid -= 40;
 
             if (unpaid > 0)
-                continueButton.Text = "Make additional payment";
+                continueButton.Text = "Make payment towards remaining " + unpaid.ToString("C");
             else
                 continueButton.Text = "Log out of table";
+
+            return ;
         }
 
         async void OnRefillButtonClicked(object sender, EventArgs e)
