@@ -45,8 +45,7 @@
                                 Text="Refill"
                                 HorizontalTextAlignment="Center"
                                 FontAttributes="Bold"
-                                TextColor="Black"
-                                BackgroundColor="White"/>
+                                TextColor="Black"/>
                         <ImageButton
                                 x:Name="refillButton"
                                 CornerRadius="15"
@@ -98,8 +97,7 @@
                                 Text="Call Server"
                                 HorizontalTextAlignment="Center"
                                 FontAttributes="Bold"
-                                TextColor="Black"
-                                BackgroundColor="White"/>
+                                TextColor="Black"/>
                         <ImageButton
                                 x:Name="serverButton"
                                 CornerRadius="15"

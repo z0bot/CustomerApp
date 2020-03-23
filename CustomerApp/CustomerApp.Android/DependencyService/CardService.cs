@@ -33,8 +33,26 @@ namespace CustomerApp.Droid
             var intent = new Intent(Act, typeof(CardIOActivity));
             intent.PutExtra(CardIOActivity.ExtraRequireCvv, true);
             intent.PutExtra(CardIOActivity.ExtraRequireCardholderName, true);
+            intent.PutExtra(CardIOActivity.ExtraRequireExpiry, true);
 
             Act.StartActivityForResult(intent, 101);
+        }
+
+        public bool ReadSuccesful()
+        {
+            if (InfoSharer.Instance.Card == null)
+                return false;
+            else return true;
+        }
+
+        public bool IsExpiryValid()
+        {
+            if (InfoSharer.Instance.Card == null)
+            {
+                return false;
+            }
+            else
+                return InfoSharer.Instance.Card.IsExpiryValid;
         }
 
         public string GetCardNum()

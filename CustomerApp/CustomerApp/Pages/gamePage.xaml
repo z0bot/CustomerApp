@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="CustomerApp.Pages.checkoutPage"
+             x:Class="CustomerApp.Pages.gamePage"
              BackgroundImageSource="backgroundImage">
     <ContentPage.Content>
         <StackLayout>
@@ -15,7 +15,7 @@
                 FontSize="Title"
                 FontAttributes="Bold"
                 Margin="15,15,15,0"
-                Text="Ticket"/>
+                Text="Guess a number!"/>
             <Label
                 VerticalOptions="Start"
                 HorizontalOptions="Center"
@@ -23,87 +23,60 @@
                 FontSize="Medium"
                 Margin="15,0,15,15"
                 HorizontalTextAlignment="Center"
-                Text="You can pay for some or all of your table's order"/>
+                Text="Win a free dessert by guessing a number between 1 and 5!"/>
 
-            <Label
-                VerticalOptions="Start"
-                HorizontalOptions="Center"
-                TextColor="Black"
-                FontSize="Title"
+            <!--Five buttons for the game of chance-->
+            <Button
+                Text="1"
+                FontSize="Large"
+                Margin="30, 0, 30, 20"
                 FontAttributes="Bold"
-                Margin="15,15,15,0"
-                Text="Your Contribution"/>
-            <Frame
-                Padding="0"
+                TextColor="White"
+                BackgroundColor="#1fbd85"
                 CornerRadius="15"
-                Margin="15,0,15,0"
-                WidthRequest="140"
-                HorizontalOptions="Center">
-                <Entry
-                    x:Name="contributionEntry"
-                    HorizontalTextAlignment="Center"
-                    BackgroundColor="White"
-                    FontSize="Medium"
-                    HorizontalOptions="Fill"
-                    Unfocused="OnContributionCompleted"
-                    Keyboard="Numeric"/>
-            </Frame>
+                Clicked="onClicked"/>
 
-            <Label
-                VerticalOptions="Start"
-                HorizontalOptions="Center"
-                TextColor="Black"
-                FontSize="Title"
+            <Button
+                Text="2"
+                FontSize="Large"
+                Margin="30, 0, 30, 20"
                 FontAttributes="Bold"
-                Margin="15,15,15,0"
-                Text="Unpaid balance"/>
-            <Frame
-                Padding="0"
+                TextColor="White"
+                BackgroundColor="#1fbd85"
                 CornerRadius="15"
-                Margin="15,0,15,0"
-                WidthRequest="140"
-                HorizontalOptions="Center">
-                <Label
-                    x:Name="unpaidEntry"
-                    HorizontalTextAlignment="Center"
-                    BackgroundColor="White"
-                    FontSize="Medium"
-                    HorizontalOptions="Fill"/>
-            </Frame>
+                Clicked="onClicked"/>
 
-            <Label
-                VerticalOptions="Start"
-                HorizontalOptions="Center"
-                TextColor="Black"
-                FontSize="Title"
+            <Button
+                Text="3"
+                FontSize="Large"
+                Margin="30, 0, 30, 20"
                 FontAttributes="Bold"
-                Margin="15,15,15,0"
-                Text="Tip"/>
-            <Frame
-                Padding="0"
+                TextColor="White"
+                BackgroundColor="#1fbd85"
                 CornerRadius="15"
-                Margin="15,0,15,0"
-                WidthRequest="140"
-                HorizontalOptions="Center">
-                <Entry
-                    x:Name="tipEntry"
-                    HorizontalTextAlignment="Center"
-                    BackgroundColor="White"
-                    FontSize="Medium"
-                    HorizontalOptions="Fill"
-                    Unfocused="OnTipCompleted"
-                    Keyboard="Numeric"/>
-            </Frame>
-            <Label
-                VerticalOptions="Start"
-                HorizontalOptions="Center"
-                TextColor="Black"
-                FontSize="Micro"
-                Margin="15,0,15,15"
-                HorizontalTextAlignment="Center"
-                Text="Note that the placeholder value is just a suggestion. No charge will be made unless explicitly specified."/>
+                Clicked="onClicked"/>
 
-            <!--Refill/help buttons and pay button-->
+            <Button
+                Text="4"
+                FontSize="Large"
+                Margin="30, 0, 30, 20"
+                FontAttributes="Bold"
+                TextColor="White"
+                BackgroundColor="#1fbd85"
+                CornerRadius="15"
+                Clicked="onClicked"/>
+
+            <Button
+                Text="5"
+                FontSize="Large"
+                Margin="30, 0, 30, 20"
+                FontAttributes="Bold"
+                TextColor="White"
+                BackgroundColor="#1fbd85"
+                CornerRadius="15"
+                Clicked="onClicked"/>
+
+            <!--Refill/help buttons-->
             <StackLayout
                     Orientation="Horizontal"
                     HorizontalOptions="Fill"
@@ -131,18 +104,6 @@
                 </StackLayout>
 
 
-                <Button
-                            x:Name="payButton"
-                            VerticalOptions="Center"
-                            Text="No Contribution"
-                            FontAttributes="Bold"
-                            TextColor="White"
-                            BackgroundColor="#1fbd85"
-                            FontSize="Medium"
-                            CornerRadius="15"
-                            Clicked="OnPayButtonClicked"/>
-
-
                 <StackLayout
                             x:Name="serverButtonLayout"
                             Orientation="Vertical"
@@ -164,8 +125,6 @@
                                 Clicked="OnServerButtonClicked"/>
                 </StackLayout>
             </StackLayout>
-
         </StackLayout>
-        
     </ContentPage.Content>
 </ContentPage>

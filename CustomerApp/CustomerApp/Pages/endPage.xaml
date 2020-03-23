@@ -4,40 +4,37 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="CustomerApp.Pages.paymentPage"
+             x:Class="CustomerApp.Pages.endPage"
              BackgroundImageSource="backgroundImage">
     <ContentPage.Content>
-        <StackLayout
-            x:Name="mainStack">
+        <StackLayout>
             <Label
-                x:Name="titleLabel"
                 VerticalOptions="Start"
                 HorizontalOptions="Center"
                 TextColor="Black"
                 FontSize="Title"
                 FontAttributes="Bold"
                 Margin="15,15,15,15"
-                Text="Payment"/>
+                Text="You're all set!"/>
             <Label
-                x:Name="descLabel"
                 VerticalOptions="Start"
                 HorizontalOptions="Center"
                 TextColor="Black"
                 FontSize="Medium"
                 Margin="15,15,15,15"
-                Text="Take a picture of your card to pay for your meal"/>
+                HorizontalTextAlignment="Center"
+                Text="If a balance remains, you can make another payment"/>
 
-
-            <Button x:Name="scanCardButton" 
-                            Text="Scan Card"
-                            BackgroundColor="#1fbd85"
-                            TextColor="White" 
-                            Margin="0,30,0,0"
-                            FontSize="Large"
-                            WidthRequest="300"
-                            Clicked="scanCard"
-                            HorizontalOptions="Center"
-                            CornerRadius="15"/>
+            <!-- General purpose button, used to continue or make additional payments -->
+            <Button
+                x:Name="continueButton"
+                FontSize="Medium"
+                Margin="30, 0, 30, 20"
+                FontAttributes="Bold"
+                TextColor="White"
+                BackgroundColor="#1fbd85"
+                CornerRadius="15"
+                Clicked="continueButtonPressed"/>
 
             <!--Refill/help buttons-->
             <StackLayout
@@ -88,6 +85,7 @@
                                 Clicked="OnServerButtonClicked"/>
                 </StackLayout>
             </StackLayout>
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

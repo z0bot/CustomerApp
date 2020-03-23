@@ -11,6 +11,9 @@ namespace CustomerApp
     {
         void StartRead();
 
+        bool ReadSuccesful();
+
+        bool IsExpiryValid();
         string GetCardNum();
 
         string GetCardName();

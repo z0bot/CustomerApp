@@ -21,8 +21,13 @@ namespace CustomerApp.Pages
 
         async void OnSendOrderClicked(object sender, EventArgs e)
         {
-            //Navigate to order confirmation page
-            await Navigation.PushAsync(new paymentPage());
+            if (await DisplayAlert("Confirm selection", "Once sent, order cannot be changed. Continue?", "Yes", "No"))
+            { 
+                // Send order to kitchen
+
+                //Navigate to order confirmation page
+                await Navigation.PushAsync(new checkoutPage());
+            }
         }
 
         async void OnAddItemClicked(object sender, EventArgs e)
