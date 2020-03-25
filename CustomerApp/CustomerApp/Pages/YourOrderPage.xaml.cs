@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomerApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,13 +17,16 @@ namespace CustomerApp.Pages
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
-
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            DisplayOrder();
         }
 
         async void OnSendOrderClicked(object sender, EventArgs e)
         {
             //Navigate to order confirmation page
-
         }
 
         async void OnAddItemClicked(object sender, EventArgs e)
@@ -58,6 +62,21 @@ namespace CustomerApp.Pages
                 }
             });
             return true; 
+        }
+
+        public void DisplayOrder()
+        {
+            //grabs currently stored food menu item
+            //var receiptInfo = RealmManager.All<MenuFoodItem>().ElementAt(0);
+            if(RealmManager.All<MenuFoodItem>().Count()==0)
+            {
+                uxMenuFoodLabel.Text = " ";
+            }
+            else
+            {
+                var receiptInfo = RealmManager.All<MenuFoodItem>().ElementAt(0);
+                uxMenuFoodLabel.Text = receiptInfo.Name;
+            }
         }
     }
 

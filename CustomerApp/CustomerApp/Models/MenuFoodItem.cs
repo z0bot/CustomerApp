@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Realms;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CustomerApp.Models
 {
-    class MenuItem
+    public class MenuFoodItem : RealmObject
     {
+        [PrimaryKey]
         public string Name { get; set; }
 
         public string Picture { get; set; }

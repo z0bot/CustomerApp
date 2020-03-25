@@ -14,12 +14,31 @@
             <ScrollView
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="CenterAndExpand"
-                Margin="40,60,40,20">
+                Margin="40,80,40,20">
                 <!--Stack layout to place items into-->
                 <StackLayout>
-                    <!--Temp scroll view items. Delete later-->
-                    <BoxView BackgroundColor="Red" HeightRequest="300" WidthRequest="600" />
-                    <BoxView BackgroundColor="Green" HeightRequest="300" WidthRequest="600" />
+                    <ListView
+                      x:Name="uxFoodItemsList"
+                        />
+                    <!--Temp scroll view items. Delete later
+                    <BoxView 
+                      BackgroundColor="Beige"
+                      Opacity=".6"
+                      Margin="0,85,0,0"
+                      HeightRequest="300" 
+                      WidthRequest="600"/>
+                    -->
+                    <Label
+                      x:Name="uxMenuFoodLabel"
+                      FontSize="Medium"
+                      TextColor="Black"/>
+                    <!--Temp scroll view items. Delete later
+                    <BoxView 
+                      BackgroundColor="Beige" 
+                      Opacity=".6"
+                      HeightRequest="300" 
+                      WidthRequest="600" />
+                    -->
                 </StackLayout>
             </ScrollView>
 

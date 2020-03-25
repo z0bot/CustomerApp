@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CustomerApp.Models;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace CustomerApp.Pages
 {
-    
-
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class menuItemPage : ContentPage
     {
-        Models.MenuItem item;
+        MenuFoodItem item;
         public menuItemPage(string itemName)
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
             // Get this item's details
-            item = new Models.MenuItem() { Name = itemName, Picture = "goodFood", Description = "Description of " + itemName, Nutrition = "Calories: hella\nFat: hella\nIngredients: hellman's", Price = 3.50, SpecialInstructions = null };
+            item = new Models.MenuFoodItem() { Name = itemName, Picture = "goodFood", Description = "Description of " + itemName, Nutrition = "Calories: hella\nFat: hella\nIngredients: hellman's", Price = 3.50, SpecialInstructions = null };
 
 
             nameLabel.Text = item.Name;
@@ -46,8 +45,8 @@ namespace CustomerApp.Pages
 
         async void OnAddItemClicked(object sender, EventArgs e)
         {
-            // Send item to order
-
+            //Store item into local database
+            RealmManager.AddOrUpdate<MenuFoodItem>(item);
 
             //Navigate back to menu. Probably a more elegant method but is easy to do. Remove previous 2 pages, then pop
             Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);
