@@ -13,7 +13,7 @@ namespace CustomerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class categoryPage : ContentPage
     {
-        List<Models.MenuItem> members;
+        List<Models.MenuFoodItem> members;
         List<Button> buttons;
 
         public categoryPage(string categoryName)
@@ -28,10 +28,10 @@ namespace CustomerApp.Pages
             // Get menu items within this category.
 
             // Generate fake members until database can be used
-            members = new List<Models.MenuItem>();
+            members = new List<Models.MenuFoodItem>();
             for (int i = 0; i < 10; ++i) 
             {
-                members.Add(new Models.MenuItem() { Name = categoryName + i.ToString(), Price = 3.50 });
+                members.Add(new Models.MenuFoodItem() { Name = categoryName + i.ToString(), Price = 3.50 });
             }
 
             // Create buttons for each category member

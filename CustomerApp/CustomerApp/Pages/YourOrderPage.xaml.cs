@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomerApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,13 +17,16 @@ namespace CustomerApp.Pages
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
-
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            DisplayOrder();
         }
 
         async void OnSendOrderClicked(object sender, EventArgs e)
         {
             //Navigate to order confirmation page
-
         }
 
         async void OnAddItemClicked(object sender, EventArgs e)
@@ -54,10 +58,23 @@ namespace CustomerApp.Pages
             {
                 if(await DisplayAlert("WARNING: Changes will be lost", "Are you sure you want to leave this page?", "Yes", "No"))
                 {
-                    await Navigation.PopAsync();
+                    RealmManager.RemoveAll<MenuFoodItem>();
+                    try
+                    {
+                        await Navigation.PopAsync();
+                    }
+                    catch
+                    {
+                        await DisplayAlert("CAUGHT", "You suck", "OK");
+                    }
                 }
             });
             return true; 
+        }
+
+        public void DisplayOrder()
+        {
+            menuFoodItemsView.ItemsSource = RealmManager.All<MenuFoodItem>().ToList();
         }
     }
 

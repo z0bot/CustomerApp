@@ -28,7 +28,7 @@
                     WidthRequest="200"
                     IsClippedToBounds="True">
                     <Entry
-                        x:Name="userFirstName"
+                        x:Name="uxFirstName"
                         BackgroundColor="White"
                         HorizontalTextAlignment="Center"
                         Placeholder="John"
@@ -52,7 +52,7 @@
                     WidthRequest="200"
                     IsClippedToBounds="True">
                     <Entry
-                        x:Name="userLastName"
+                        x:Name="uxLastName"
                         BackgroundColor="White"
                         Placeholder="Wick"
                         PlaceholderColor="#dbdbdb"
@@ -80,6 +80,7 @@
                     HorizontalOptions="Center"
                     IsClippedToBounds="True">
                     <Entry
+                        x:Name="uxEmail"
                         BackgroundColor="White"
                         Placeholder="johnwick@wheresmydog.com"
                         PlaceholderColor="#dbdbdb"
@@ -104,7 +105,7 @@
                     HorizontalOptions="Center"
                     IsClippedToBounds="True">
                     <DatePicker
-                        x:Name="userBirthdate"
+                        x:Name="uxBirthdate"
                         WidthRequest="450"
                         HorizontalOptions="Center"/>
                 </Frame>
@@ -130,7 +131,7 @@
                     Opacity=".9"
                     IsClippedToBounds="True">
                     <Entry 
-                        x:Name="userPassword"
+                        x:Name="uxPassword"
                         BackgroundColor="White"
                         Placeholder="johnWicksPassword"
                         PlaceholderColor="#dbdbdb"
@@ -156,7 +157,7 @@
                     WidthRequest="200"
                     IsClippedToBounds="True">
                     <Entry
-                        x:Name="userPasswordReentry"
+                        x:Name="uxPasswordReentry"
                         BackgroundColor="White"
                         Placeholder="johnWicksPassword"
                         PlaceholderColor="#dbdbdb"
@@ -174,10 +175,10 @@
                 TextColor="White"
                 FontSize="Medium"
                 BackgroundColor="#1fbd85"
-                CornerRadius="15"
+                CornerRadius=" 15"
                 Padding="100,0,100,0"
-                Margin="0,150,0,300"
-                VerticalOptions="EndAndExpand"
+                Margin="0,0,0,10"
+                VerticalOptions="EndAndExpand" 
                 HorizontalOptions="Center"/>
         </StackLayout>
     </ContentPage.Content>
