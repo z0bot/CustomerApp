@@ -21,8 +21,6 @@ namespace CustomerApp.Pages
 
             // Get this item's details
             item = new Models.MenuFoodItem() { Name = itemName, Picture = "goodFood", Description = "Description of " + itemName, Nutrition = "Calories: hella\nFat: hella\nIngredients: hellman's", Price = 3.50, SpecialInstructions = null };
-
-
             nameLabel.Text = item.Name;
             descLabel.Text = item.Description;
             itemPic.Source = item.Picture;

@@ -16,30 +16,44 @@
                 HorizontalOptions="CenterAndExpand"
                 Margin="40,80,40,20">
                 <!--Stack layout to place items into-->
-                <StackLayout>
-                    <ListView
-                      x:Name="uxFoodItemsList"
-                        />
-                    <!--Temp scroll view items. Delete later
-                    <BoxView 
-                      BackgroundColor="Beige"
-                      Opacity=".6"
-                      Margin="0,85,0,0"
-                      HeightRequest="300" 
-                      WidthRequest="600"/>
-                    -->
-                    <Label
-                      x:Name="uxMenuFoodLabel"
-                      FontSize="Medium"
-                      TextColor="Black"/>
-                    <!--Temp scroll view items. Delete later
-                    <BoxView 
-                      BackgroundColor="Beige" 
-                      Opacity=".6"
-                      HeightRequest="300" 
-                      WidthRequest="600" />
-                    -->
-                </StackLayout>
+                <ListView
+                  x:Name="menuFoodItemsView">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="3*"/>
+                                    </Grid.RowDefinitions>
+                                    <StackLayout
+                                      x:Name="menuFoodItemLayout"
+                                      Orientation="Vertical">
+                                        <StackLayout
+                                          Grid.Row="0"
+                                          Orientation="Horizontal">
+                                             <Label
+                                                x:Name="uxMenuItemLabel"
+                                                FontSize="Medium"
+                                                Text="{Binding Name}"/>
+                                             <Label
+                                                x:Name="uxMenuItemPriceLabel"
+                                                Margin="70,0,0,0"
+                                                FontSize="Medium"
+                                                Text="{Binding StringPrice}"/>
+                                        </StackLayout>
+                                    <Label
+                                        x:Name="uxMenuItemSpcInst"
+                                        Grid.Row="1"
+                                        FontSize="Medium"
+                                        VerticalOptions="Start"
+                                        Text="{Binding SpecialInstructions}"/>
+                            </StackLayout>
+                            </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </ScrollView>
 
             <!--Stacklayout storing control options, including refill/help buttons-->

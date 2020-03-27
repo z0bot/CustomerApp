@@ -58,7 +58,15 @@ namespace CustomerApp.Pages
             {
                 if(await DisplayAlert("WARNING: Changes will be lost", "Are you sure you want to leave this page?", "Yes", "No"))
                 {
-                    await Navigation.PopAsync();
+                    RealmManager.RemoveAll<MenuFoodItem>();
+                    try
+                    {
+                        await Navigation.PopAsync();
+                    }
+                    catch
+                    {
+                        await DisplayAlert("CAUGHT", "You suck", "OK");
+                    }
                 }
             });
             return true; 
@@ -66,17 +74,7 @@ namespace CustomerApp.Pages
 
         public void DisplayOrder()
         {
-            //grabs currently stored food menu item
-            //var receiptInfo = RealmManager.All<MenuFoodItem>().ElementAt(0);
-            if(RealmManager.All<MenuFoodItem>().Count()==0)
-            {
-                uxMenuFoodLabel.Text = " ";
-            }
-            else
-            {
-                var receiptInfo = RealmManager.All<MenuFoodItem>().ElementAt(0);
-                uxMenuFoodLabel.Text = receiptInfo.Name;
-            }
+            menuFoodItemsView.ItemsSource = RealmManager.All<MenuFoodItem>().ToList();
         }
     }
 

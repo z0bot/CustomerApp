@@ -15,6 +15,7 @@ namespace CustomerApp.Models
         public string Nutrition { get; set; } // Just manually input formatted text to be displayed in an alert, lmao
 
         public double Price { get; set; }
+        public string StringPrice => "$" + Price.ToString();
 
         public string Description { get; set; }
 
