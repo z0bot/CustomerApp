@@ -177,8 +177,8 @@
                 BackgroundColor="#1fbd85"
                 CornerRadius="15"
                 Padding="100,0,100,0"
-                Margin="0,50,0,0"
-                VerticalOptions="End"
+                Margin="0,0,0,10"
+                VerticalOptions="EndAndExpand" 
                 HorizontalOptions="Center"/>
         </StackLayout>
     </ContentPage.Content>
