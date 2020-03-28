@@ -9,27 +9,23 @@
     <ContentPage.Content>
         <StackLayout
             x:Name="yourOrderLayout">
-
-            <!--Scroll view to display order items-->
-            <ScrollView
-                VerticalOptions="FillAndExpand"
-                HorizontalOptions="CenterAndExpand"
-                Margin="40,80,40,20">
                 <!--Stack layout to place items into-->
                 <ListView
-                  x:Name="menuFoodItemsView">
+                  x:Name="menuFoodItemsView"
+                  VerticalOptions="FillAndExpand"
+                  HorizontalOptions="CenterAndExpand"
+                  Margin="40,80,40,70"
+                  HasUnevenRows="True">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="*" />
-                                        <RowDefinition Height="3*"/>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <StackLayout
-                                      x:Name="menuFoodItemLayout"
-                                      Orientation="Vertical">
                                         <StackLayout
+                                          x:Name="menuFoodItemLayout"
                                           Grid.Row="0"
                                           Orientation="Horizontal">
                                              <Label
@@ -38,7 +34,7 @@
                                                 Text="{Binding Name}"/>
                                              <Label
                                                 x:Name="uxMenuItemPriceLabel"
-                                                Margin="70,0,0,0"
+                                                HorizontalOptions="EndAndExpand"
                                                 FontSize="Medium"
                                                 Text="{Binding StringPrice}"/>
                                         </StackLayout>
@@ -46,16 +42,13 @@
                                         x:Name="uxMenuItemSpcInst"
                                         Grid.Row="1"
                                         FontSize="Medium"
-                                        VerticalOptions="Start"
+                                        VerticalTextAlignment="Start"
                                         Text="{Binding SpecialInstructions}"/>
-                            </StackLayout>
-                            </Grid>
+                                </Grid>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-            </ScrollView>
-
             <!--Stacklayout storing control options, including refill/help buttons-->
             <StackLayout
                 x:Name="controlLayout"
