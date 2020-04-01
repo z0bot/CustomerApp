@@ -10,7 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="FodyWeavers.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BarcodeScanner.XF" Version="4.2.2.2" />
+    <PackageReference Include="Realm" Version="4.3.0" />
+    <PackageReference Include="Realm.Fody" Version="4.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.356" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.0" />
   </ItemGroup>
