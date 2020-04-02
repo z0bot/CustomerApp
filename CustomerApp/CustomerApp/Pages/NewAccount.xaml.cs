@@ -1,4 +1,5 @@
 ﻿using CustomerApp.Models;
+using CustomerApp.Models.ServiceRequests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace CustomerApp.Pages
         public NewAccount()
         {
             InitializeComponent();
+            MessagingCenterResponse();
         }
 
         private async void RegisterAcctButton_Clicked(object sender, EventArgs e)
@@ -31,12 +33,25 @@ namespace CustomerApp.Pages
             }
             else if(UserPasswordCheck())
             {
-                await Navigation.PopModalAsync();
+                if (await AddUserRequest.SendAddUserRequest(uxFirstName.Text, uxLastName.Text, uxEmail.Text, uxPassword.Text, uxBirthdate.Date.ToString()));
+                {
+                    await DisplayAlert("Successful", "Account has been registered!", "OK");
+                    await Navigation.PopModalAsync();
+                }
             }
             else
             {
                 await DisplayAlert("ERROR", "Passwords must match!", "Continue");
             }
+        }
+        //Used to catch errors thrown by the service request 
+        //determined by entering preexisting email tied to an account
+        public void MessagingCenterResponse()
+        {
+            MessagingCenter.Subscribe<ServiceRequest, string>(this, "Email exists", async (sender, arg) =>
+            {
+                await DisplayAlert("Email already registered", "Please try again with a different email", "OK");
+            });
         }
         /// <summary>
         /// A check that returns true if the user passwords match and then
@@ -60,11 +75,11 @@ namespace CustomerApp.Pages
         {
             User user = new User();
 
-            user.FirstName = uxFirstName.Text;
-            user.LastName = uxLastName.Text;
-            user.Birthday = uxBirthdate.ToString();
-            user.Email = uxEmail.Text;
-            user.Password = uxPassword.Text;
+            user.first_name = uxFirstName.Text;
+            user.last_name = uxLastName.Text;
+            user.birthday = uxBirthdate.ToString();
+            user.email = uxEmail.Text;
+            user.password = uxPassword.Text;
 
             RealmManager.AddOrUpdate<User>(user);
         }

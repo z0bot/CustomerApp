@@ -38,8 +38,8 @@ namespace CustomerApp.Pages
                 For now, creates new user object and stores it in realm*/
                 User currentUser = new User
                 {
-                    Email = uxEmailAdress.Text,
-                    Password = uxPassword.Text,
+                    email = uxEmailAdress.Text,
+                    password = uxPassword.Text,
                 };
                 RealmManager.AddOrUpdate<User>(currentUser);
                 await Navigation.PushAsync(new QRScannerPage());
