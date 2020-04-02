@@ -9,20 +9,46 @@
     <ContentPage.Content>
         <StackLayout
             x:Name="yourOrderLayout">
-
-            <!--Scroll view to display order items-->
-            <ScrollView
-                VerticalOptions="FillAndExpand"
-                HorizontalOptions="CenterAndExpand"
-                Margin="40,60,40,20">
-                <!--Stack layout to place items into-->
-                <StackLayout>
-                    <!--Temp scroll view items. Delete later-->
-                    <BoxView BackgroundColor="Red" HeightRequest="300" WidthRequest="600" />
-                    <BoxView BackgroundColor="Green" HeightRequest="300" WidthRequest="600" />
-                </StackLayout>
-            </ScrollView>
-
+            <!--Stack layout to place items into-->
+            <ListView
+                  x:Name="menuFoodItemsView"
+                  VerticalOptions="FillAndExpand"
+                  HorizontalOptions="CenterAndExpand"
+                  Margin="40,80,40,70"
+                  HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <StackLayout
+                                          x:Name="menuFoodItemLayout"
+                                          Grid.Row="0"
+                                          Orientation="Horizontal">
+                                    <Label
+                                                x:Name="uxMenuItemLabel"
+                                                FontSize="Medium"
+                                                Text="{Binding name}"/>
+                                    <Label
+                                                x:Name="uxMenuItemPriceLabel"
+                                                HorizontalOptions="EndAndExpand"
+                                                FontSize="Medium"
+                                                Text="{Binding StringPrice}"/>
+                                </StackLayout>
+                                <Label
+                                        x:Name="uxMenuItemSpcInst"
+                                        Grid.Row="1"
+                                        FontSize="Medium"
+                                        VerticalTextAlignment="Start"
+                                        Text="{Binding SpecialInstructions}"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
             <!--Stacklayout storing control options, including refill/help buttons-->
             <StackLayout
                 x:Name="controlLayout"
@@ -34,7 +60,7 @@
                 <StackLayout
                     Orientation="Horizontal"
                     HorizontalOptions="FillAndExpand">
-                    
+
                     <StackLayout
                             x:Name="refillLayout"
                             Margin="25,0,10,0"
@@ -45,7 +71,8 @@
                                 Text="Refill"
                                 HorizontalTextAlignment="Center"
                                 FontAttributes="Bold"
-                                TextColor="Black"/>
+                                TextColor="Black"
+                                BackgroundColor="White"/>
                         <ImageButton
                                 x:Name="refillButton"
                                 CornerRadius="15"
@@ -97,7 +124,8 @@
                                 Text="Call Server"
                                 HorizontalTextAlignment="Center"
                                 FontAttributes="Bold"
-                                TextColor="Black"/>
+                                TextColor="Black"
+                                BackgroundColor="White"/>
                         <ImageButton
                                 x:Name="serverButton"
                                 CornerRadius="15"

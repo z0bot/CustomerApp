@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomerApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,26 +13,35 @@ namespace CustomerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class checkoutPage : ContentPage
     {
-        static double unpaid, contribution = 0, tip = 0;
+        static double contribution = 0, tip = 0;
         static bool tipChanged = false;
-
         
         public checkoutPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
-            // Pull unpaid total from database
-            // Faked for now
-            unpaid = 100;
+            System.Windows.Input.ICommand cmd = new Command(onRefresh);
+            orderRefreshView.Command = cmd;
 
-            unpaidEntry.Text = unpaid.ToString("C");
+            
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            DisplayOrder();
         }
 
         async void OnPayButtonClicked(object sender, EventArgs e)
         {
             if ((contribution + tip) > 0)
+            {
+                // Update items paid for in database
+
+
                 await Navigation.PushAsync(new paymentPage(contribution + tip));
+            }
             else // No contribution
                 await Navigation.PushAsync(new endPage());
         }
@@ -47,6 +57,7 @@ namespace CustomerApp.Pages
             if (tip < 0)
                 tip = 0;
 
+            tipChanged = true;
             // Round to two decimal places, then update the textboxes
             tip = Math.Round(tip, 2);
 
@@ -55,26 +66,9 @@ namespace CustomerApp.Pages
             payButton.Text = "Pay " + (contribution + tip).ToString("C");
         }
 
-        void OnContributionCompleted(object sender, EventArgs e)
+        void OnContributionCompleted()
         {
-            // Sanity check inputs
-            if (((Entry)sender).Text == "$" || ((Entry)sender).Text == "$." || ((Entry)sender).Text == "." || ((Entry)sender).Text == "" || ((Entry)sender).Text == null)
-                contribution = 0;
-            else
-                contribution = double.Parse(((Entry)sender).Text, System.Globalization.NumberStyles.Currency);
-
-            if (contribution < 0)
-                contribution = 0;
-            else if (contribution > unpaid)
-                contribution = unpaid;
-
-            // Round to two decimal places, then update the textboxes
-            contribution = Math.Round(contribution, 2);
-
-            ((Entry)sender).Text = contribution.ToString("C");
-
-            unpaidEntry.Text = (unpaid - contribution).ToString("C");
-            if((contribution + tip) != 0)
+            if((contribution + tip) > 0)
                 payButton.Text = "Pay " + (contribution + tip).ToString("C");
             else
                 payButton.Text = "No Contribution";
@@ -101,6 +95,50 @@ namespace CustomerApp.Pages
 
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
+
+        public void DisplayOrder()
+        {
+            // Fetch most recent order status
+
+            
+
+            menuFoodItemsView.ItemsSource = RealmManager.All<MenuFoodItem>().Where((MenuFoodItem m) => m.paid == false).ToList();
+        }
+
+        void OnTogglePaid(object sender, ToggledEventArgs e)
+        {
+            // Don't do anything if Realm is writing
+            if (RealmManager.Realm.IsInTransaction)
+                return;
+
+            MenuFoodItem temp = new MenuFoodItem(((MenuFoodItem)((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext));
+            if (e.Value)
+            {
+                temp.paid = true;
+
+                contribution += temp.price;
+                contribution = Math.Round(contribution, 2);
+            }
+            else
+            {
+                temp.paid = false;
+                contribution -= temp.price;
+                contribution = Math.Round(contribution, 2);
+            }
+            OnContributionCompleted();
+
+            RealmManager.AddOrUpdate<MenuFoodItem>(temp);
+
+        }
+
+        void onRefresh()
+        {
+            // Pull newest order status
+            DisplayOrder();
+
+            orderRefreshView.IsRefreshing = false;
+        }
+
 
         // Prevent going back to previous pages, as the order has already been sent. Must continue and pay
         protected override bool OnBackButtonPressed()

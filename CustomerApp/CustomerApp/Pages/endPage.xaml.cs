@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using CustomerApp.Models;
+
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,39 +14,35 @@ namespace CustomerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class endPage : ContentPage
     {
-        static double unpaid;
+        static double numUnpaid = 0;
         public endPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
-
-            // Pull unpaid balance from database
-            // Faked for now
-            unpaid = 100;
 
             System.Windows.Input.ICommand cmd = new Command(onRefresh);
             refresher.Command = cmd;
             updateLabel();
         }
 
-        async void continueButtonPressed(object sender, EventArgs e)
+        async void unpaidBalanceButton(object sender, EventArgs e)
         {
-            updateLabel();
-
-            if (unpaid > 0)
+            if (numUnpaid > 0)
             {
-                if (await DisplayAlert("Unpaid balance remaining", "Your balance has not yet been fully paid. Would you like to make an additional payment?", "Yes", "No"))
+                if (await DisplayAlert("Unpaid balance remaining", "Not all items have been paid for. Would you like to make an additional contribution?", "Yes", "No"))
                 {
                     await Navigation.PushAsync(new checkoutPage());
                 }
             }
-            else
-            {
+        }
+
+        async void logOutButton(object sender, EventArgs e)
+        {
+            if (numUnpaid == 0)
                 if (await DisplayAlert("Log out confirmation", "Once logged out, you will not be able to request refills until a new order is started. Are you sure you want to leave the table?", "Yes", "No"))
                 {
                     await Navigation.PopToRootAsync();
                 }
-            }
         }
 
         void onRefresh()
@@ -56,16 +54,37 @@ namespace CustomerApp.Pages
         // Need to call this regularly via onRefresh
         void updateLabel()
         {
-            // Pull unpaid from server
-            // Currently decrement every time triggered
-            unpaid -= 40;
+            // Pull unpaid items from server
 
-            if (unpaid > 0)
-                continueButton.Text = "Make payment towards remaining " + unpaid.ToString("C");
+            // Check if any items are unpaid
+            List<MenuFoodItem> unpaidItems = RealmManager.All<MenuFoodItem>().Where((MenuFoodItem m) => m.paid == false).ToList();
+            numUnpaid = unpaidItems.Count();
+
+
+            if (numUnpaid > 1)
+            {
+                continueButton.Text = "Make payment towards remaining " + unpaidItems.Count() + " items";
+                continueButton.Clicked -= unpaidBalanceButton;
+                continueButton.Clicked -= logOutButton;
+                continueButton.Clicked += unpaidBalanceButton;
+                return;
+            }
+            else if (numUnpaid == 1)
+            {
+                continueButton.Text = "Make payment towards remaining item";
+                continueButton.Clicked -= unpaidBalanceButton;
+                continueButton.Clicked -= logOutButton;
+                continueButton.Clicked += unpaidBalanceButton;
+                return;
+            }
             else
+            {
                 continueButton.Text = "Log out of table";
-
-            return ;
+                continueButton.Clicked -= unpaidBalanceButton;
+                continueButton.Clicked -= logOutButton;
+                continueButton.Clicked += logOutButton;
+                return;
+            }
         }
 
         async void OnRefillButtonClicked(object sender, EventArgs e)

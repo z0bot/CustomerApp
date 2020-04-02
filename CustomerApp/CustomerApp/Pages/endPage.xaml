@@ -23,7 +23,7 @@
                 FontSize="Medium"
                 Margin="15,15,15,15"
                 HorizontalTextAlignment="Center"
-                Text="If a balance remains, you can make another payment. Pull down on the button below to refresh the balance"/>
+                Text="If unpaid items remain, you can make another payment. Pull down on the button below to refresh the remaining items"/>
 
             <!-- General purpose button, used to continue or make additional payments -->
             <RefreshView
@@ -42,7 +42,7 @@
                         TextColor="White"
                         BackgroundColor="#1fbd85"
                         CornerRadius="15"
-                        Clicked="continueButtonPressed"/>
+                        Clicked="logOutButton"/>
                 </ScrollView>
             </RefreshView>
             

@@ -6,10 +6,11 @@ namespace CustomerApp.Models
 {
     class Order
     {
-        public List<MenuFoodItem> Contents { get; set; }
+        public IList<MenuFoodItem> Contents { get; set; }
 
-        public double UnpaidBalance { get; set; }
 
         public string WaitstaffEmail { get; set; }
+
+        public bool sent { get; set; }
     }
 }

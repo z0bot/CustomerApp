@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using CustomerApp.Models;
+using CustomerApp.Models.ServiceRequests;
+
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -20,16 +23,51 @@ namespace CustomerApp.Pages
     public partial class menuPage : ContentPage
     {
         
-
         public List<categoryLink> category;
         public menuPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
+            
+        }
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            await UpdateMenuItems();
+            PopulateCategories();
+        }
+
+        async Task UpdateMenuItems()
+        {
+            RealmManager.RemoveAll<MenuItemsList>();
+            var success = await GetMenuItemsRequest.SendGetMenuItemsRequest();
+            
+        }
+
+        void PopulateCategories()
+        {
+            // Clear existing categories
+            while(categoryList.Children.Count != 0)
+                categoryList.Children.RemoveAt(0);
+
             category = new List<categoryLink>();
 
-            List<string> categoryNames = new List<string>() { "Appetizers", "Entrees", "Sides", "Desserts", "Beverages", "Appetizers", "Entrees", "Sides", "Desserts", "Beverages" }; // *** Temporary categories. Doubled up to demonstrate scrollview
+            //MenuItemsList items = RealmManager.All<MenuItemsList>().FirstOrDefault();
+
+            List<string> categoryNames = new List<string>();
+
+            foreach(MenuFoodItem m in RealmManager.All<MenuItemsList>().FirstOrDefault().menuItems)
+            {
+                categoryNames.Add(m.category);
+            }
+
+            /*foreach (MenuFoodItem MenuItem in RealmManager.All<MenuItemsList>().FirstOrDefault().menuItems)
+            {
+                categoryNames.Add(MenuItem.category);
+            }*/
+
+            categoryNames = categoryNames.Distinct().ToList();
 
             for (int i = 0; i < categoryNames.Count; ++i)
             {
@@ -49,7 +87,6 @@ namespace CustomerApp.Pages
                     CornerRadius = 15
                 }));
 
-                //newCat.ButtonInfo.Clicked += async (sender, args) => await DisplayAlert("Navigation", newCat.name, "OK");
                 newCat.ButtonInfo.Clicked += async (sender, args) => await Navigation.PushAsync(new categoryPage(newCat.name));
                 category.Add(newCat);
             }

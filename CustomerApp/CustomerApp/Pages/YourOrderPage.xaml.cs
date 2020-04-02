@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomerApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,18 +17,18 @@ namespace CustomerApp.Pages
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
-
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            DisplayOrder();
         }
 
         async void OnSendOrderClicked(object sender, EventArgs e)
         {
-            if (await DisplayAlert("Confirm selection", "Once sent, order cannot be changed. Continue?", "Yes", "No"))
-            { 
-                // Send order to kitchen
-
-                //Navigate to order confirmation page
+            //Navigate to order confirmation page
+            if(await DisplayAlert("WARNING: Sending Order", "Are you sure you want to send the order? No further edits may be made by anyone else at the table", "Yes", "No"))
                 await Navigation.PushAsync(new checkoutPage());
-            }
         }
 
         async void OnAddItemClicked(object sender, EventArgs e)
@@ -57,12 +58,25 @@ namespace CustomerApp.Pages
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
-                if(await DisplayAlert("WARNING: Changes will be lost", "Are you sure you want to leave this page?", "Yes", "No"))
+                if (await DisplayAlert("WARNING: Changes will be lost", "Are you sure you want to leave this page?", "Yes", "No"))
                 {
-                    await Navigation.PopAsync();
+                    RealmManager.RemoveAll<MenuFoodItem>();
+                    try
+                    {
+                        await Navigation.PopAsync();
+                    }
+                    catch
+                    {
+                        await DisplayAlert("CAUGHT", "You suck", "OK");
+                    }
                 }
             });
-            return true; 
+            return true;
+        }
+
+        public void DisplayOrder()
+        {
+            menuFoodItemsView.ItemsSource = RealmManager.All<MenuFoodItem>().ToList();
         }
     }
 

@@ -23,53 +23,54 @@
                 FontSize="Medium"
                 Margin="15,0,15,15"
                 HorizontalTextAlignment="Center"
-                Text="You can pay for some or all of your table's order"/>
+                Text="You can pay for some or all of the items your table has ordered"/>
 
-            <Label
-                VerticalOptions="Start"
-                HorizontalOptions="Center"
-                TextColor="Black"
-                FontSize="Title"
-                FontAttributes="Bold"
-                Margin="15,15,15,0"
-                Text="Your Contribution"/>
-            <Frame
-                Padding="0"
-                CornerRadius="15"
-                Margin="15,0,15,0"
-                WidthRequest="140"
-                HorizontalOptions="Center">
-                <Entry
-                    x:Name="contributionEntry"
-                    HorizontalTextAlignment="Center"
-                    BackgroundColor="White"
-                    FontSize="Medium"
-                    HorizontalOptions="Fill"
-                    Unfocused="OnContributionCompleted"
-                    Keyboard="Numeric"/>
-            </Frame>
-
-            <Label
-                VerticalOptions="Start"
-                HorizontalOptions="Center"
-                TextColor="Black"
-                FontSize="Title"
-                FontAttributes="Bold"
-                Margin="15,15,15,0"
-                Text="Unpaid balance"/>
-            <Frame
-                Padding="0"
-                CornerRadius="15"
-                Margin="15,0,15,0"
-                WidthRequest="140"
-                HorizontalOptions="Center">
-                <Label
-                    x:Name="unpaidEntry"
-                    HorizontalTextAlignment="Center"
-                    BackgroundColor="White"
-                    FontSize="Medium"
-                    HorizontalOptions="Fill"/>
-            </Frame>
+            <RefreshView
+                x:Name="orderRefreshView"
+                Command="{Binding onRefresh()}"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="CenterAndExpand"
+                Margin="40,80,40,70">
+                <ListView
+                      x:Name="menuFoodItemsView"
+                      HasUnevenRows="True"
+                    SelectionMode="None">
+                    <ListView.ItemTemplate
+                        >
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <StackLayout
+                                              x:Name="menuFoodItemLayout"
+                                              Grid.Row="0"
+                                              Orientation="Horizontal">
+                                        <Label
+                                                    x:Name="uxMenuItemLabel"
+                                                    FontSize="Medium"
+                                                    Text="{Binding name}"/>
+                                        <Label
+                                                    FontSize="Medium"
+                                                    Text="{Binding paid}"/>
+                                        <Label
+                                                    x:Name="uxMenuItemPriceLabel"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    FontSize="Medium"
+                                                    Text="{Binding StringPrice}"/>
+                                        <Switch
+                                            x:Name="uxTogglePaid"
+                                            IsToggled="{Binding paid}"
+                                            Toggled="OnTogglePaid"/>
+                                    </StackLayout>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </RefreshView>
 
             <Label
                 VerticalOptions="Start"
