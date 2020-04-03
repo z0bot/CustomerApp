@@ -147,7 +147,7 @@
     <AndroidResource Include="Resources\drawable\detailsIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\goodFood.jpg" />
+    <AndroidResource Include="Resources\drawable\GoodFood.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />

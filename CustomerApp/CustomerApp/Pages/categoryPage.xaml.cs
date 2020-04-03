@@ -42,8 +42,8 @@ namespace CustomerApp.Pages
         void PopulateMenu()
         {
             // Clear existing categories
-            while (menuItemList.Children.Count != 0)
-                menuItemList.Children.RemoveAt(0);
+            while (categoryItemList.Children.Count != 0)
+                categoryItemList.Children.RemoveAt(0);
 
             buttons = new List<Button>();
 
@@ -55,13 +55,12 @@ namespace CustomerApp.Pages
                 foreach(Ingredient i in m.ingredients)
                 {
                     // Remove a member if we don't have the necessary ingredients
-                    var index = ingredients.FindIndex((Ingredient j) => j.id == i.id && j.quantity > 0);
+                    var index = ingredients.FindIndex((Ingredient j) => j._id == i._id && j.quantity > 0);
                     if(index == -1)
                     {
                         members.Remove(m);
                         break;
                     }
-                            
                 }
             }
 
@@ -70,7 +69,8 @@ namespace CustomerApp.Pages
             {
                 Button temp;
                 string itemName = members[i].name;
-                menuItemList.Children.Add(temp = (new Button()
+                string itemID = members[i]._id;
+                categoryItemList.Children.Add(temp = (new Button()
                 {
                     Text = members[i].name + " | " + members[i].StringPrice,
                     Margin = new Thickness(20, 0, 20, 20),
@@ -81,11 +81,36 @@ namespace CustomerApp.Pages
                     CornerRadius = 15
                 }));
 
-                temp.Clicked += async (sender, args) => await Navigation.PushAsync(new menuItemPage(itemName));
+                temp.Clicked += async (sender, args) => await Navigation.PushAsync(new menuItemPage(itemID));
 
                 buttons.Add(temp);
             }
 
+
+            if (members.Count() == 0)
+            {
+                categoryItemList.Children.Add(new Label()
+                {
+                    VerticalOptions = LayoutOptions.Start,
+                    HorizontalOptions = LayoutOptions.Center,
+                    TextColor = Color.Black,
+                    FontSize = Device.GetNamedSize(NamedSize.Header, typeof(Label)),
+                    FontAttributes = FontAttributes.Bold,
+                    Margin = new Thickness(15, 15, 15, 15),
+                    Text = "We've come up empty!"
+                });
+
+                categoryItemList.Children.Add(new Label()
+                {
+                    VerticalOptions = LayoutOptions.Start,
+                    HorizontalOptions = LayoutOptions.Center,
+                    TextColor = Color.Black,
+                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                    Margin = new Thickness(15, 15, 15, 15),
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    Text = "We're all out of the ingredients for the items in this category. Please use the back button and look at a different category"
+                });
+            }
         }
 
         async void OnRefillButtonClicked(object sender, EventArgs e)

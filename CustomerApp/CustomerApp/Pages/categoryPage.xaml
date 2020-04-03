@@ -23,7 +23,7 @@
                 HorizontalOptions="FillAndExpand"
                 Margin="20,20,20,20">
                 <StackLayout
-                    x:Name="menuItemList">
+                    x:Name="categoryItemList">
                     
                 </StackLayout>
                 

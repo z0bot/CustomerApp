@@ -13,21 +13,34 @@ namespace CustomerApp
         {
             InitializeComponent();
 
-            //if food exists go to YourOrderPage
-            //else no food but user logged on, OrderHerePage
+            //if an order exists go to YourOrderPage
+            //else no order but user logged on, OrderHerePage
             //else LoginPage
-            if(!RealmManager.All<MenuFoodItem>().Count().Equals(0))
+            if(!RealmManager.All<Order>().Count().Equals(0))
             {
-                MainPage = new NavigationPage(new YourOrderPage());
+                if(RealmManager.All<Order>().FirstOrDefault().sent)
+                {
+                    MainPage = new NavigationPage(new checkoutPage());
 
-                //gets access to navigation stack
-                INavigation navigation = Xamarin.Forms.Application.Current.MainPage.Navigation;
-                //gets current page (i.e. MainPage)
-                Page currentpage = navigation.NavigationStack.ElementAt(navigation.NavigationStack.Count - 1);
-                //gets new orderHerePage
-                Page orderHerePage = new orderHerePage();
-                //now have the ability to back from YourOrder to orderHerePage
-                navigation.InsertPageBefore(orderHerePage, currentpage);
+                    //gets access to navigation stack
+                    INavigation navigation = Xamarin.Forms.Application.Current.MainPage.Navigation;
+                    //gets current page (i.e. MainPage)
+                    Page currentpage = navigation.NavigationStack.ElementAt(navigation.NavigationStack.Count - 1);
+                }
+                else
+                {
+                    MainPage = new NavigationPage(new YourOrderPage());
+
+                    //gets access to navigation stack
+                    INavigation navigation = Xamarin.Forms.Application.Current.MainPage.Navigation;
+                    //gets current page (i.e. MainPage)
+                    Page currentpage = navigation.NavigationStack.ElementAt(navigation.NavigationStack.Count - 1);
+                    //gets new orderHerePage
+                    Page orderHerePage = new orderHerePage();
+                    //now have the ability to back from YourOrder to orderHerePage
+                    navigation.InsertPageBefore(orderHerePage, currentpage);
+                }
+                
             }
             else if(!RealmManager.All<User>().Count().Equals(0))
             {

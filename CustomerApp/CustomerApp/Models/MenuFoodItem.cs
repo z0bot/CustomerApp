@@ -9,10 +9,9 @@ namespace CustomerApp.Models
     {
         public IList<Ingredient> ingredients { get; }
 
-        
-        public string id { get; set; }
-
         [PrimaryKey]
+        public string _id { get; set; }
+
         public string name { get; set; }
 
         public string picture { get; set; }
@@ -24,7 +23,7 @@ namespace CustomerApp.Models
 
         public string description { get; set; }
 
-        public string SpecialInstructions { get; set; }
+        public string special_instruct { get; set; }
 
         public bool paid { get; set; }
 
@@ -36,7 +35,10 @@ namespace CustomerApp.Models
         // Copy constructor
         public MenuFoodItem(MenuFoodItem m)
         {
-            id = m.id;
+            _id = m._id;
+
+            ingredients = m.ingredients;
+
             name = m.name;
 
             picture = m.picture;
@@ -47,7 +49,7 @@ namespace CustomerApp.Models
 
             description = m.description;
 
-            SpecialInstructions = m.SpecialInstructions;
+            special_instruct = m.special_instruct;
 
             paid = m.paid;
 

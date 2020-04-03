@@ -41,6 +41,7 @@ namespace CustomerApp.Pages
         async Task UpdateMenuItems()
         {
             RealmManager.RemoveAll<MenuItemsList>();
+            //RealmManager.RemoveAll<MenuFoodItem>();
             var success = await GetMenuItemsRequest.SendGetMenuItemsRequest();
             
         }

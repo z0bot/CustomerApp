@@ -41,7 +41,9 @@ namespace CustomerApp.Pages
             if (numUnpaid == 0)
                 if (await DisplayAlert("Log out confirmation", "Once logged out, you will not be able to request refills until a new order is started. Are you sure you want to leave the table?", "Yes", "No"))
                 {
-                    await Navigation.PopToRootAsync();
+                    RealmManager.RemoveAll<User>();
+                    RealmManager.RemoveAll<Order>();
+                    await Navigation.PushAsync(new Login());
                 }
         }
 
@@ -57,7 +59,7 @@ namespace CustomerApp.Pages
             // Pull unpaid items from server
 
             // Check if any items are unpaid
-            List<MenuFoodItem> unpaidItems = RealmManager.All<MenuFoodItem>().Where((MenuFoodItem m) => m.paid == false).ToList();
+            List<MenuFoodItem> unpaidItems = RealmManager.All<Order>().FirstOrDefault().Contents.Where((MenuFoodItem m) => m.paid == false).ToList();
             numUnpaid = unpaidItems.Count();
 
 

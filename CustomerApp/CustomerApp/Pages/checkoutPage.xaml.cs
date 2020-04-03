@@ -14,7 +14,7 @@ namespace CustomerApp.Pages
     public partial class checkoutPage : ContentPage
     {
         static double contribution = 0, tip = 0;
-        static bool tipChanged = false;
+        bool tipChanged = false;
         
         public checkoutPage()
         {
@@ -24,7 +24,7 @@ namespace CustomerApp.Pages
             System.Windows.Input.ICommand cmd = new Command(onRefresh);
             orderRefreshView.Command = cmd;
 
-            
+            menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().Contents.Where((MenuFoodItem m) => m.paid == false).ToList();
         }
 
         protected override void OnAppearing()
@@ -63,21 +63,24 @@ namespace CustomerApp.Pages
 
             tipEntry.Text = tip.ToString("C");
 
-            payButton.Text = "Pay " + (contribution + tip).ToString("C");
+            OnContributionCompleted();
         }
 
         void OnContributionCompleted()
         {
-            if((contribution + tip) > 0)
+            // Suggest tip if not specified
+            if (!tipChanged)
+            {
+                tip = 0;
+                tipEntry.Placeholder = (contribution * 0.2).ToString("C");
+            }
+
+            if ((contribution + tip) > 0)
                 payButton.Text = "Pay " + (contribution + tip).ToString("C");
             else
                 payButton.Text = "No Contribution";
 
-            // Suggest tip if not specified
-            if (!tipChanged)
-            {
-                tipEntry.Placeholder = (contribution * 0.2).ToString("C");
-            }
+            
         }
 
 
@@ -98,11 +101,21 @@ namespace CustomerApp.Pages
 
         public void DisplayOrder()
         {
-            // Fetch most recent order status
+            // Reset all items to unpaid
+            foreach (MenuFoodItem m in RealmManager.All<Order>().FirstOrDefault().Contents)
+                RealmManager.Write(() =>
+                {
+                    m.paid = false;
+                });
 
+            // Fetch most recent order status
             
 
-            menuFoodItemsView.ItemsSource = RealmManager.All<MenuFoodItem>().Where((MenuFoodItem m) => m.paid == false).ToList();
+            contribution = 0;
+
+            OnContributionCompleted();
+
+            //menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().Contents.Where((MenuFoodItem m) => m.paid == false).ToList();
         }
 
         void OnTogglePaid(object sender, ToggledEventArgs e)
@@ -111,24 +124,26 @@ namespace CustomerApp.Pages
             if (RealmManager.Realm.IsInTransaction)
                 return;
 
-            MenuFoodItem temp = new MenuFoodItem(((MenuFoodItem)((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext));
+            string toggledID = ((MenuFoodItem)((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext)._id;
+            //MenuFoodItem updated = new MenuFoodItem(original);
+
             if (e.Value)
             {
-                temp.paid = true;
+                RealmManager.Write(() => RealmManager.Find<MenuFoodItem>(toggledID).paid = true);
 
-                contribution += temp.price;
+                contribution += RealmManager.Find<MenuFoodItem>(toggledID).price;
                 contribution = Math.Round(contribution, 2);
             }
             else
             {
-                temp.paid = false;
-                contribution -= temp.price;
+                RealmManager.Write(() => RealmManager.Find<MenuFoodItem>(toggledID).paid = false);
+
+                contribution -= RealmManager.Find<MenuFoodItem>(toggledID).price;
                 contribution = Math.Round(contribution, 2);
+                if (contribution < 0)
+                    contribution = 0;
             }
             OnContributionCompleted();
-
-            RealmManager.AddOrUpdate<MenuFoodItem>(temp);
-
         }
 
         void onRefresh()

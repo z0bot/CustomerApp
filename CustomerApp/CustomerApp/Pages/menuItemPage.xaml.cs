@@ -14,14 +14,15 @@ namespace CustomerApp.Pages
     public partial class menuItemPage : ContentPage
     {
         MenuFoodItem item;
-        public menuItemPage(string itemName)
+        public menuItemPage(string itemID)
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
             // Get this item's details
             //item = new Models.MenuFoodItem() { id = itemName + new Random().Next(0, 10000).ToString(), name = itemName, picture = "goodFood", description = "Description of " + itemName, nutrition = "Calories: hella\nFat: hella\nIngredients: hellman's", price = 3.50, SpecialInstructions = null, paid = false, category = itemName };
-            item = new MenuFoodItem(RealmManager.Find<MenuFoodItem>(itemName));
+            item = new MenuFoodItem(RealmManager.Find<MenuFoodItem>(itemID));
+            item._id += new Random().Next(0, 1000000);
             nameLabel.Text = item.name;
             descLabel.Text = item.description;
             itemPic.Source = item.picture;
@@ -39,13 +40,24 @@ namespace CustomerApp.Pages
         {
             // Prompt for special instructions
 
-            item.SpecialInstructions = await DisplayPromptAsync("Special Instructions", "Enter special instructions, such as allergen information", "OK", "Cancel", null, -1, keyboard: Keyboard.Plain, item.SpecialInstructions);
+            item.special_instruct = await DisplayPromptAsync("Special Instructions", "Enter special instructions, such as allergen information", "OK", "Cancel", null, -1, keyboard: Keyboard.Plain, item.special_instruct);
         }
 
         async void OnAddItemClicked(object sender, EventArgs e)
         {
             //Store item into local database
-            RealmManager.AddOrUpdate<MenuFoodItem>(item);
+            
+            /*Order temp = new Order(RealmManager.All<Order>().FirstOrDefault());
+            RealmManager.AddOrUpdate<Order>(temp);
+            temp.Contents.Add(item);
+            RealmManager.AddOrUpdate<Order>(temp);*/
+            RealmManager.Write(() => 
+            {
+                RealmManager.Realm.All<Order>().FirstOrDefault().Contents.Add(item);
+                //temp.Contents.Add(item);
+                //RealmManager.AddOrUpdate<Order>(temp);
+            });
+            
 
             //Navigate back to menu. Probably a more elegant method but is easy to do. Remove previous 2 pages, then pop
             Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);

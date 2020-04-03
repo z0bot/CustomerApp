@@ -43,7 +43,7 @@
                                         Grid.Row="1"
                                         FontSize="Medium"
                                         VerticalTextAlignment="Start"
-                                        Text="{Binding SpecialInstructions}"/>
+                                        Text="{Binding special_instruct}"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

@@ -28,11 +28,12 @@
             <RefreshView
                 x:Name="orderRefreshView"
                 Command="{Binding onRefresh()}"
-                VerticalOptions="FillAndExpand"
+                VerticalOptions="Fill"
                 HorizontalOptions="CenterAndExpand"
-                Margin="40,80,40,70">
+                Margin="40,10,40,10">
                 <ListView
                       x:Name="menuFoodItemsView"
+                    VerticalOptions="Fill"
                       HasUnevenRows="True"
                     SelectionMode="None">
                     <ListView.ItemTemplate
@@ -53,12 +54,10 @@
                                                     FontSize="Medium"
                                                     Text="{Binding name}"/>
                                         <Label
-                                                    FontSize="Medium"
-                                                    Text="{Binding paid}"/>
-                                        <Label
                                                     x:Name="uxMenuItemPriceLabel"
                                                     HorizontalOptions="EndAndExpand"
-                                                    FontSize="Medium"
+                                                    VerticalOptions="Center"
+                                                    FontSize="Small"
                                                     Text="{Binding StringPrice}"/>
                                         <Switch
                                             x:Name="uxTogglePaid"

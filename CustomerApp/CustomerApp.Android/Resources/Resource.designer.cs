@@ -11149,7 +11149,7 @@ namespace CustomerApp.Droid
 			public const int detailsIcon = 2131165311;
 			
 			// aapt resource value: 0x7F070080
-			public const int goodFood = 2131165312;
+			public const int GoodFood = 2131165312;
 			
 			// aapt resource value: 0x7F070081
 			public const int googleg_disabled_color_18 = 2131165313;
