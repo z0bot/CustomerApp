@@ -48,11 +48,17 @@ namespace CustomerApp.Pages
                 await Navigation.PushAsync(new endPage());
         }
 
+        // Clear the tip's entry every time it is selected
+        void clearTip(object sender, EventArgs e)
+        {
+            ((Entry)sender).Text = "";
+        }
+
         // Called when entry is completed on the tip field. Sets tipChanged to true, preventing suggestions going forward
         void OnTipCompleted(object sender, EventArgs e)
         {
             // Sanity check inputs
-            if (((Entry)sender).Text == "$" || ((Entry)sender).Text == "$." || ((Entry)sender).Text == "." || ((Entry)sender).Text == "" || ((Entry)sender).Text == null)
+            if (!double.TryParse(((Entry)sender).Text, out tip))
                 tip = 0;
             else
                 tip = double.Parse(((Entry)sender).Text, System.Globalization.NumberStyles.Currency);
@@ -68,6 +74,7 @@ namespace CustomerApp.Pages
 
             OnContributionCompleted();
         }
+
 
         void OnContributionCompleted()
         {
