@@ -7,19 +7,53 @@ namespace CustomerApp.Models
 {
     public class MenuFoodItem : RealmObject
     {
+        public IList<Ingredient> ingredients { get; }
+
         [PrimaryKey]
-        public string Name { get; set; }
+        public string _id { get; set; }
 
-        public string Picture { get; set; }
+        public string name { get; set; }
 
-        public string Nutrition { get; set; } // Just manually input formatted text to be displayed in an alert, lmao
+        public string picture { get; set; }
 
-        public double Price { get; set; }
-        public string StringPrice => "$" + Price.ToString();
+        public string nutrition { get; set; } // Just manually input formatted text to be displayed in an alert, lmao
 
-        public string Description { get; set; }
+        public double price { get; set; }
+        public string StringPrice => price.ToString("C");
 
-        public string SpecialInstructions { get; set; }
+        public string description { get; set; }
 
+        public string special_instruct { get; set; }
+
+        public bool paid { get; set; }
+
+        public string category { get; set; }
+
+        // Default constructor
+        public MenuFoodItem() { }
+
+        // Copy constructor
+        public MenuFoodItem(MenuFoodItem m)
+        {
+            _id = m._id;
+
+            ingredients = m.ingredients;
+
+            name = m.name;
+
+            picture = m.picture;
+
+            nutrition = m.nutrition;
+
+            price = m.price;
+
+            description = m.description;
+
+            special_instruct = m.special_instruct;
+
+            paid = m.paid;
+
+            category = m.category;
+        }
     }
 }

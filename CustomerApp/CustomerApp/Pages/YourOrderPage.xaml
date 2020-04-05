@@ -9,46 +9,46 @@
     <ContentPage.Content>
         <StackLayout
             x:Name="yourOrderLayout">
-                <!--Stack layout to place items into-->
-                <ListView
+            <!--Stack layout to place items into-->
+            <ListView
                   x:Name="menuFoodItemsView"
                   VerticalOptions="FillAndExpand"
                   HorizontalOptions="CenterAndExpand"
                   Margin="40,80,40,70"
                   HasUnevenRows="True">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                        <StackLayout
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <StackLayout
                                           x:Name="menuFoodItemLayout"
                                           Grid.Row="0"
                                           Orientation="Horizontal">
-                                             <Label
+                                    <Label
                                                 x:Name="uxMenuItemLabel"
                                                 FontSize="Medium"
-                                                Text="{Binding Name}"/>
-                                             <Label
+                                                Text="{Binding name}"/>
+                                    <Label
                                                 x:Name="uxMenuItemPriceLabel"
                                                 HorizontalOptions="EndAndExpand"
                                                 FontSize="Medium"
                                                 Text="{Binding StringPrice}"/>
-                                        </StackLayout>
-                                    <Label
+                                </StackLayout>
+                                <Label
                                         x:Name="uxMenuItemSpcInst"
                                         Grid.Row="1"
                                         FontSize="Medium"
                                         VerticalTextAlignment="Start"
-                                        Text="{Binding SpecialInstructions}"/>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                                        Text="{Binding special_instruct}"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
             <!--Stacklayout storing control options, including refill/help buttons-->
             <StackLayout
                 x:Name="controlLayout"
@@ -60,7 +60,7 @@
                 <StackLayout
                     Orientation="Horizontal"
                     HorizontalOptions="FillAndExpand">
-                    
+
                     <StackLayout
                             x:Name="refillLayout"
                             Margin="25,0,10,0"

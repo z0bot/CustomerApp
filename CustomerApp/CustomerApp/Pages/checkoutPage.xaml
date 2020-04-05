@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="CustomerApp.Pages.checkoutPage"
+             BackgroundImageSource="backgroundImage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Title"
+                FontAttributes="Bold"
+                Margin="15,15,15,0"
+                Text="Ticket"/>
+            <Label
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Medium"
+                Margin="15,0,15,15"
+                HorizontalTextAlignment="Center"
+                Text="You can pay for some or all of the items your table has ordered"/>
+
+            <RefreshView
+                x:Name="orderRefreshView"
+                Command="{Binding onRefresh()}"
+                VerticalOptions="Fill"
+                HorizontalOptions="CenterAndExpand"
+                Margin="40,10,40,10">
+                <ListView
+                      x:Name="menuFoodItemsView"
+                    VerticalOptions="Fill"
+                      HasUnevenRows="True"
+                    SelectionMode="None">
+                    <ListView.ItemTemplate
+                        >
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <StackLayout
+                                              x:Name="menuFoodItemLayout"
+                                              Grid.Row="0"
+                                              Orientation="Horizontal">
+                                        <Label
+                                                    x:Name="uxMenuItemLabel"
+                                                    FontSize="Medium"
+                                                    Text="{Binding name}"/>
+                                        <Label
+                                                    x:Name="uxMenuItemPriceLabel"
+                                                    HorizontalOptions="EndAndExpand"
+                                                    VerticalOptions="Center"
+                                                    FontSize="Small"
+                                                    Text="{Binding StringPrice}"/>
+                                        <Switch
+                                            x:Name="uxTogglePaid"
+                                            IsToggled="{Binding paid}"
+                                            Toggled="OnTogglePaid"/>
+                                    </StackLayout>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </RefreshView>
+
+            <Label
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Title"
+                FontAttributes="Bold"
+                Margin="15,15,15,0"
+                Text="Tip"/>
+            <Frame
+                Padding="0"
+                CornerRadius="15"
+                Margin="15,0,15,0"
+                WidthRequest="140"
+                HorizontalOptions="Center">
+                <Entry
+                    x:Name="tipEntry"
+                    HorizontalTextAlignment="Center"
+                    BackgroundColor="White"
+                    FontSize="Medium"
+                    HorizontalOptions="Fill"
+                    Unfocused="OnTipCompleted"
+                    Keyboard="Numeric"/>
+            </Frame>
+            <Label
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Micro"
+                Margin="15,0,15,15"
+                HorizontalTextAlignment="Center"
+                Text="Note that the placeholder value is just a suggestion. No charge will be made unless explicitly specified."/>
+
+            <!--Refill/help buttons and pay button-->
+            <StackLayout
+                    Orientation="Horizontal"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="EndAndExpand">
+
+                <StackLayout
+                            x:Name="refillLayout"
+                            Margin="25,0,10,0"
+                            Orientation="Vertical"
+                            VerticalOptions="EndAndExpand"
+                            HorizontalOptions="StartAndExpand">
+                    <Label
+                                Text="Refill"
+                                HorizontalTextAlignment="Center"
+                                FontAttributes="Bold"
+                                TextColor="Black"/>
+                    <ImageButton
+                                x:Name="refillButton"
+                                CornerRadius="15"
+                                Source="plusButton"
+                                BackgroundColor="Transparent"
+                                WidthRequest="70"
+                                HeightRequest="70"
+                                Clicked="OnRefillButtonClicked"/>
+                </StackLayout>
+
+
+                <Button
+                            x:Name="payButton"
+                            VerticalOptions="Center"
+                            Text="No Contribution"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            BackgroundColor="#1fbd85"
+                            FontSize="Medium"
+                            CornerRadius="15"
+                            Clicked="OnPayButtonClicked"/>
+
+
+                <StackLayout
+                            x:Name="serverButtonLayout"
+                            Orientation="Vertical"
+                            Margin="10,0,25,0"
+                            VerticalOptions="EndAndExpand"
+                            HorizontalOptions="EndAndExpand">
+                    <Label
+                                Text="Call Server"
+                                HorizontalTextAlignment="Center"
+                                FontAttributes="Bold"
+                                TextColor="Black"/>
+                    <ImageButton
+                                x:Name="serverButton"
+                                CornerRadius="15"
+                                BackgroundColor="Transparent"
+                                WidthRequest="70"
+                                HeightRequest="70"
+                                Source="plusButton"
+                                Clicked="OnServerButtonClicked"/>
+                </StackLayout>
+            </StackLayout>
+
+        </StackLayout>
+        
+    </ContentPage.Content>
+</ContentPage>

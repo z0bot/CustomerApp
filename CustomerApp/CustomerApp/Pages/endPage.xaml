@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="CustomerApp.Pages.endPage"
+             BackgroundImageSource="backgroundImage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Title"
+                FontAttributes="Bold"
+                Margin="15,15,15,15"
+                Text="You're all set!"/>
+            <Label
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Medium"
+                Margin="15,15,15,15"
+                HorizontalTextAlignment="Center"
+                Text="If unpaid items remain, you can make another payment. Pull down on the button below to refresh the remaining items"/>
+
+            <!-- General purpose button, used to continue or make additional payments -->
+            <RefreshView
+                x:Name="refresher"
+                Command="{Binding onRefresh()}"
+                HeightRequest="140">
+                <ScrollView
+                    VerticalOptions="Fill">
+                    <Button
+                        x:Name="continueButton"
+                        VerticalOptions="Start"
+                        FontSize="Medium"
+                        Margin="30, 0, 30, 20"
+                        HeightRequest="70"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="#1fbd85"
+                        CornerRadius="15"
+                        Clicked="logOutButton"/>
+                </ScrollView>
+            </RefreshView>
+            
+
+            <!--Refill/help buttons-->
+            <StackLayout
+                    Orientation="Horizontal"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="EndAndExpand">
+
+                <StackLayout
+                            x:Name="refillLayout"
+                            Margin="25,0,10,0"
+                            Orientation="Vertical"
+                            VerticalOptions="EndAndExpand"
+                            HorizontalOptions="StartAndExpand">
+                    <Label
+                                Text="Refill"
+                                HorizontalTextAlignment="Center"
+                                FontAttributes="Bold"
+                                TextColor="Black"/>
+                    <ImageButton
+                                x:Name="refillButton"
+                                CornerRadius="15"
+                                Source="plusButton"
+                                BackgroundColor="Transparent"
+                                WidthRequest="70"
+                                HeightRequest="70"
+                                Clicked="OnRefillButtonClicked"/>
+                </StackLayout>
+
+
+                <StackLayout
+                            x:Name="serverButtonLayout"
+                            Orientation="Vertical"
+                            Margin="10,0,25,0"
+                            VerticalOptions="EndAndExpand"
+                            HorizontalOptions="EndAndExpand">
+                    <Label
+                                Text="Call Server"
+                                HorizontalTextAlignment="Center"
+                                FontAttributes="Bold"
+                                TextColor="Black"/>
+                    <ImageButton
+                                x:Name="serverButton"
+                                CornerRadius="15"
+                                BackgroundColor="Transparent"
+                                WidthRequest="70"
+                                HeightRequest="70"
+                                Source="plusButton"
+                                Clicked="OnServerButtonClicked"/>
+                </StackLayout>
+            </StackLayout>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

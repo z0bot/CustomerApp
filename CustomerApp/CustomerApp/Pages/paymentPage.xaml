@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="CustomerApp.Pages.paymentPage"
+             BackgroundImageSource="backgroundImage">
+    <ContentPage.Content>
+        <StackLayout
+            x:Name="mainStack">
+            <Label
+                x:Name="titleLabel"
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Title"
+                FontAttributes="Bold"
+                Margin="15,15,15,15"
+                Text="Payment"/>
+            <Label
+                x:Name="descLabel"
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Medium"
+                Margin="15,15,15,15"
+                Text="Take a picture of your card to pay for your meal"/>
+
+
+            <Button x:Name="scanCardButton" 
+                            Text="Scan Card"
+                            BackgroundColor="#1fbd85"
+                            TextColor="White" 
+                            Margin="0,30,0,0"
+                            FontSize="Large"
+                            WidthRequest="300"
+                            Clicked="scanCard"
+                            HorizontalOptions="Center"
+                            CornerRadius="15"/>
+
+            <!--Refill/help buttons-->
+            <StackLayout
+                    Orientation="Horizontal"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="EndAndExpand">
+
+                <StackLayout
+                            x:Name="refillLayout"
+                            Margin="25,0,10,0"
+                            Orientation="Vertical"
+                            VerticalOptions="EndAndExpand"
+                            HorizontalOptions="StartAndExpand">
+                    <Label
+                                Text="Refill"
+                                HorizontalTextAlignment="Center"
+                                FontAttributes="Bold"
+                                TextColor="Black"/>
+                    <ImageButton
+                                x:Name="refillButton"
+                                CornerRadius="15"
+                                Source="plusButton"
+                                BackgroundColor="Transparent"
+                                WidthRequest="70"
+                                HeightRequest="70"
+                                Clicked="OnRefillButtonClicked"/>
+                </StackLayout>
+
+
+                <StackLayout
+                            x:Name="serverButtonLayout"
+                            Orientation="Vertical"
+                            Margin="10,0,25,0"
+                            VerticalOptions="EndAndExpand"
+                            HorizontalOptions="EndAndExpand">
+                    <Label
+                                Text="Call Server"
+                                HorizontalTextAlignment="Center"
+                                FontAttributes="Bold"
+                                TextColor="Black"/>
+                    <ImageButton
+                                x:Name="serverButton"
+                                CornerRadius="15"
+                                BackgroundColor="Transparent"
+                                WidthRequest="70"
+                                HeightRequest="70"
+                                Source="plusButton"
+                                Clicked="OnServerButtonClicked"/>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
