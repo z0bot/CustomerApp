@@ -19,6 +19,8 @@ namespace CustomerApp.Pages
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
+            confirmPayButton.IsVisible = false;
+
             total = payment;
         }
 
@@ -29,33 +31,22 @@ namespace CustomerApp.Pages
             // Give the card reader time to come up
             await System.Threading.Tasks.Task.Delay(1000);
 
+            scanCardButton.IsVisible = false;
+
             // Add button to confirm order if it was not already added
-            if(mainStack.Children.Count != 5) {
-                Button confirm = new Button()
-                {
-                    Text = "Confirm Payment of " + total.ToString("C"),
-                    Margin = new Thickness(30, 0, 30, 20),
-                    FontAttributes = FontAttributes.Bold,
-                    TextColor = Color.White,
-                    WidthRequest = 140,
-                    BackgroundColor = Color.FromHex("1fbd85"),
-                    CornerRadius = 15
-                };
+            confirmPayButton.Text = "Confirm Payment of " + total.ToString("C");
+            confirmPayButton.IsVisible = true;
 
-                confirm.Clicked += (Sender, args) => confirmButton();
-
-                mainStack.Children.Insert(3, confirm);
-            }
         }
 
 
-        async void confirmButton()
+        async void confirmButton(object sender, EventArgs e)
         {
             if (DependencyService.Get<ICard>().ReadSuccesful())
             {
-                if (await DisplayAlert("Card Details", DependencyService.Get<ICard>().GetCardName() + "\n" 
-                    + DependencyService.Get<ICard>().GetCardNum() + "\n" 
-                    + DependencyService.Get<ICard>().GetCardCvv() + "\n" 
+                if (await DisplayAlert("Card Details", DependencyService.Get<ICard>().GetCardName() + "\n"
+                    + DependencyService.Get<ICard>().GetCardNum() + "\n"
+                    + DependencyService.Get<ICard>().GetCardCvv() + "\n"
                     + "Valid expiry? " + (DependencyService.Get<ICard>().IsExpiryValid() ? "Yes" : "No"), "Confirm", "Cancel"))
                 {
                     await DisplayAlert("Confimed", "Payment confirmed", "OK");
@@ -77,7 +68,7 @@ namespace CustomerApp.Pages
                         Navigation.InsertPageBefore(new endPage(), this);
                     }
                     await Navigation.PopAsync();
-                        
+
                 }
                 else
                 {
@@ -85,7 +76,11 @@ namespace CustomerApp.Pages
                 }
             }
             else
-                await DisplayAlert("Error", "Couldn't read card data, try again", "OK");
+            {
+                await DisplayAlert("Error", "Couldn't read card data, please try to scan your card again", "OK");
+                scanCardButton.IsVisible = true;
+                confirmPayButton.IsVisible = false;
+            }
         }
 
         async void OnRefillButtonClicked(object sender, EventArgs e)

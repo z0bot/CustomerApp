@@ -14,7 +14,6 @@ namespace CustomerApp.Pages
     public partial class checkoutPage : ContentPage
     {
         static double contribution = 0, tip = 0;
-        bool tipChanged = false;
         
         public checkoutPage()
         {
@@ -66,7 +65,6 @@ namespace CustomerApp.Pages
             if (tip < 0) // No negative tips (lol)
                 tip = 0;
 
-            tipChanged = true;
             // Round to two decimal places, then update the textboxes
             tip = Math.Round(tip, 2);
 
@@ -78,12 +76,8 @@ namespace CustomerApp.Pages
 
         void OnContributionCompleted()
         {
-            // Suggest tip if not specified
-            if (!tipChanged)
-            {
-                tip = 0;
-                tipEntry.Placeholder = (contribution * 0.2).ToString("C");
-            }
+            // Suggest tip through placeholder text
+            tipEntry.Placeholder = (contribution * 0.2).ToString("C");
 
             // Update buttons
             if ((contribution + tip) > 0)
