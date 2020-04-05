@@ -20,8 +20,8 @@ namespace CustomerApp.Pages
             InitializeComponent();
 
             // Get this item's details
-            //item = new Models.MenuFoodItem() { id = itemName + new Random().Next(0, 10000).ToString(), name = itemName, picture = "goodFood", description = "Description of " + itemName, nutrition = "Calories: hella\nFat: hella\nIngredients: hellman's", price = 3.50, SpecialInstructions = null, paid = false, category = itemName };
             item = new MenuFoodItem(RealmManager.Find<MenuFoodItem>(itemID));
+            // Assign item new ID
             item._id += new Random().Next(0, 1000000);
             nameLabel.Text = item.name;
             descLabel.Text = item.description;
@@ -46,16 +46,9 @@ namespace CustomerApp.Pages
         async void OnAddItemClicked(object sender, EventArgs e)
         {
             //Store item into local database
-            
-            /*Order temp = new Order(RealmManager.All<Order>().FirstOrDefault());
-            RealmManager.AddOrUpdate<Order>(temp);
-            temp.Contents.Add(item);
-            RealmManager.AddOrUpdate<Order>(temp);*/
             RealmManager.Write(() => 
             {
                 RealmManager.Realm.All<Order>().FirstOrDefault().Contents.Add(item);
-                //temp.Contents.Add(item);
-                //RealmManager.AddOrUpdate<Order>(temp);
             });
             
 

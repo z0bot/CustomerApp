@@ -20,11 +20,13 @@ namespace CustomerApp.Pages
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
+            // Necessary for the refresh view to work
             System.Windows.Input.ICommand cmd = new Command(onRefresh);
             refresher.Command = cmd;
             updateLabel();
         }
 
+        // Called when at least 1 item remains unpaid
         async void unpaidBalanceButton(object sender, EventArgs e)
         {
             if (numUnpaid > 0)
@@ -36,6 +38,7 @@ namespace CustomerApp.Pages
             }
         }
 
+        // Called when 0 items remain unpaid
         async void logOutButton(object sender, EventArgs e)
         {
             if (numUnpaid == 0)
@@ -47,25 +50,26 @@ namespace CustomerApp.Pages
                 }
         }
 
+        // Called when button is refreshed by pulling down
         void onRefresh()
         {
             updateLabel();
             refresher.IsRefreshing = false;
         }
 
-        // Need to call this regularly via onRefresh
+        // Called regularly via onRefresh
         void updateLabel()
         {
             // Pull unpaid items from server
 
             // Check if any items are unpaid
-            List<MenuFoodItem> unpaidItems = RealmManager.All<Order>().FirstOrDefault().Contents.Where((MenuFoodItem m) => m.paid == false).ToList();
-            numUnpaid = unpaidItems.Count();
+            numUnpaid = RealmManager.All<Order>().FirstOrDefault().Contents.Where((MenuFoodItem m) => m.paid == false).ToList().Count();
+            
 
-
+            // Change button based on remaining number of items
             if (numUnpaid > 1)
             {
-                continueButton.Text = "Make payment towards remaining " + unpaidItems.Count() + " items";
+                continueButton.Text = "Make payment towards remaining " + numUnpaid + " items";
                 continueButton.Clicked -= unpaidBalanceButton;
                 continueButton.Clicked -= logOutButton;
                 continueButton.Clicked += unpaidBalanceButton;
@@ -100,6 +104,7 @@ namespace CustomerApp.Pages
         async void OnServerButtonClicked(object sender, EventArgs e)
         {
             // Send Help Request
+
 
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }

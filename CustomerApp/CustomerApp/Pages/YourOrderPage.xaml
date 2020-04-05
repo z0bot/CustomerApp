@@ -14,7 +14,7 @@
                   x:Name="menuFoodItemsView"
                   VerticalOptions="FillAndExpand"
                   HorizontalOptions="CenterAndExpand"
-                  Margin="40,80,40,70"
+                  Margin="40,80,40,20"
                   HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
