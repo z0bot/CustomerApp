@@ -88,6 +88,7 @@
                 <Entry
                     x:Name="tipEntry"
                     HorizontalTextAlignment="Center"
+                    Focused="clearTip"
                     BackgroundColor="White"
                     FontSize="Medium"
                     HorizontalOptions="Fill"

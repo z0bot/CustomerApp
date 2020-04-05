@@ -15,5 +15,9 @@ namespace CustomerApp.Models
         public string LastName { get; set; }
         public string Password { get; set; }
         public string Birthday { get; set; }
+
+        public string points { get; set; }
+
+        public int tableNum { get; set; }
     }
 }

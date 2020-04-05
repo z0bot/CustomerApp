@@ -24,8 +24,9 @@
                 HorizontalOptions="Center"
                 TextColor="Black"
                 FontSize="Medium"
-                Margin="15,15,15,15"
-                Text="Take a picture of your card to pay for your meal"/>
+                Margin="30,0,30,20"
+                Text="Take a picture of your card to pay for your meal"
+                HorizontalTextAlignment="Center"/>
 
 
             <Button x:Name="scanCardButton" 
@@ -39,6 +40,17 @@
                             HorizontalOptions="Center"
                             CornerRadius="15"/>
 
+            <Button x:Name="confirmPayButton" 
+                            Text="NULL"
+                            BackgroundColor="#1fbd85"
+                            TextColor="White" 
+                            Margin="0,30,0,0"
+                            FontSize="Medium"
+                            WidthRequest="300"
+                            Clicked="confirmButton"
+                            HorizontalOptions="Center"
+                            CornerRadius="15"/>
+            
             <!--Refill/help buttons-->
             <StackLayout
                     Orientation="Horizontal"

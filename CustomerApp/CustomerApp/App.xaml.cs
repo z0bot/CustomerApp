@@ -18,6 +18,7 @@ namespace CustomerApp
             //else LoginPage
             if(!RealmManager.All<Order>().Count().Equals(0))
             {
+                // If an order exists and has already been sent, default to the checkout page
                 if(RealmManager.All<Order>().FirstOrDefault().sent)
                 {
                     MainPage = new NavigationPage(new checkoutPage());

@@ -9,7 +9,7 @@ namespace CustomerApp.Models
     class Order : RealmObject
     {
         [PrimaryKey]
-        public int tableNum { get; set; }
+        public int _id { get; set; }
 
         public IList<MenuFoodItem> Contents { get; }
 
@@ -23,7 +23,7 @@ namespace CustomerApp.Models
         // Copy constructor
         public Order(Order o)
         {
-            tableNum = o.tableNum;
+            _id = o._id;
             // Deep copy of each menu item
             foreach (MenuFoodItem m in o.Contents)
                 Contents.Add(new MenuFoodItem(m));
