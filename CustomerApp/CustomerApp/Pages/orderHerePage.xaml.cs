@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using CustomerApp.Models.ServiceRequests;
+
 namespace CustomerApp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -23,9 +25,11 @@ namespace CustomerApp.Pages
 
         async void OnOrderHereButtonClicked(object sender, EventArgs e)
         {
-
+            // Clear existing data
+            RealmManager.RemoveAll<Order>();
+            RealmManager.RemoveAll<Table>();
             // Pull existing orders for this table
-            // GetOrderRequest.SendGetOrderRequest();
+            await GetTableRequest.SendGetTableRequest(RealmManager.All<User>().FirstOrDefault().tableNum);
 
             Order currentOrder;
 
@@ -34,18 +38,18 @@ namespace CustomerApp.Pages
             else
             {
                 currentOrder = new Order();
+
                 // Get which table we are at
                 int table = RealmManager.All<User>().FirstOrDefault().tableNum;
-                table = 2; // TEMPORARILY set table to 2. Only used for testing
 
                 // Find which waitstaff is in charge of this table
                 // GetTablesRequest.SendGetTablesRequest(table);
-                string employeeID; // = RealmManager.All<Order>
+                string employeeID; // = RealmManager.All<Table>().FirstOrDefault().
                 // employeeID = RealmManager.Find<Table>().Where((Table t) => t.table_number == table).FirstOrDefault().employee_id;
                 employeeID = "5e850b90c849ed00047b4ec9"; // TEMPORARILY assign this for testing. This should be Zach's employee ID (because he was first in the DB)
 
                 currentOrder.waitstaff_id = employeeID;
-                currentOrder.sent = false;
+                currentOrder.send_to_kitchen = false;
 
                 RealmManager.AddOrUpdate<Order>(currentOrder);
             }

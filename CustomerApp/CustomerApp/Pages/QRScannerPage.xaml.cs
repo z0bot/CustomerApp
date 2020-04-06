@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using CustomerApp.Models;
+
 namespace CustomerApp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -40,18 +42,46 @@ namespace CustomerApp.Pages
         {
             List<GoogleVisionBarCodeScanner.BarcodeResult> obj = e.BarcodeResults;
 
-            string result = string.Empty;
-            for(int i = 0; i < obj.Count; i++)
+            string result = obj[0].DisplayValue;
+            /*for(int i = 0; i < obj.Count; i++)
             {
-                result += $"Type : {obj[i].BarcodeType}, Value : {obj[i].DisplayValue}{Environment.NewLine}";
+                //result += $"Type : {obj[i].BarcodeType}, Value : {obj[i].DisplayValue}{Environment.NewLine}";
+                result = obj[i].DisplayValue;
+            }*/
+
+            int tablenum = -1;
+            if (!int.TryParse(result, out tablenum) || tablenum < 1 || tablenum > 20)
+            {
+                await DisplayAlert("Invalid Table", "Sorry, we couldn't find table " + result + ", please try again", "OK");
+                return;
             }
 
-            await DisplayAlert("You're signed in!", result, "OK");
+            RealmManager.Write(() => RealmManager.All<User>().FirstOrDefault().tableNum = tablenum);
+
+            await DisplayAlert("You're signed in!", "You've succesfully signed in to table " + tablenum + "!", "OK");
             GoogleVisionBarCodeScanner.Methods.SetIsScanning(false);
 
             // Turn off flashlight if it is on
             if (GoogleVisionBarCodeScanner.Methods.IsTorchOn())
                 GoogleVisionBarCodeScanner.Methods.ToggleFlashlight();
+
+            await Navigation.PushAsync(new orderHerePage());
+        }
+
+        async void manualEntry(object sender, EventArgs e)
+        {
+            string result = await DisplayPromptAsync("Enter table number", "Enter the table number you are sitting at", "OK", "Cancel", "1, 2, 3, ... etc.", -1, keyboard: Keyboard.Numeric, null);
+
+            int tablenum = -1;
+            if(!int.TryParse(result, out tablenum) || tablenum < 1 || tablenum > 20)
+            {
+                await DisplayAlert("Invalid Table", "Sorry, we couldn't find table " + result + ", please try again", "OK");
+                return;
+            }
+
+            RealmManager.Write(() => RealmManager.All<User>().FirstOrDefault().tableNum = tablenum);
+
+            await DisplayAlert("You're signed in!", "You've succesfully signed in to table " + tablenum + "!", "OK");
 
             await Navigation.PushAsync(new orderHerePage());
         }

@@ -63,7 +63,7 @@ namespace CustomerApp.Pages
             // Pull unpaid items from server
 
             // Check if any items are unpaid
-            numUnpaid = RealmManager.All<Order>().FirstOrDefault().Contents.Where((MenuFoodItem m) => m.paid == false).ToList().Count();
+            numUnpaid = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid == false).ToList().Count();
             
 
             // Change button based on remaining number of items

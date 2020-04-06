@@ -27,10 +27,10 @@ namespace CustomerApp.Pages
         async void OnSendOrderClicked(object sender, EventArgs e)
         {
             //Navigate to order confirmation page
-            if (await DisplayAlert("WARNING: Sending Order", "Are you sure you want to send the order? No further edits may be made by anyone else at the table", "Yes", "No"))
+            if (await DisplayAlert("WARNING: Sending Order", "Are you sure you want to send the order? Current items cannot be changed by anyone at the table.", "Yes", "No"))
             {
                 // Set order status to 'sent'
-                RealmManager.Write(() => RealmManager.All<Order>().FirstOrDefault().sent = true);
+                RealmManager.Write(() => RealmManager.All<Order>().FirstOrDefault().send_to_kitchen = true);
 
                 // Update remote database
 
@@ -83,7 +83,7 @@ namespace CustomerApp.Pages
 
         public void DisplayOrder()
         {
-            menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().Contents.ToList();
+            menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().menuItems.ToList();
         }
     }
 

@@ -13,20 +13,27 @@ namespace CustomerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class menuItemPage : ContentPage
     {
-        MenuFoodItem item;
+        OrderItem item;
+        MenuFoodItem baseItem;
         public menuItemPage(string itemID)
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
             // Get this item's details
-            item = new MenuFoodItem(RealmManager.Find<MenuFoodItem>(itemID));
+            MenuFoodItem baseItem = new MenuFoodItem(RealmManager.Find<MenuFoodItem>(itemID));
+
+            item = new OrderItem(baseItem);
             // Assign item new ID
-            item._id += new Random().Next(0, 1000000);
+            //item.newID = (new Random().Next(0, 1000000000)).ToString();
+            //while(RealmManager.Find<OrderItem>(item.newID) != null) // If the ID already exists, try again until you get a unique ID.
+            //{
+            //    item.newID = (new Random().Next(0, 1000000000)).ToString();
+            //}
             nameLabel.Text = item.name;
-            descLabel.Text = item.description;
-            itemPic.Source = item.picture;
-            priceLabel.Text = item.StringPrice;
+            descLabel.Text = baseItem.description;
+            itemPic.Source = baseItem.picture;
+            priceLabel.Text = baseItem.StringPrice;
         }
 
         async void OnNutritionButtonClicked(object sender, EventArgs e)
@@ -34,7 +41,7 @@ namespace CustomerApp.Pages
             // Display nutrition info
             // **** Maybe make a separate page? Look into this: https://github.com/rotorgames/Rg.Plugins.Popup
 
-            await DisplayAlert("Nutrition info", item.nutrition, "OK");
+            await DisplayAlert("Nutrition info", baseItem.nutrition, "OK");
         }
         async void OnAddInstructionsClicked(object sender, EventArgs e)
         {
@@ -48,7 +55,7 @@ namespace CustomerApp.Pages
             //Store item into local database
             RealmManager.Write(() => 
             {
-                RealmManager.Realm.All<Order>().FirstOrDefault().Contents.Add(item);
+                RealmManager.Realm.All<Order>().FirstOrDefault().menuItems.Add(item);
             });
             
 

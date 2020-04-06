@@ -23,11 +23,21 @@
             <!--<gv:CameraView HorizontalOptions="Center" WidthRequest="200" HeightRequest="200" OnDetected="CameraView_OnDetected" Grid.Row="1"/>-->
             <StackLayout Orientation="Vertical"
                          VerticalOptions ="Start">
+                <Button x:Name="manualEntryButton" 
+                        Text="Enter table number manually"
+                        BackgroundColor="#1fbd85"
+                        TextColor="White" 
+                        Margin="0,30,0,0"
+                        FontSize="Large"
+                        WidthRequest="300"
+                        Clicked="manualEntry"
+                        HorizontalOptions="Center"
+                        CornerRadius="15"/>
                 <Button x:Name="FlashlightButton" 
                         Text="Flashlight"
                         BackgroundColor="#1fbd85"
                         TextColor="White" 
-                        Margin="0,30,0,0"
+                        Margin="0,15,0,0"
                         FontSize="Large"
                         WidthRequest="300"
                         Clicked="FlashlightButton_Clicked"
@@ -36,7 +46,7 @@
                 <Label 
                     x:Name="loginGreetingText"
                     Text="Scan your seat's QR code to link to your table!"
-                    Margin="40,70,40,0"
+                    Margin="40,10,40,0"
                     FontSize="Large"
                     VerticalTextAlignment="Center"
                     HorizontalTextAlignment="Center"
@@ -52,6 +62,7 @@
             </StackLayout>
             -->
             </StackLayout>
+
         </StackLayout>
 
     </ContentPage.Content>

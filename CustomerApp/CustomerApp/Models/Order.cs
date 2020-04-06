@@ -9,14 +9,14 @@ namespace CustomerApp.Models
     class Order : RealmObject
     {
         [PrimaryKey]
-        public int _id { get; set; }
+        public string _id { get; set; }
 
-        public IList<MenuFoodItem> Contents { get; }
+        public IList<OrderItem> menuItems { get; }
 
 
         public string waitstaff_id { get; set; }
 
-        public bool sent { get; set; }
+        public bool send_to_kitchen { get; set; }
 
         public Order() { }
 
@@ -25,11 +25,11 @@ namespace CustomerApp.Models
         {
             _id = o._id;
             // Deep copy of each menu item
-            foreach (MenuFoodItem m in o.Contents)
-                Contents.Add(new MenuFoodItem(m));
+            foreach (OrderItem m in o.menuItems)
+                menuItems.Add(new OrderItem(m));
 
             waitstaff_id = o.waitstaff_id;
-            sent = o.sent;
+            send_to_kitchen = o.send_to_kitchen;
         }
 
     }

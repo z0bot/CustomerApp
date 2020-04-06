@@ -8,13 +8,16 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using CustomerApp.Models.ServiceRequests;
+
 namespace CustomerApp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class checkoutPage : ContentPage
     {
         static double contribution = 0, tip = 0;
-        
+        List<OrderItem> unpaidItems;
+
         public checkoutPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
@@ -25,7 +28,7 @@ namespace CustomerApp.Pages
             orderRefreshView.Command = cmd;
 
             // Set view to unpaid food items in this order
-            menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().Contents.Where((MenuFoodItem m) => m.paid == false).ToList();
+            //menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid == false).ToList();
         }
 
         protected override void OnAppearing()
@@ -102,47 +105,45 @@ namespace CustomerApp.Pages
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
 
-        public void DisplayOrder()
+        public async void DisplayOrder()
         {
-            // Reset all items to unpaid
-            foreach (MenuFoodItem m in RealmManager.All<Order>().FirstOrDefault().Contents)
-                RealmManager.Write(() =>
-                {
-                    m.paid = false;
-                });
-
             // Fetch most recent order status
-            
+            await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
 
             contribution = 0;
 
             OnContributionCompleted();
 
-            //menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().Contents.Where((MenuFoodItem m) => m.paid == false).ToList();
+            unpaidItems = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem m) => m.paid == false).ToList();
+            //menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem m) => m.paid == false).ToList();
+            menuFoodItemsView.ItemsSource = unpaidItems;
         }
 
         void OnTogglePaid(object sender, ToggledEventArgs e)
         {
             // Don't do anything if Realm is writing
-            if (RealmManager.Realm.IsInTransaction)
-                return;
+            //if (RealmManager.Realm.IsInTransaction)
+            //    return;
 
-            string toggledID = ((MenuFoodItem)((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext)._id;
-            
+            OrderItem toggledItem = new OrderItem((OrderItem)((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext);
+
+            var index = unpaidItems.IndexOf(toggledItem);
 
             // Update food item and contribution according to toggled/not toggled
             if (e.Value)
             {
-                RealmManager.Write(() => RealmManager.Find<MenuFoodItem>(toggledID).paid = true);
+                //RealmManager.Write(() => RealmManager.Find<MenuFoodItem>(toggledID).paid = true);
+                unpaidItems[index].paid = true;
 
-                contribution += RealmManager.Find<MenuFoodItem>(toggledID).price;
+                contribution += toggledItem.price;
                 contribution = Math.Round(contribution, 2);
             }
             else
             {
-                RealmManager.Write(() => RealmManager.Find<MenuFoodItem>(toggledID).paid = false);
+                //RealmManager.Write(() => RealmManager.Find<MenuFoodItem>(toggledID).paid = false);
+                unpaidItems[index].paid = false;
 
-                contribution -= RealmManager.Find<MenuFoodItem>(toggledID).price;
+                contribution -= toggledItem.price;
                 contribution = Math.Round(contribution, 2);
                 if (contribution < 0)
                     contribution = 0;
