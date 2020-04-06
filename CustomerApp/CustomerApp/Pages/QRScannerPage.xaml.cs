@@ -32,7 +32,7 @@ namespace CustomerApp.Pages
 
         public async void ManualTableEntry_Clicked(object sender, EventArgs e)
         {
-            string result = await DisplayPromptAsync("Table Number", "Enter the table number shown at the center of your table", "OK");
+            string result = await DisplayPromptAsync("Table Number", "Enter the table number shown at the center of your table", "OK", "Cancel", "Table Number", 50, null);
             await Navigation.PushAsync(new orderHerePage());
         }
 
