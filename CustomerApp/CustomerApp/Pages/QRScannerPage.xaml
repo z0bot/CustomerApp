@@ -41,16 +41,15 @@
                     VerticalTextAlignment="Center"
                     HorizontalTextAlignment="Center"
                     HorizontalOptions="Center" />
-                <!---
-                <Button x:Name="CancelButton" 
-                        Text="Cancel" 
-                        BackgroundColor="#FF0000" 
+                <Button x:Name="uxManualTableEntry" 
+                        Text="Enter table number" 
+                        BackgroundColor="#1fbd85" 
                         TextColor="White" 
-                        Clicked="CancelButton_Clicked" 
-                        HorizontalOptions="EndAndExpand"
+                        Margin="0,30,0,0"
+                        WidthRequest="300"
+                        Clicked="ManualTableEntry_Clicked" 
+                        HorizontalOptions="Center"
                         CornerRadius="15"/>
-            </StackLayout>
-            -->
             </StackLayout>
         </StackLayout>
 
