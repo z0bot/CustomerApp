@@ -9,6 +9,8 @@ using CustomerApp.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using CustomerApp.Models.ServiceRequests;
+
 namespace CustomerApp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -44,8 +46,10 @@ namespace CustomerApp.Pages
             if (numUnpaid == 0)
                 if (await DisplayAlert("Log out confirmation", "Once logged out, you will not be able to request refills until a new order is started. Are you sure you want to leave the table?", "Yes", "No"))
                 {
-                    RealmManager.RemoveAll<User>();
+                    RealmManager.RemoveAll<MenuFoodItem>();
                     RealmManager.RemoveAll<Order>();
+                    RealmManager.RemoveAll<Table>();
+                    RealmManager.RemoveAll<User>();
                     await Navigation.PushAsync(new Login());
                 }
         }
@@ -57,10 +61,16 @@ namespace CustomerApp.Pages
             refresher.IsRefreshing = false;
         }
 
+        async void ReturnToOrder(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new YourOrderPage());
+        }
+
         // Called regularly via onRefresh
-        void updateLabel()
+        async void updateLabel()
         {
             // Pull unpaid items from server
+            await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
 
             // Check if any items are unpaid
             numUnpaid = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid == false).ToList().Count();

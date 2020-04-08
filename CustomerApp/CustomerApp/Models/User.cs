@@ -18,6 +18,10 @@ namespace CustomerApp.Models
 
         public string points { get; set; }
 
-        public int tableNum { get; set; }
+        public int tableNum { get; set; } = -1;
+
+        public bool paymentInProgress { get; set; } = false;
+        public double contribution { get; set; }
+        public double tip { get; set; }
     }
 }

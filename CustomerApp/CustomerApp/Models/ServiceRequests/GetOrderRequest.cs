@@ -37,6 +37,20 @@ namespace CustomerApp.Models.ServiceRequests
             else
             {
                 //add the response into the local database
+                
+                RealmManager.RemoveAll<Order>();
+                RealmManager.RemoveAll<OrderItem>();
+
+                // Assign each order item a unique ID
+                Random rand = new Random();
+                for(int i = 0; i < ((Order)response).menuItems.Count(); ++i)
+                {
+                    ((Order)response).menuItems[i].newID = rand.Next(0, 1000000000).ToString();
+                    while (RealmManager.Find<OrderItem>((((Order)response).menuItems[i].newID)) != null)
+                    {
+                        ((Order)response).menuItems[i].newID = rand.Next(0, 1000000000).ToString();
+                    }
+                }
                 RealmManager.AddOrUpdate<Order>(response);
                 //call succeeded
                 return true;

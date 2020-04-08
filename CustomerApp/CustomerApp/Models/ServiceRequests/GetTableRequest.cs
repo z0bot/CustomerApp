@@ -35,6 +35,7 @@ namespace CustomerApp.Models.ServiceRequests
             }
             else
             {
+                RealmManager.RemoveAll<Table>();
                 //add the response into the local database
                 RealmManager.AddOrUpdate<Table>(response);
 

@@ -32,12 +32,6 @@ namespace CustomerApp.Pages
             GoogleVisionBarCodeScanner.Methods.ToggleFlashlight();
         }
 
-        public async void ManualTableEntry_Clicked(object sender, EventArgs e)
-        {
-            string result = await DisplayPromptAsync("Table Number", "Enter the table number shown at the center of your table", "OK", "Cancel", "Table Number", 50, null);
-            await Navigation.PushAsync(new orderHerePage());
-        }
-
         /// <summary>
         /// Once barcode detected, "OnDetected" event will be triggered, 
         /// do the stuff with the barcode, it will contain type and display value of QR
@@ -59,6 +53,7 @@ namespace CustomerApp.Pages
             if (!int.TryParse(result, out tablenum) || tablenum < 1 || tablenum > 20)
             {
                 await DisplayAlert("Invalid Table", "Sorry, we couldn't find table " + result + ", please try again", "OK");
+                GoogleVisionBarCodeScanner.Methods.SetIsScanning(true);
                 return;
             }
 
@@ -88,6 +83,11 @@ namespace CustomerApp.Pages
             RealmManager.Write(() => RealmManager.All<User>().FirstOrDefault().tableNum = tablenum);
 
             await DisplayAlert("You're signed in!", "You've succesfully signed in to table " + tablenum + "!", "OK");
+            GoogleVisionBarCodeScanner.Methods.SetIsScanning(false);
+
+            // Turn off flashlight if it is on
+            if (GoogleVisionBarCodeScanner.Methods.IsTorchOn())
+                GoogleVisionBarCodeScanner.Methods.ToggleFlashlight();
 
             await Navigation.PushAsync(new orderHerePage());
         }

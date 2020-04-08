@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using CustomerApp.Models;
+
 namespace CustomerApp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -14,14 +16,14 @@ namespace CustomerApp.Pages
     {
         static double total;
 
-        public paymentPage(double payment)
+        public paymentPage(double contribution, double tip)
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
             confirmPayButton.IsVisible = false;
 
-            total = payment;
+            total = contribution + tip;
         }
 
         async void scanCard(object sender, EventArgs e)
@@ -51,24 +53,8 @@ namespace CustomerApp.Pages
                 {
                     await DisplayAlert("Confimed", "Payment confirmed", "OK");
 
-                    // Remove previous page to prevent double payment
-                    Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count() - 2]);
-
-
-                    // Add points
-
-
-                    // Offer game
-                    if (await DisplayAlert("Game Opportunity", "Would you like to play a game for a chance at a free dessert?", "Yes, please!", "No thanks"))
-                    {
-                        Navigation.InsertPageBefore(new gamePage(), this);
-                    }
-                    else
-                    {
-                        Navigation.InsertPageBefore(new endPage(), this);
-                    }
-                    await Navigation.PopAsync();
-
+                    await LeavePage();
+                    return;
                 }
                 else
                 {
@@ -81,6 +67,45 @@ namespace CustomerApp.Pages
                 scanCardButton.IsVisible = true;
                 confirmPayButton.IsVisible = false;
             }
+        }
+
+        async void payWithCashClicked(object sender, EventArgs e)
+        {
+            // Send notification to waitstaff
+
+            await DisplayAlert("Cash Payment", "Your server is on their way to collect your cash payment", "OK");
+
+            await LeavePage();
+        }
+
+        async Task LeavePage()
+        {
+            // Remove previous page to prevent double payment
+            if(Navigation.NavigationStack.Count() > 1)
+                Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count() - 2]);
+
+
+            // Add points
+
+
+            // Unlock user from payment page
+            RealmManager.Write(() =>
+            {
+                RealmManager.All<User>().FirstOrDefault().paymentInProgress = false;
+                RealmManager.All<User>().FirstOrDefault().contribution = 0;
+                RealmManager.All<User>().FirstOrDefault().tip = 0;
+            });
+
+            // Offer game
+            if (await DisplayAlert("Game Opportunity", "Would you like to play a game for a chance at a free dessert?", "Yes, please!", "No thanks"))
+            {
+                Navigation.InsertPageBefore(new gamePage(), this);
+            }
+            else
+            {
+                Navigation.InsertPageBefore(new endPage(), this);
+            }
+            await Navigation.PopAsync();
         }
 
         async void OnRefillButtonClicked(object sender, EventArgs e)
@@ -96,6 +121,12 @@ namespace CustomerApp.Pages
             // Send Help Request
 
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
+        }
+
+        // Prevent going back to previous pages, as the order has already been sent. Must continue and pay
+        protected override bool OnBackButtonPressed()
+        {
+            return true;
         }
     }
 }

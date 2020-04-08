@@ -41,7 +41,6 @@ namespace CustomerApp.Pages
         async Task UpdateMenuItems()
         {
             RealmManager.RemoveAll<MenuItemsList>();
-            //RealmManager.RemoveAll<MenuFoodItem>();
             var success = await GetMenuItemsRequest.SendGetMenuItemsRequest();
             
         }
@@ -54,19 +53,12 @@ namespace CustomerApp.Pages
 
             category = new List<categoryLink>();
 
-            //MenuItemsList items = RealmManager.All<MenuItemsList>().FirstOrDefault();
-
             List<string> categoryNames = new List<string>();
 
             foreach(MenuFoodItem m in RealmManager.All<MenuItemsList>().FirstOrDefault().menuItems)
             {
                 categoryNames.Add(m.category);
             }
-
-            /*foreach (MenuFoodItem MenuItem in RealmManager.All<MenuItemsList>().FirstOrDefault().menuItems)
-            {
-                categoryNames.Add(MenuItem.category);
-            }*/
 
             categoryNames = categoryNames.Distinct().ToList();
 

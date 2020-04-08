@@ -8,6 +8,8 @@ using CustomerApp.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using CustomerApp.Models.ServiceRequests;
+
 namespace CustomerApp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -21,19 +23,21 @@ namespace CustomerApp.Pages
             InitializeComponent();
 
             // Get this item's details
-            MenuFoodItem baseItem = new MenuFoodItem(RealmManager.Find<MenuFoodItem>(itemID));
+            baseItem = new MenuFoodItem(RealmManager.Find<MenuFoodItem>(itemID));
 
             item = new OrderItem(baseItem);
-            // Assign item new ID
-            //item.newID = (new Random().Next(0, 1000000000)).ToString();
-            //while(RealmManager.Find<OrderItem>(item.newID) != null) // If the ID already exists, try again until you get a unique ID.
-            //{
-            //    item.newID = (new Random().Next(0, 1000000000)).ToString();
-            //}
-            nameLabel.Text = item.name;
+            //Assign item new ID
+            var rand = new Random();
+            item.newID = (rand.Next(0, 1000000000)).ToString();
+            while (RealmManager.Find<OrderItem>(item.newID) != null) // If the ID already exists, try again until you get a unique ID.
+            {
+                item.newID = (rand.Next(0, 1000000000)).ToString();
+            }
+            nameLabel.Text = baseItem.name;
             descLabel.Text = baseItem.description;
             itemPic.Source = baseItem.picture;
             priceLabel.Text = baseItem.StringPrice;
+            item.special_instruct = null;
         }
 
         async void OnNutritionButtonClicked(object sender, EventArgs e)
@@ -52,12 +56,24 @@ namespace CustomerApp.Pages
 
         async void OnAddItemClicked(object sender, EventArgs e)
         {
+            // Remove ability to add items after an order is sent. Easy to change later
+            if (RealmManager.All<Order>().FirstOrDefault().send_to_kitchen)
+            {
+                await DisplayAlert("Option Unavailable", "Sorry, but this option is not available since the order has already been sent", "OK");
+
+                //Navigate back to menu. Probably a more elegant method but is easy to do. Remove previous 2 pages, then pop
+                Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);
+                Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);
+                await Navigation.PopAsync();
+                return;
+            }
             //Store item into local database
             RealmManager.Write(() => 
             {
                 RealmManager.Realm.All<Order>().FirstOrDefault().menuItems.Add(item);
             });
-            
+
+            await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());
 
             //Navigate back to menu. Probably a more elegant method but is easy to do. Remove previous 2 pages, then pop
             Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);

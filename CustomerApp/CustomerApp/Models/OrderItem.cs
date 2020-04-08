@@ -9,6 +9,9 @@ namespace CustomerApp.Models
     // This class is very similar to MenuFoodItem, but is used to store items which are in the user's order
     public class OrderItem : RealmObject
     {
+        [PrimaryKey]
+        public string newID { get; set; }
+
         public IList<string> ingredients { get; }
 
         //[PrimaryKey]
@@ -33,6 +36,7 @@ namespace CustomerApp.Models
 
         public bool paid { get; set; }
 
+        public bool prepared { get; set; }
         //public string category { get; set; }
 
         // Default constructor

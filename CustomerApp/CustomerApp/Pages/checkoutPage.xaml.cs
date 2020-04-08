@@ -15,8 +15,7 @@ namespace CustomerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class checkoutPage : ContentPage
     {
-        static double contribution = 0, tip = 0;
-        List<OrderItem> unpaidItems;
+        double contribution = 0, tip = 0;
 
         public checkoutPage()
         {
@@ -26,25 +25,69 @@ namespace CustomerApp.Pages
             // Necessary for the refreshview to work
             System.Windows.Input.ICommand cmd = new Command(onRefresh);
             orderRefreshView.Command = cmd;
-
-            // Set view to unpaid food items in this order
-            //menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid == false).ToList();
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            DisplayOrder();
+            await DisplayOrder();
         }
 
         async void OnPayButtonClicked(object sender, EventArgs e)
         {
             if ((contribution + tip) > 0)
             {
-                // Update items paid for in database
+                if (await DisplayAlert("Confirm", "You will not be able to change this contribution after leaving this screen. Continue to payment screen?", "OK", "Cancel"))
+                {
+                    // Pull most recent order status form database
+                    List<string> paidForIDs = new List<string>();
 
+                    foreach (OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems)
+                        paidForIDs.Add(o._id);
 
-                await Navigation.PushAsync(new paymentPage(contribution + tip));
+                    await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
+
+                    List<string> alreadyPaidIDs = new List<string>();
+                    foreach (OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid))
+                        alreadyPaidIDs.Add(o._id);
+
+                    foreach(string ID in alreadyPaidIDs)
+                    {
+                        var index = paidForIDs.IndexOf(ID);
+                        if(index != -1)
+                        {
+                            paidForIDs.RemoveAt(index);
+                        }
+                    }
+
+                    // Do something with coupons
+                    // 
+
+                    double newContribution = 0;
+                    foreach(string ID in paidForIDs)
+                    {
+                        newContribution += (RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == ID && !o.paid).FirstOrDefault()).price;
+                        RealmManager.Write(() => RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == ID && !o.paid).FirstOrDefault().paid = true);
+                    }
+
+                    
+
+                    // Update items paid for in database
+                    await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());
+
+                    if(newContribution != contribution)
+                        await DisplayAlert("Notice", "Due to coupons or other items already being paid for, your payment has been changed to " + newContribution + " plus your tip of " + tip, "OK");
+
+                    // Lock in user's payment status
+                    RealmManager.Write(() =>
+                    {
+                        RealmManager.All<User>().FirstOrDefault().contribution = newContribution;
+                        RealmManager.All<User>().FirstOrDefault().tip = tip;
+                        RealmManager.All<User>().FirstOrDefault().paymentInProgress = true;
+                    });
+
+                    await Navigation.PushAsync(new paymentPage(newContribution, tip));
+                }
             }
             else // No contribution
                 await Navigation.PushAsync(new endPage());
@@ -105,7 +148,7 @@ namespace CustomerApp.Pages
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
 
-        public async void DisplayOrder()
+        public async Task DisplayOrder()
         {
             // Fetch most recent order status
             await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
@@ -114,56 +157,42 @@ namespace CustomerApp.Pages
 
             OnContributionCompleted();
 
-            unpaidItems = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem m) => m.paid == false).ToList();
-            //menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem m) => m.paid == false).ToList();
-            menuFoodItemsView.ItemsSource = unpaidItems;
+            menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => !o.paid).ToList();
+
         }
 
         void OnTogglePaid(object sender, ToggledEventArgs e)
         {
             // Don't do anything if Realm is writing
-            //if (RealmManager.Realm.IsInTransaction)
-            //    return;
+            if (RealmManager.Realm.IsInTransaction)
+                return;
 
-            OrderItem toggledItem = new OrderItem((OrderItem)((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext);
+            OrderItem toggledItem = ((OrderItem)(((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext));
 
-            var index = unpaidItems.IndexOf(toggledItem);
-
-            // Update food item and contribution according to toggled/not toggled
+            // Update contribution according to toggled/not toggled
             if (e.Value)
             {
-                //RealmManager.Write(() => RealmManager.Find<MenuFoodItem>(toggledID).paid = true);
-                unpaidItems[index].paid = true;
-
                 contribution += toggledItem.price;
                 contribution = Math.Round(contribution, 2);
             }
             else
             {
-                //RealmManager.Write(() => RealmManager.Find<MenuFoodItem>(toggledID).paid = false);
-                unpaidItems[index].paid = false;
-
                 contribution -= toggledItem.price;
                 contribution = Math.Round(contribution, 2);
+                // Mainly need this because onAppearing seems to toggle off, even if the switch already was off
                 if (contribution < 0)
                     contribution = 0;
             }
+
             OnContributionCompleted();
         }
 
-        void onRefresh()
+        async void onRefresh()
         {
             // Pull newest order status
-            DisplayOrder();
+            await DisplayOrder();
 
             orderRefreshView.IsRefreshing = false;
-        }
-
-
-        // Prevent going back to previous pages, as the order has already been sent. Must continue and pay
-        protected override bool OnBackButtonPressed()
-        {
-            return true;
         }
     }
 }

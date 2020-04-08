@@ -27,7 +27,7 @@
                         Text="Enter table number manually"
                         BackgroundColor="#1fbd85"
                         TextColor="White" 
-                        Margin="0,30,0,0"
+                        Margin="0,20,0,0"
                         FontSize="Large"
                         WidthRequest="300"
                         Clicked="manualEntry"
@@ -51,15 +51,6 @@
                     VerticalTextAlignment="Center"
                     HorizontalTextAlignment="Center"
                     HorizontalOptions="Center" />
-                <Button x:Name="uxManualTableEntry" 
-                        Text="Enter table number" 
-                        BackgroundColor="#1fbd85" 
-                        TextColor="White" 
-                        Margin="0,30,0,0"
-                        WidthRequest="300"
-                        Clicked="ManualTableEntry_Clicked" 
-                        HorizontalOptions="Center"
-                        CornerRadius="15"/>
             </StackLayout>
         </StackLayout>
 
