@@ -42,7 +42,7 @@ namespace CustomerApp.Pages
                     // Pull most recent order status form database
                     List<string> paidForIDs = new List<string>();
 
-                    foreach (OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems)
+                    foreach (OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid))
                         paidForIDs.Add(o._id);
 
                     await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
@@ -63,6 +63,8 @@ namespace CustomerApp.Pages
                     // Do something with coupons
                     // 
 
+                    
+
                     double newContribution = 0;
                     foreach(string ID in paidForIDs)
                     {
@@ -76,7 +78,7 @@ namespace CustomerApp.Pages
                     await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());
 
                     if(newContribution != contribution)
-                        await DisplayAlert("Notice", "Due to coupons or other items already being paid for, your payment has been changed to " + newContribution + " plus your tip of " + tip, "OK");
+                        await DisplayAlert("Notice", "Due to coupons or other items already being paid for, your payment has been changed to " + newContribution.ToString("C") + " plus your tip of " + tip.ToString("C"), "OK");
 
                     // Lock in user's payment status
                     RealmManager.Write(() =>
@@ -85,6 +87,9 @@ namespace CustomerApp.Pages
                         RealmManager.All<User>().FirstOrDefault().tip = tip;
                         RealmManager.All<User>().FirstOrDefault().paymentInProgress = true;
                     });
+
+                    // Send tip to server
+
 
                     await Navigation.PushAsync(new paymentPage(newContribution, tip));
                 }
@@ -150,6 +155,8 @@ namespace CustomerApp.Pages
 
         public async Task DisplayOrder()
         {
+            orderRefreshView.IsEnabled = false;
+
             // Fetch most recent order status
             await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
 
@@ -159,15 +166,25 @@ namespace CustomerApp.Pages
 
             menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => !o.paid).ToList();
 
+            orderRefreshView.IsEnabled = true;
         }
 
-        void OnTogglePaid(object sender, ToggledEventArgs e)
+        async void OnTogglePaid(object sender, ToggledEventArgs e)
         {
             // Don't do anything if Realm is writing
             if (RealmManager.Realm.IsInTransaction)
                 return;
 
-            OrderItem toggledItem = ((OrderItem)(((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext));
+            OrderItem toggledItem = new OrderItem((OrderItem)(((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext));
+
+            if (toggledItem._id == null)
+            {
+                await DisplayOrder();
+                return;
+            }
+                
+
+            //OrderItem toggledItem = new OrderItem((OrderItem)(((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext));
 
             // Update contribution according to toggled/not toggled
             if (e.Value)

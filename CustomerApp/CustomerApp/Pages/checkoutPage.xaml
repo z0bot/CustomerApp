@@ -21,10 +21,18 @@
                 HorizontalOptions="Center"
                 TextColor="Black"
                 FontSize="Medium"
-                Margin="15,0,15,15"
+                Margin="15,0,15,0"
                 HorizontalTextAlignment="Center"
                 Text="You can pay for some or all of the items your table has ordered"/>
-
+            <Label
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Medium"
+                Margin="15,0,15,15"
+                HorizontalTextAlignment="Center"
+                Text="Pull down on the list to refresh"/>
+            
             <RefreshView
                 x:Name="orderRefreshView"
                 Command="{Binding onRefresh()}"

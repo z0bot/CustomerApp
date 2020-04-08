@@ -97,6 +97,16 @@
                 </ListView.ItemTemplate>
             </ListView>
         </RefreshView>
+
+            <Label
+                VerticalOptions="EndAndExpand"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Medium"
+                Margin="15,0,0,15"
+                HorizontalTextAlignment="Center"
+                Text="Pull down on menu items to refresh your order, swipe left on an item to get more options"/>
+
             <!--Stacklayout storing control options, including refill/help buttons-->
             <StackLayout
                 x:Name="controlLayout"

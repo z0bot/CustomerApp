@@ -60,6 +60,9 @@ namespace CustomerApp.Models
         }
         public OrderItem(OrderItem o)
         {
+            if (o == null)
+                return;
+
             _id = o._id;
 
             ingredients = o.ingredients;
