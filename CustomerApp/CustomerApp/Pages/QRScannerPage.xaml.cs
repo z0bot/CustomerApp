@@ -30,6 +30,12 @@ namespace CustomerApp.Pages
             GoogleVisionBarCodeScanner.Methods.ToggleFlashlight();
         }
 
+        public async void ManualTableEntry_Clicked(object sender, EventArgs e)
+        {
+            string result = await DisplayPromptAsync("Table Number", "Enter the table number shown at the center of your table", "OK", "Cancel", "Table Number", 50, null);
+            await Navigation.PushAsync(new orderHerePage());
+        }
+
         /// <summary>
         /// Once barcode detected, "OnDetected" event will be triggered, 
         /// do the stuff with the barcode, it will contain type and display value of QR

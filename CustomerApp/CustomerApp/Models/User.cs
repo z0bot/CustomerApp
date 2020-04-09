@@ -9,7 +9,8 @@ namespace CustomerApp.Models
     {
         //email will serve as the user's unique GUID and primary key for
         //unique user lookup/storage
-        public int points { get; set; }
+        public int tableNum { get; set; }
+        public string points { get; set; }
         public string _id { get; set; }
         public string first_name { get; set; }
         public string last_name { get; set; }

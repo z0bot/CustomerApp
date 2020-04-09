@@ -27,6 +27,15 @@ namespace CustomerApp.Pages
         async void OnSendOrderClicked(object sender, EventArgs e)
         {
             //Navigate to order confirmation page
+            if (await DisplayAlert("WARNING: Sending Order", "Are you sure you want to send the order? No further edits may be made by anyone else at the table", "Yes", "No"))
+            {
+                // Set order status to 'sent'
+                RealmManager.Write(() => RealmManager.All<Order>().FirstOrDefault().sent = true);
+
+                // Update remote database
+
+                await Navigation.PushAsync(new checkoutPage());
+            }
         }
 
         async void OnAddItemClicked(object sender, EventArgs e)
@@ -56,9 +65,9 @@ namespace CustomerApp.Pages
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
-                if(await DisplayAlert("WARNING: Changes will be lost", "Are you sure you want to leave this page?", "Yes", "No"))
+                if (await DisplayAlert("WARNING: Changes will be lost", "Are you sure you want to leave this page?", "Yes", "No"))
                 {
-                    RealmManager.RemoveAll<MenuFoodItem>();
+                    RealmManager.RemoveAll<Order>();
                     try
                     {
                         await Navigation.PopAsync();
@@ -69,12 +78,12 @@ namespace CustomerApp.Pages
                     }
                 }
             });
-            return true; 
+            return true;
         }
 
         public void DisplayOrder()
         {
-            menuFoodItemsView.ItemsSource = RealmManager.All<MenuFoodItem>().ToList();
+            menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().Contents.ToList();
         }
     }
 

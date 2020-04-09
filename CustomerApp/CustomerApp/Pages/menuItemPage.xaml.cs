@@ -14,17 +14,19 @@ namespace CustomerApp.Pages
     public partial class menuItemPage : ContentPage
     {
         MenuFoodItem item;
-        public menuItemPage(string itemName)
+        public menuItemPage(string itemID)
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
             // Get this item's details
-            item = new Models.MenuFoodItem() { Name = itemName, Picture = "goodFood", Description = "Description of " + itemName, Nutrition = "Calories: hella\nFat: hella\nIngredients: hellman's", Price = 3.50, SpecialInstructions = null };
-            nameLabel.Text = item.Name;
-            descLabel.Text = item.Description;
-            itemPic.Source = item.Picture;
-            priceLabel.Text = item.Price.ToString("C");
+            item = new MenuFoodItem(RealmManager.Find<MenuFoodItem>(itemID));
+            // Assign item new ID
+            item._id += new Random().Next(0, 1000000);
+            nameLabel.Text = item.name;
+            descLabel.Text = item.description;
+            itemPic.Source = item.picture;
+            priceLabel.Text = item.StringPrice;
         }
 
         async void OnNutritionButtonClicked(object sender, EventArgs e)
@@ -32,19 +34,23 @@ namespace CustomerApp.Pages
             // Display nutrition info
             // **** Maybe make a separate page? Look into this: https://github.com/rotorgames/Rg.Plugins.Popup
 
-            await DisplayAlert("Nutrition info", item.Nutrition, "OK");
+            await DisplayAlert("Nutrition info", item.nutrition, "OK");
         }
         async void OnAddInstructionsClicked(object sender, EventArgs e)
         {
             // Prompt for special instructions
 
-            item.SpecialInstructions = await DisplayPromptAsync("Special Instructions", "Enter special instructions, such as allergen information", "OK", "Cancel", null, -1, keyboard: Keyboard.Plain, item.SpecialInstructions);
+            item.special_instruct = await DisplayPromptAsync("Special Instructions", "Enter special instructions, such as allergen information", "OK", "Cancel", null, -1, keyboard: Keyboard.Plain, item.special_instruct);
         }
 
         async void OnAddItemClicked(object sender, EventArgs e)
         {
             //Store item into local database
-            RealmManager.AddOrUpdate<MenuFoodItem>(item);
+            RealmManager.Write(() => 
+            {
+                RealmManager.Realm.All<Order>().FirstOrDefault().Contents.Add(item);
+            });
+            
 
             //Navigate back to menu. Probably a more elegant method but is easy to do. Remove previous 2 pages, then pop
             Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);

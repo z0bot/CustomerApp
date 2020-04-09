@@ -16,10 +16,40 @@ namespace CustomerApp.Pages
         public orderHerePage()
         {
             InitializeComponent();
+
+            
+                
         }
 
         async void OnOrderHereButtonClicked(object sender, EventArgs e)
         {
+
+            // Pull existing orders for this table
+            // GetOrderRequest.SendGetOrderRequest();
+
+            Order currentOrder;
+
+            if (RealmManager.All<Order>().Count() != 0)
+                currentOrder = RealmManager.All<Order>().FirstOrDefault();
+            else
+            {
+                currentOrder = new Order();
+                // Get which table we are at
+                int table = RealmManager.All<User>().FirstOrDefault().tableNum;
+                table = 2; // TEMPORARILY set table to 2. Only used for testing
+
+                // Find which waitstaff is in charge of this table
+                // GetTablesRequest.SendGetTablesRequest(table);
+                string employeeID; // = RealmManager.All<Order>
+                // employeeID = RealmManager.Find<Table>().Where((Table t) => t.table_number == table).FirstOrDefault().employee_id;
+                employeeID = "5e850b90c849ed00047b4ec9"; // TEMPORARILY assign this for testing. This should be Zach's employee ID (because he was first in the DB)
+
+                currentOrder.waitstaff_id = employeeID;
+                currentOrder.sent = false;
+
+                RealmManager.AddOrUpdate<Order>(currentOrder);
+            }
+
             await Navigation.PushAsync(new YourOrderPage());
         }
 
