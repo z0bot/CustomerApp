@@ -72,26 +72,14 @@ namespace CustomerApp.Pages
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
 
-        //// Disable back button for this page with a confirmation warning
-        //protected override bool OnBackButtonPressed()
-        //{
-        //    Device.BeginInvokeOnMainThread(async () =>
-        //    {
-        //        if (await DisplayAlert("Confirm Leaving page", "Are you sure you want to leave this page?", "Yes", "No"))
-        //        {
-        //            try
-        //            {
-        //                await Navigation.PopAsync();
-        //            }
-        //            catch
-        //            {
-        //                await DisplayAlert("CAUGHT", "You suck", "OK");
-        //            }
-        //        }
-        //    });
-        //    return true;
-        //}
-
+        /// <summary>
+        /// Only called by the swipeView Edit button. Allows user to change the special instructions for the selected item if the order is not yet sent
+        /// This function will first pull the most recent order status, then, if the instructions have been changed, update the remote database with the new instructions
+        /// If the item has been removed from the order before the instructions were input, an error message will be displayed and the remote order will not be updated
+        /// Lastly, pulls the most recent order from the server again
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void OnEditItemInvoked(object sender, EventArgs e)
         {
             OrderItem item = new OrderItem((OrderItem)(((SwipeItem)sender).BindingContext));
@@ -126,6 +114,13 @@ namespace CustomerApp.Pages
             await DisplayOrder();
         }
 
+        /// <summary>
+        /// Only called by the Delete swipeView item. Removes the selected item from the order if the order is not yet sent
+        /// Pulls the most recent update for the order, removes the item if it still exists, then updates the remote order.
+        /// Lastly, pulls the most recent order from the server again
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void OnRemoveItemInvoked(object sender, EventArgs e)
         {
             OrderItem item = new OrderItem((OrderItem)(((SwipeItem)sender).BindingContext));
@@ -164,6 +159,9 @@ namespace CustomerApp.Pages
             orderRefreshView.IsEnabled = true;
         }
 
+        /// <summary>
+        /// Called every time the list of order items (orderRefreshView) is refreshed by pulling down
+        /// </summary>
         async void onRefresh()
         {
             // Pull newest order status
@@ -172,6 +170,10 @@ namespace CustomerApp.Pages
             orderRefreshView.IsRefreshing = false;
         }
 
+        /// <summary>
+        /// Gets the most recent version of the order, sets the menuFoodItemsView's ItemsSource property to that order, and turns the Send Order button into a Payment button if the order has been sent
+        /// </summary>
+        /// <returns></returns>
         public async Task DisplayOrder()
         {
             // Fetch most recent version of the order

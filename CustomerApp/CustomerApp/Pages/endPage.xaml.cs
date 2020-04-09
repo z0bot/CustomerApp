@@ -28,7 +28,11 @@ namespace CustomerApp.Pages
             updateLabel();
         }
 
-        // Called when at least 1 item remains unpaid
+        /// <summary>
+        /// Called when at least 1 item remains unpaid after the order is updated
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void unpaidBalanceButton(object sender, EventArgs e)
         {
             if (numUnpaid > 0)
@@ -40,7 +44,11 @@ namespace CustomerApp.Pages
             }
         }
 
-        // Called when 0 items remain unpaid
+        /// <summary>
+        /// Called when 0 items remain unpaid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void logOutButton(object sender, EventArgs e)
         {
             if (numUnpaid == 0)
@@ -66,7 +74,10 @@ namespace CustomerApp.Pages
             await Navigation.PushAsync(new YourOrderPage());
         }
 
-        // Called regularly via onRefresh
+        /// <summary>
+        /// Updates the text and functions of the continue button to reflect the most recent order status
+        /// Called by the constructor and refreshView
+        /// </summary>
         async void updateLabel()
         {
             // Pull unpaid items from server

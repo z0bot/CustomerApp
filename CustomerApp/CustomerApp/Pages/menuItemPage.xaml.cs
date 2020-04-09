@@ -15,8 +15,14 @@ namespace CustomerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class menuItemPage : ContentPage
     {
-        OrderItem item;
-        MenuFoodItem baseItem;
+        OrderItem item; // The item as it will appear in the order
+        MenuFoodItem baseItem; // The base item that will be copied into item
+        
+        /// <summary>
+        /// Constructor for the menuItemPage, taking in a menuFoodItem's ID. Assumes that the ID exists
+        /// Creates an orderItem copy of the associated menuItem, assigning it a unique key
+        /// </summary>
+        /// <param name="itemID"></param>
         public menuItemPage(string itemID)
         {
             NavigationPage.SetHasNavigationBar(this, false);
@@ -33,6 +39,8 @@ namespace CustomerApp.Pages
             {
                 item.newID = (rand.Next(0, 1000000000)).ToString();
             }
+
+            // Update labels
             nameLabel.Text = baseItem.name;
             descLabel.Text = baseItem.description;
             itemPic.Source = baseItem.picture;
@@ -47,6 +55,12 @@ namespace CustomerApp.Pages
 
             await DisplayAlert("Nutrition info", baseItem.nutrition, "OK");
         }
+
+        /// <summary>
+        /// Add special instructions to the item (NOT the base item)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void OnAddInstructionsClicked(object sender, EventArgs e)
         {
             // Prompt for special instructions
@@ -54,6 +68,11 @@ namespace CustomerApp.Pages
             item.special_instruct = await DisplayPromptAsync("Special Instructions", "Enter special instructions, such as allergen information", "OK", "Cancel", null, -1, keyboard: Keyboard.Plain, item.special_instruct);
         }
 
+        /// <summary>
+        /// If the order has not been sent, add this item to it. Then return to the yourOrder page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void OnAddItemClicked(object sender, EventArgs e)
         {
             // Remove ability to add items after an order is sent. Easy to change later
@@ -67,12 +86,17 @@ namespace CustomerApp.Pages
                 await Navigation.PopAsync();
                 return;
             }
+
+            // Get most recent order status
+            await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
+
             //Store item into local database
             RealmManager.Write(() => 
             {
                 RealmManager.Realm.All<Order>().FirstOrDefault().menuItems.Add(item);
             });
 
+            // Send update order
             await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());
 
             //Navigate back to menu. Probably a more elegant method but is easy to do. Remove previous 2 pages, then pop

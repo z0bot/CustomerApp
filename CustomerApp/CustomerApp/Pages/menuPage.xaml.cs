@@ -12,18 +12,9 @@ using Xamarin.Forms.Xaml;
 
 namespace CustomerApp.Pages
 {
-    public class categoryLink
-    {
-        public string name;
-
-        public Button ButtonInfo { get; set; }
-    }
-
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class menuPage : ContentPage
     {
-        
-        public List<categoryLink> category;
         public menuPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
@@ -31,6 +22,10 @@ namespace CustomerApp.Pages
 
             
         }
+
+        /// <summary>
+        /// Called upon the page appearing. Gets most recent menu items and populates the list with category buttons
+        /// </summary>
         protected override async void OnAppearing()
         {
             base.OnAppearing();
@@ -38,6 +33,10 @@ namespace CustomerApp.Pages
             PopulateCategories();
         }
 
+        /// <summary>
+        /// Pulls the most recent list of menu items from the remote database
+        /// </summary>
+        /// <returns></returns>
         async Task UpdateMenuItems()
         {
             RealmManager.RemoveAll<MenuItemsList>();
@@ -45,33 +44,35 @@ namespace CustomerApp.Pages
             
         }
 
+        /// <summary>
+        /// Creates the list of categories from the menu items pulled from the remote database. Assumes at least one category exists, but shouldn't break if there aren't any
+        /// </summary>
         void PopulateCategories()
         {
             // Clear existing categories
             while(categoryList.Children.Count != 0)
                 categoryList.Children.RemoveAt(0);
 
-            category = new List<categoryLink>();
 
             List<string> categoryNames = new List<string>();
 
+            // Collect all category names
             foreach(MenuFoodItem m in RealmManager.All<MenuItemsList>().FirstOrDefault().menuItems)
             {
                 categoryNames.Add(m.category);
             }
 
-            categoryNames = categoryNames.Distinct().ToList();
+            categoryNames = categoryNames.Distinct().ToList(); // Get only unique categories
 
+            // Create buttons for each category
             for (int i = 0; i < categoryNames.Count; ++i)
             {
-                categoryLink newCat = new categoryLink
-                {
-                    name = categoryNames[i]
-                };
+                Button temp;
+                string buttonName = categoryNames[i];
 
-                categoryList.Children.Add(newCat.ButtonInfo = (new Button()
+                categoryList.Children.Add(temp = (new Button()
                 {
-                    Text = newCat.name,
+                    Text = buttonName,
                     Margin = new Thickness(30, 0, 30, 20),
                     FontAttributes = FontAttributes.Bold,
                     TextColor = Color.White,
@@ -80,10 +81,10 @@ namespace CustomerApp.Pages
                     CornerRadius = 15
                 }));
 
-                newCat.ButtonInfo.Clicked += async (sender, args) => await Navigation.PushAsync(new categoryPage(newCat.name));
-                category.Add(newCat);
+                temp.Clicked += async (sender, args) => await Navigation.PushAsync(new categoryPage(buttonName));
             }
         }
+
 
         async void OnRefillButtonClicked(object sender, EventArgs e)
         {

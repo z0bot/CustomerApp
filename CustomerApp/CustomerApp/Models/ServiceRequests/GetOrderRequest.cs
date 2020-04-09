@@ -36,8 +36,9 @@ namespace CustomerApp.Models.ServiceRequests
             }
             else
             {
-                //add the response into the local database
-                
+                // Add the response into the local database
+
+                // Remove current contents
                 RealmManager.RemoveAll<Order>();
                 RealmManager.RemoveAll<OrderItem>();
 

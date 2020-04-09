@@ -42,7 +42,7 @@ namespace CustomerApp.Models
         // Default constructor
         public OrderItem() { }
 
-        // Copy constructor
+        // Create item based on Menu Item
         public OrderItem(MenuFoodItem m)
         {
             _id = m._id;
@@ -58,6 +58,8 @@ namespace CustomerApp.Models
 
             paid = m.paid;
         }
+
+        // Copy constructor
         public OrderItem(OrderItem o)
         {
             if (o == null)

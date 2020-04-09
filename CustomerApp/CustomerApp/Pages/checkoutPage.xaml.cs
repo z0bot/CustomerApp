@@ -33,6 +33,11 @@ namespace CustomerApp.Pages
             await DisplayOrder();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void OnPayButtonClicked(object sender, EventArgs e)
         {
             if ((contribution + tip) > 0)
@@ -98,23 +103,27 @@ namespace CustomerApp.Pages
                 await Navigation.PushAsync(new endPage());
         }
 
+
         // Clear the tip's entry every time it is selected
         void clearTip(object sender, EventArgs e)
         {
             ((Entry)sender).Text = "";
         }
 
-        // Called when entry is completed on the tip field. Sets tipChanged to true, preventing suggestions going forward
+        /// <summary>
+        /// Called upon the tip entry box being deselected.
+        /// Rounds the tip to two decimal places (currency) if it is a valid entry (non-negative numbers)
+        /// Otherwise, sets tip to 0
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void OnTipCompleted(object sender, EventArgs e)
         {
             // Sanity check inputs
-            if (!double.TryParse(((Entry)sender).Text, out tip))
+            if (!double.TryParse(((Entry)sender).Text, out tip) || tip < 0)
                 tip = 0;
             else
                 tip = double.Parse(((Entry)sender).Text, System.Globalization.NumberStyles.Currency);
-
-            if (tip < 0) // No negative tips (lol)
-                tip = 0;
 
             // Round to two decimal places, then update the textboxes
             tip = Math.Round(tip, 2);
@@ -124,7 +133,10 @@ namespace CustomerApp.Pages
             OnContributionCompleted();
         }
 
-
+        /// <summary>
+        /// Updates labels according to contribution and tip sum
+        /// Also uses placeholder text to suggest a tip
+        /// </summary>
         void OnContributionCompleted()
         {
             // Suggest tip through placeholder text
@@ -153,6 +165,11 @@ namespace CustomerApp.Pages
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
 
+        /// <summary>
+        /// Pulls the most recent order status, then assigns that to the items list's itemsSource
+        /// Also resets contribution to 0
+        /// </summary>
+        /// <returns></returns>
         public async Task DisplayOrder()
         {
             orderRefreshView.IsEnabled = false;
@@ -169,6 +186,12 @@ namespace CustomerApp.Pages
             orderRefreshView.IsEnabled = true;
         }
 
+        /// <summary>
+        /// Called upon toggling a switch.
+        /// Note that the toggle itself is tied to an order item's paid attribute, so we do not need ot manually change it
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void OnTogglePaid(object sender, ToggledEventArgs e)
         {
             // Don't do anything if Realm is writing
@@ -177,15 +200,14 @@ namespace CustomerApp.Pages
 
             OrderItem toggledItem = new OrderItem((OrderItem)(((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext));
 
+            // Error checking
             if (toggledItem._id == null)
             {
                 await DisplayOrder();
                 return;
             }
                 
-
-            //OrderItem toggledItem = new OrderItem((OrderItem)(((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext));
-
+               
             // Update contribution according to toggled/not toggled
             if (e.Value)
             {

@@ -20,6 +20,11 @@ namespace CustomerApp.Pages
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Gets the order associated with the current table, then move to YourOrder page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void OnOrderHereButtonClicked(object sender, EventArgs e)
         {
             // Clear existing data
@@ -49,7 +54,10 @@ namespace CustomerApp.Pages
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
 
-        // Disable back button for this page
+        /// <summary>
+        /// Completely logs the user out of the app, theoretically resetting it to the same as the first boot
+        /// </summary>
+        /// <returns></returns>
         protected override bool OnBackButtonPressed()
         {
             Device.BeginInvokeOnMainThread(async () =>
@@ -65,6 +73,7 @@ namespace CustomerApp.Pages
             });
             return true;
         }
+
         /// <summary>
         /// Due to dynamic MainPage states, this allows the user to logout from OrderHerePage
         /// safely and creates a new instance of the login page in case there wasn't one before

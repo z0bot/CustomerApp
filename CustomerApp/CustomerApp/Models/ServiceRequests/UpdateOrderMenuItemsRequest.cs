@@ -26,7 +26,7 @@ namespace CustomerApp.Models.ServiceRequests
 
             UpdaterObject UO = new UpdaterObject();
             foreach (OrderItem o in toUpdate)
-                UO.value.Add(new DeserializableOrderItem(o));
+                UO.value.Add(new SerializableOrderItem(o));
 
             Body = new List<UpdaterObject>();
             Body.Add(UO);
@@ -36,12 +36,12 @@ namespace CustomerApp.Models.ServiceRequests
         public class UpdaterObject
         {
             public string propName = "menuItems";
-            public IList<DeserializableOrderItem> value = new List<DeserializableOrderItem>();
+            public IList<SerializableOrderItem> value = new List<SerializableOrderItem>();
         }
 
         // Objects to contain just the information needed to update the order. 
         // Since OrderItems extend RealmObject, they contain a bunch of extra stuff we don't need
-        public class DeserializableOrderItem
+        public class SerializableOrderItem
         {
             public IList<string> ingredients;
 
@@ -57,7 +57,7 @@ namespace CustomerApp.Models.ServiceRequests
 
             public string _id;
 
-            public DeserializableOrderItem(OrderItem o)
+            public SerializableOrderItem(OrderItem o)
             {
                 _id = o._id;
 

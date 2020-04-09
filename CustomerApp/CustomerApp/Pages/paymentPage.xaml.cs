@@ -26,6 +26,11 @@ namespace CustomerApp.Pages
             total = contribution + tip;
         }
 
+        /// <summary>
+        /// Activates the Card.IO scanner, then swaps the visibility of the Scan Card button with that of the Confirm Payment button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void scanCard(object sender, EventArgs e)
         {
             DependencyService.Get<ICard>().StartRead();
@@ -41,7 +46,14 @@ namespace CustomerApp.Pages
 
         }
 
-
+        /// <summary>
+        /// Becomes visible after the Card.IO scanner appears.
+        /// If a valid card has been provided, allows the user to confirm their payment, then leave
+        /// If no valid card has been read, swaps visibility with the Scan Card button
+        /// If a valid card is read but the user denies confirmation, shows both buttons to allow a rescan or confirm the scanned card
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void confirmButton(object sender, EventArgs e)
         {
             if (DependencyService.Get<ICard>().ReadSuccesful())
@@ -58,7 +70,8 @@ namespace CustomerApp.Pages
                 }
                 else
                 {
-
+                    scanCardButton.IsVisible = true;
+                    confirmPayButton.IsVisible = true;
                 }
             }
             else
@@ -69,6 +82,11 @@ namespace CustomerApp.Pages
             }
         }
 
+        /// <summary>
+        /// Sends notification to the waitstaff of the amount to be collected, then allows the user to leave the page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void payWithCashClicked(object sender, EventArgs e)
         {
             // Send notification to waitstaff
@@ -78,6 +96,12 @@ namespace CustomerApp.Pages
             await LeavePage();
         }
 
+        /// <summary>
+        /// Leave the current page. Unlocks the user's payment-in-progress attribute, canceling the persistence to this page.
+        /// Prompts users if they wish to play a game of chance
+        /// Will add points to their account eventually
+        /// </summary>
+        /// <returns></returns>
         async Task LeavePage()
         {
             // Remove previous page to prevent double payment
