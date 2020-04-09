@@ -31,14 +31,10 @@ namespace CustomerApp.Models.ServiceRequests
         {
             var sendAddUserRequest = new AddUserRequest(firstName, lastName, email, password, birthday);
             var response = await ServiceRequestHandler.MakeServiceCall<UserPostResponse>(sendAddUserRequest, sendAddUserRequest.Body);
+            string test = "test";
 
             if (response.message == null)
             {
-                return false;
-            }
-            else if (response.message == "Email exisits")
-            {
-                MessagingCenter.Send<ServiceRequest, string>(sendAddUserRequest, "Email exists", response.message);
                 return false;
             }
             else

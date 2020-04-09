@@ -3,6 +3,7 @@ using CustomerApp.Models.ServiceRequests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,7 +34,8 @@ namespace CustomerApp.Pages
             }
             else if(UserPasswordCheck())
             {
-                if (await AddUserRequest.SendAddUserRequest(uxFirstName.Text, uxLastName.Text, uxEmail.Text, uxPassword.Text, uxBirthdate.Date.ToString()));
+                var response = await AddUserRequest.SendAddUserRequest(uxFirstName.Text, uxLastName.Text, uxEmail.Text, uxPassword.Text, uxBirthdate.Date.ToString());
+                if (response)
                 {
                     await DisplayAlert("Successful", "Account has been registered!", "OK");
                     await Navigation.PopModalAsync();
@@ -48,7 +50,7 @@ namespace CustomerApp.Pages
         //determined by entering preexisting email tied to an account
         public void MessagingCenterResponse()
         {
-            MessagingCenter.Subscribe<ServiceRequest, string>(this, "Email exists", async (sender, arg) =>
+            MessagingCenter.Subscribe<HttpResponseMessage>(this, "Conflict", async (sender) =>
             {
                 await DisplayAlert("Email already registered", "Please try again with a different email", "OK");
             });
