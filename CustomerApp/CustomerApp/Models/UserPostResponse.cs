@@ -7,5 +7,6 @@ namespace CustomerApp.Models
     public class UserPostResponse
     {
         public string message { get; set; }
+        public User user { get; set; }
     }
 }
