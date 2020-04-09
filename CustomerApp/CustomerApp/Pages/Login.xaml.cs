@@ -1,4 +1,5 @@
 ﻿using CustomerApp.Models;
+using CustomerApp.Models.ServiceRequests;
 using GoogleVisionBarCodeScanner;
 using System;
 using System.Collections.Generic;
@@ -36,13 +37,22 @@ namespace CustomerApp.Pages
                 /*will eventually be a post request to fill out the rest of the properties
                 for a user that theoretically already exists
                 For now, creates new user object and stores it in realm*/
-                User currentUser = new User
+
+                var response = await UserAuthenticationRequest.SendUserAuthenticationRequest(uxEmailAdress.Text, uxPassword.Text);
+                if(response)
                 {
-                    email = uxEmailAdress.Text,
-                    password = uxPassword.Text,
-                };
-                RealmManager.AddOrUpdate<User>(currentUser);
-                await Navigation.PushAsync(new QRScannerPage());
+                    User currentUser = new User
+                    {
+                        email = uxEmailAdress.Text,
+                        password = uxPassword.Text,
+                    };
+                    RealmManager.AddOrUpdate<User>(currentUser);
+                    await Navigation.PushAsync(new QRScannerPage());
+                }
+                else
+                {
+                    await DisplayAlert("Incorrect Login Credentials", "No account found with that email and/or password", "Try Again");
+                }
             }
             else
                 await DisplayAlert("Alert", "You have to provide Camera permission", "Ok");

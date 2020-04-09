@@ -31,7 +31,6 @@ namespace CustomerApp.Models.ServiceRequests
         {
             var sendAddUserRequest = new AddUserRequest(firstName, lastName, email, password, birthday);
             var response = await ServiceRequestHandler.MakeServiceCall<UserPostResponse>(sendAddUserRequest, sendAddUserRequest.Body);
-            string test = "test";
 
             if (response.message == null)
             {
