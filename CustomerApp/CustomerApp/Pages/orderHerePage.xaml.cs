@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using CustomerApp.Models.ServiceRequests;
+
 namespace CustomerApp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -16,39 +18,23 @@ namespace CustomerApp.Pages
         public orderHerePage()
         {
             InitializeComponent();
-
-            
-                
         }
 
+        /// <summary>
+        /// Gets the order associated with the current table, then move to YourOrder page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void OnOrderHereButtonClicked(object sender, EventArgs e)
         {
+            // Clear existing data
+            RealmManager.RemoveAll<Order>();
+            RealmManager.RemoveAll<Table>();
 
             // Pull existing orders for this table
-            // GetOrderRequest.SendGetOrderRequest();
+            await GetTableRequest.SendGetTableRequest(RealmManager.All<User>().FirstOrDefault().tableNum);
 
-            Order currentOrder;
-
-            if (RealmManager.All<Order>().Count() != 0)
-                currentOrder = RealmManager.All<Order>().FirstOrDefault();
-            else
-            {
-                currentOrder = new Order();
-                // Get which table we are at
-                int table = RealmManager.All<User>().FirstOrDefault().tableNum;
-                table = 2; // TEMPORARILY set table to 2. Only used for testing
-
-                // Find which waitstaff is in charge of this table
-                // GetTablesRequest.SendGetTablesRequest(table);
-                string employeeID; // = RealmManager.All<Order>
-                // employeeID = RealmManager.Find<Table>().Where((Table t) => t.table_number == table).FirstOrDefault().employee_id;
-                employeeID = "5e850b90c849ed00047b4ec9"; // TEMPORARILY assign this for testing. This should be Zach's employee ID (because he was first in the DB)
-
-                currentOrder.waitstaff_id = employeeID;
-                currentOrder.sent = false;
-
-                RealmManager.AddOrUpdate<Order>(currentOrder);
-            }
+            await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Table>().FirstOrDefault().order_id._id);
 
             await Navigation.PushAsync(new YourOrderPage());
         }
@@ -68,7 +54,10 @@ namespace CustomerApp.Pages
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
 
-        // Disable back button for this page
+        /// <summary>
+        /// Completely logs the user out of the app, theoretically resetting it to the same as the first boot
+        /// </summary>
+        /// <returns></returns>
         protected override bool OnBackButtonPressed()
         {
             Device.BeginInvokeOnMainThread(async () =>
@@ -76,12 +65,15 @@ namespace CustomerApp.Pages
                 if (await DisplayAlert("LOGOUT", "Are you sure you want to logout from this table?", "Yes", "No"))
                 {
                     RealmManager.RemoveAll<MenuFoodItem>();
+                    RealmManager.RemoveAll<Order>();
+                    RealmManager.RemoveAll<Table>();
                     RealmManager.RemoveAll<User>();
                     await InsertPageBeneathAndPop();
                 }
             });
             return true;
         }
+
         /// <summary>
         /// Due to dynamic MainPage states, this allows the user to logout from OrderHerePage
         /// safely and creates a new instance of the login page in case there wasn't one before

@@ -12,15 +12,21 @@ namespace CustomerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class gamePage : ContentPage
     {
-        static int winner;
+        int winner;
         public gamePage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
+            // Randomly select a number between 1 and 5, inclusively
             winner = new Random(System.DateTime.Now.Second).Next(1, 5);
         }
 
+        /// <summary>
+        /// Uses clicked button's text (A number between 1 and 5) to determine if choice was correct
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void onClicked(object sender, EventArgs e)
         {
             if(((Button)sender).Text == winner.ToString())

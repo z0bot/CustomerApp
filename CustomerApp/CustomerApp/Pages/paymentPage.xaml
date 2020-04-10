@@ -50,7 +50,18 @@
                             Clicked="confirmButton"
                             HorizontalOptions="Center"
                             CornerRadius="15"/>
-            
+
+            <Button x:Name="PayWithCashButton" 
+                            Text="Pay with cash"
+                            BackgroundColor="#1fbd85"
+                            TextColor="White" 
+                            Margin="0,30,0,0"
+                            FontSize="Large"
+                            WidthRequest="300"
+                            Clicked="payWithCashClicked"
+                            HorizontalOptions="Center"
+                            CornerRadius="15"/>
+
             <!--Refill/help buttons-->
             <StackLayout
                     Orientation="Horizontal"
