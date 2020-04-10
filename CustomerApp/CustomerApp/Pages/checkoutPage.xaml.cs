@@ -82,8 +82,7 @@ namespace CustomerApp.Pages
                     // Update items paid for in database
                     await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());
 
-                    if(newContribution != contribution)
-                        await DisplayAlert("Notice", "Due to coupons or other items already being paid for, your payment has been changed to " + newContribution.ToString("C") + " plus your tip of " + tip.ToString("C"), "OK");
+                    
 
                     // Lock in user's payment status
                     RealmManager.Write(() =>
@@ -95,6 +94,8 @@ namespace CustomerApp.Pages
 
                     // Send tip to server
 
+                    if (Math.Abs(newContribution - contribution) >= 0.01)
+                        await DisplayAlert("Notice", "Due to coupons or other items already being paid for, your payment has been changed to " + newContribution.ToString("C") + " plus your tip of " + tip.ToString("C"), "OK");
 
                     await Navigation.PushAsync(new paymentPage(newContribution, tip));
                 }
