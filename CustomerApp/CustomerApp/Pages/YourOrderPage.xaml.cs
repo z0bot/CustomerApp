@@ -148,16 +148,6 @@ namespace CustomerApp.Pages
             await DisplayOrder();
         }
 
-        // This and enableRefresh are used in an attempt to make it easier to use the swipeview for each item
-        async void disableRefresh(object sender, SwipeStartedEventArgs e)
-        {
-            orderRefreshView.IsEnabled = false;
-        }
-
-        async void enableRefresh(object sender, SwipeEndedEventArgs e)
-        {
-            orderRefreshView.IsEnabled = true;
-        }
 
         /// <summary>
         /// Called every time the list of order items (orderRefreshView) is refreshed by pulling down
