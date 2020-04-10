@@ -140,6 +140,31 @@ namespace CustomerApp.Pages
         /// </summary>
         void OnContributionCompleted()
         {
+            // Update active coupons
+            foreach(Coupon c in RealmManager.All<CouponsList>().FirstOrDefault().Coupons)
+            {
+                foreach(string reqID in c.requiredItems)
+                {
+                    List<OrderItem> requiredItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == reqID && !o.couponApplied).ToList();
+                    if (!requiredItemList.Count().Equals(0)) // If the order contains at least one of the required items not already used for a different coupon
+                    {
+                        foreach(string applID in c.appliedItems)
+                        {
+                            List<OrderItem> appliedItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == applID && !o.couponApplied).ToList();
+                            if (!appliedItemList.Count().Equals(0))
+                            {
+                                // For now just pick the first/default item from each list. Could be optimized later
+                                OrderItem requiredItem = requiredItemList.FirstOrDefault();
+                                OrderItem appliedItem = appliedItemList.FirstOrDefault();
+
+
+                            }
+                        }
+                        
+                    }
+                }
+            }
+
             // Suggest tip through placeholder text
             tipEntry.Placeholder = (contribution * 0.2).ToString("C");
 
@@ -186,6 +211,8 @@ namespace CustomerApp.Pages
 
             orderRefreshView.IsEnabled = true;
         }
+
+
 
         /// <summary>
         /// Called upon toggling a switch.

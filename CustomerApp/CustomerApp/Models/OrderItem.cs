@@ -19,7 +19,7 @@ namespace CustomerApp.Models
 
         public string _id { get; set; } // Original item's ID
 
-
+        public bool couponApplied = false;
 
         public string name { get; set; }
 
