@@ -20,5 +20,9 @@ namespace CustomerApp.Models
         public double discount { get; set; }
 
         public bool repeatable { get; set; }
+
+        public bool active { get; set; }
+
+        public bool selected { get; set; } = false; // Used for Customer coupons. Indicates that the customer wants to apply these to their order
     }
 }

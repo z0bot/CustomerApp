@@ -23,5 +23,7 @@ namespace CustomerApp.Models
         public bool paymentInProgress { get; set; } = false;
         public double contribution { get; set; }
         public double tip { get; set; }
+
+        public IList<Coupon> coupons { get; }
     }
 }

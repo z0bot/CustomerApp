@@ -31,6 +31,7 @@ namespace CustomerApp.Models.ServiceRequests
             else
             {
                 //add the response into the local database
+                RealmManager.RemoveAll<CouponsList>();
                 RealmManager.AddOrUpdate<CouponsList>(response);
                 //call succeeded
                 return true;
