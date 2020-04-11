@@ -147,7 +147,7 @@
                             FontAttributes="Bold"
                             TextColor="White"
                             BackgroundColor="#1fbd85"
-                            WidthRequest="140"
+                            WidthRequest="160"
                             FontSize="Medium"
                             CornerRadius="15"
                             Clicked="OnPayButtonClicked"/>

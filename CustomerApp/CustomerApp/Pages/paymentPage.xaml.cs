@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 using CustomerApp.Models;
+using CustomerApp.Models.ServiceRequests;
 
 namespace CustomerApp.Pages
 {
@@ -65,6 +66,11 @@ namespace CustomerApp.Pages
                 {
                     await DisplayAlert("Confimed", "Payment confirmed", "OK");
 
+                    await GetTableRequest.SendGetTableRequest(RealmManager.All<User>().FirstOrDefault().tableNum);
+
+                    // Send tip
+                    await PostTipRequest.SendPostTipRequest(RealmManager.All<Table>().FirstOrDefault().employee_id, RealmManager.All<User>().FirstOrDefault().tip);
+
                     await LeavePage();
                     return;
                 }
@@ -110,8 +116,10 @@ namespace CustomerApp.Pages
 
 
             // Add points
-
-
+            //await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password);
+            //await UpdatePointsRequest.SendUpdatePointsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().points + (RealmManager.All<User>().FirstOrDefault().contribution * 100));
+            await UpdatePointsRequest.SendUpdatePointsRequest("5e85144e9fbc2b0004b279f4", RealmManager.All<User>().FirstOrDefault().points + (RealmManager.All<User>().FirstOrDefault().contribution * 100)); // For now just add to the first user (Karen Smith)
+            
             // Unlock user from payment page
             RealmManager.Write(() =>
             {

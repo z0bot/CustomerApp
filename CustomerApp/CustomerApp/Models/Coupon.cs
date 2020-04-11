@@ -11,9 +11,9 @@ namespace CustomerApp.Models
         [PrimaryKey]
         public string _id { get; set; }
 
-        public IList<string> requiredItems { get; set; }
+        public IList<string> requiredItems { get; }
 
-        public IList<string> appliedItems { get; set; }
+        public IList<string> appliedItems { get; }
 
         public string couponType { get; set; }
 

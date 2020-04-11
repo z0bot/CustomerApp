@@ -16,7 +16,7 @@ namespace CustomerApp.Models
         public string Password { get; set; }
         public string Birthday { get; set; }
 
-        public string points { get; set; }
+        public double points { get; set; }
 
         public int tableNum { get; set; } = -1;
 

@@ -77,12 +77,10 @@ namespace CustomerApp.Pages
                         RealmManager.Write(() => RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == ID && !o.paid).FirstOrDefault().paid = true);
                     }
 
-                    
 
                     // Update items paid for in database
                     await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());
 
-                    
 
                     // Lock in user's payment status
                     RealmManager.Write(() =>
@@ -91,8 +89,6 @@ namespace CustomerApp.Pages
                         RealmManager.All<User>().FirstOrDefault().tip = tip;
                         RealmManager.All<User>().FirstOrDefault().paymentInProgress = true;
                     });
-
-                    // Send tip to server
 
                     if (Math.Abs(newContribution - contribution) >= 0.01)
                         await DisplayAlert("Notice", "Due to coupons or other items already being paid for, your payment has been changed to " + newContribution.ToString("C") + " plus your tip of " + tip.ToString("C"), "OK");
@@ -141,7 +137,7 @@ namespace CustomerApp.Pages
         void OnContributionCompleted()
         {
             // Update active coupons
-            foreach(Coupon c in RealmManager.All<CouponsList>().FirstOrDefault().Coupons)
+            /*foreach(Coupon c in RealmManager.All<CouponsList>().FirstOrDefault().Coupons)
             {
                 foreach(string reqID in c.requiredItems)
                 {
@@ -163,7 +159,7 @@ namespace CustomerApp.Pages
                         
                     }
                 }
-            }
+            }*/
 
             // Suggest tip through placeholder text
             tipEntry.Placeholder = (contribution * 0.2).ToString("C");

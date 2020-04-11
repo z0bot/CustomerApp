@@ -62,6 +62,15 @@
                             HorizontalOptions="Center"
                             CornerRadius="15"/>
 
+            <Label
+                VerticalOptions="StartAndExpand"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Small"
+                Margin="15,0,0,15"
+                HorizontalTextAlignment="Center"
+                Text="NOTE: Any specified tip will be disregarded if paying with cash. Please give your tip directly to your server"/>
+            
             <!--Refill/help buttons-->
             <StackLayout
                     Orientation="Horizontal"

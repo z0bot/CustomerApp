@@ -8,7 +8,7 @@ namespace CustomerApp.Models
 {
     class CouponsList : RealmObject
     {
-        public IList<Coupon> Coupons { get; set; }
+        public IList<Coupon> Coupons { get; }
 
     }
 }
