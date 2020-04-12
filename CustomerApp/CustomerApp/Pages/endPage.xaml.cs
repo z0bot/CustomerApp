@@ -9,6 +9,8 @@ using CustomerApp.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using CustomerApp.Models.ServiceRequests;
+
 namespace CustomerApp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -26,7 +28,11 @@ namespace CustomerApp.Pages
             updateLabel();
         }
 
-        // Called when at least 1 item remains unpaid
+        /// <summary>
+        /// Called when at least 1 item remains unpaid after the order is updated
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void unpaidBalanceButton(object sender, EventArgs e)
         {
             if (numUnpaid > 0)
@@ -38,14 +44,20 @@ namespace CustomerApp.Pages
             }
         }
 
-        // Called when 0 items remain unpaid
+        /// <summary>
+        /// Called when 0 items remain unpaid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void logOutButton(object sender, EventArgs e)
         {
             if (numUnpaid == 0)
                 if (await DisplayAlert("Log out confirmation", "Once logged out, you will not be able to request refills until a new order is started. Are you sure you want to leave the table?", "Yes", "No"))
                 {
-                    RealmManager.RemoveAll<User>();
+                    RealmManager.RemoveAll<MenuFoodItem>();
                     RealmManager.RemoveAll<Order>();
+                    RealmManager.RemoveAll<Table>();
+                    RealmManager.RemoveAll<User>();
                     await Navigation.PushAsync(new Login());
                 }
         }
@@ -57,13 +69,22 @@ namespace CustomerApp.Pages
             refresher.IsRefreshing = false;
         }
 
-        // Called regularly via onRefresh
-        void updateLabel()
+        async void ReturnToOrder(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new YourOrderPage());
+        }
+
+        /// <summary>
+        /// Updates the text and functions of the continue button to reflect the most recent order status
+        /// Called by the constructor and refreshView
+        /// </summary>
+        async void updateLabel()
         {
             // Pull unpaid items from server
+            await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
 
             // Check if any items are unpaid
-            numUnpaid = RealmManager.All<Order>().FirstOrDefault().Contents.Where((MenuFoodItem m) => m.paid == false).ToList().Count();
+            numUnpaid = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid == false).ToList().Count();
             
 
             // Change button based on remaining number of items

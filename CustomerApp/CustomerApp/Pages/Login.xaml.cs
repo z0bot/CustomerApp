@@ -70,5 +70,11 @@ namespace CustomerApp.Pages
         {
             Navigation.PushModalAsync(new NavigationPage(new NewAccount()));
         }
+
+        // Since the app is now a large loop, we must prevent the user from going back to the endPage
+        protected override bool OnBackButtonPressed()
+        {
+            return true;
+        }
     }
 }
