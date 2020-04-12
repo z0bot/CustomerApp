@@ -14,30 +14,21 @@ namespace CustomerApp.Models
 
         public IList<string> ingredients { get; }
 
-        //[PrimaryKey]
-        //public string newID { get; set; }
-
         public string _id { get; set; } // Original item's ID
 
-        public bool couponApplied = false;
+        public bool couponApplied { get; set; } = false;
+        
 
         public string name { get; set; }
 
-        //public string picture { get; set; }
-
-        //public string nutrition { get; set; } // Just manually input formatted text to be displayed in an alert, lmao
-
         public double price { get; set; }
         public string StringPrice => price.ToString("C");
-
-        //public string description { get; set; }
 
         public string special_instruct { get; set; }
 
         public bool paid { get; set; }
 
         public bool prepared { get; set; }
-        //public string category { get; set; }
 
         // Default constructor
         public OrderItem() { }

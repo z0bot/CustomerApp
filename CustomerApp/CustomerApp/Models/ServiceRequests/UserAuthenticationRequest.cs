@@ -32,6 +32,7 @@ namespace CustomerApp.Models.ServiceRequests
             }
             else
             {
+                response.user.password = password;
                 RealmManager.AddOrUpdate<User>(response.user);
                 return true;
             }

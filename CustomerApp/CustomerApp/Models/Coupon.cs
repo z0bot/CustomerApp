@@ -6,10 +6,12 @@ using Realms;
 
 namespace CustomerApp.Models
 {
-    class Coupon : RealmObject
+    public class Coupon : RealmObject
     {
         [PrimaryKey]
         public string _id { get; set; }
+
+        public string description { get; set; }
 
         public IList<string> requiredItems { get; }
 

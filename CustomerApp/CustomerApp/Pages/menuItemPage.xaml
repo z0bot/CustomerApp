@@ -39,8 +39,7 @@
                         BackgroundColor="Transparent"
                         
                         HorizontalOptions="EndAndExpand"
-                        VerticalOptions="Center"
-                        />
+                        VerticalOptions="Center"/>
                 </StackLayout>
                 
                 <Label
@@ -109,7 +108,8 @@
                     <StackLayout
                         x:Name="orderControlLayout"
                         Orientation="Vertical"
-                        HorizontalOptions="CenterAndExpand">
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="End">
                         <Button
                             x:Name="addItemButton"
                             VerticalOptions="Center"

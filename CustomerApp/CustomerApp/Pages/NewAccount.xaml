@@ -27,14 +27,14 @@
                     HorizontalOptions="CenterAndExpand"
                     WidthRequest="200"
                     IsClippedToBounds="True">
-                    <Entry
+                        <Entry
                         x:Name="uxFirstName"
                         BackgroundColor="White"
                         HorizontalTextAlignment="Center"
                         Placeholder="John"
                         PlaceholderColor="#dbdbdb"
                         FontSize="Medium"/>
-                </Frame>
+                    </Frame>
                 </StackLayout>
                 <StackLayout
                    Orientation="Vertical"
@@ -44,14 +44,14 @@
                         Margin="15,0,0,5"
                         TextColor="Black"
                         Text="Last Name"/>
-                <Frame
+                    <Frame
                     Padding="0"
                     CornerRadius="15"
                     HorizontalOptions="CenterAndExpand"
                     Opacity=".9"
                     WidthRequest="200"
                     IsClippedToBounds="True">
-                    <Entry
+                        <Entry
                         x:Name="uxLastName"
                         BackgroundColor="White"
                         Placeholder="Wick"
@@ -59,7 +59,7 @@
                         TextColor="Black"
                         HorizontalTextAlignment="Center"
                         FontSize="Medium"/>
-                </Frame>
+                    </Frame>
                 </StackLayout>
             </StackLayout>
             <StackLayout
@@ -72,14 +72,14 @@
                         Margin="15,0,0,0"
                         TextColor="Black"
                         Text="Email Address"/>
-                <Frame
+                    <Frame
                     Padding="0"
                     CornerRadius="15"
                     WidthRequest="300"
                     Opacity=".9"
                     HorizontalOptions="Center"
                     IsClippedToBounds="True">
-                    <Entry
+                        <Entry
                         x:Name="uxEmail"
                         BackgroundColor="White"
                         Placeholder="johnwick@wheresmydog.com"
@@ -87,7 +87,7 @@
                         HorizontalTextAlignment="Center"
                         WidthRequest="250"
                         FontSize="Medium"/>
-                </Frame>
+                    </Frame>
                 </StackLayout>
                 <StackLayout
                    Orientation="Vertical"
@@ -97,18 +97,18 @@
                         Margin="15,0,0,0"
                         TextColor="Black"
                         Text="Birthday"/>
-                <Frame
+                    <Frame
                     Padding="0"
                     CornerRadius="15"
                     WidthRequest="300"
                     Opacity=".9"
                     HorizontalOptions="Center"
                     IsClippedToBounds="True">
-                    <DatePicker
+                        <DatePicker
                         x:Name="uxBirthdate"
                         WidthRequest="450"
                         HorizontalOptions="Center"/>
-                </Frame>
+                    </Frame>
                 </StackLayout>
             </StackLayout>
             <StackLayout
@@ -123,14 +123,14 @@
                         TextColor="White"
                         FontSize="Medium"
                         Text="Create password"/>
-                <Frame
+                    <Frame
                     Padding="0"
                     CornerRadius="15"
                     WidthRequest="200"
                     HorizontalOptions="CenterAndExpand"
                     Opacity=".9"
                     IsClippedToBounds="True">
-                    <Entry 
+                        <Entry 
                         x:Name="uxPassword"
                         BackgroundColor="White"
                         Placeholder="johnWicksPassword"
@@ -138,7 +138,7 @@
                         HorizontalTextAlignment="Center"
                         IsPassword="True"
                         FontSize="Medium"/>
-                </Frame>
+                    </Frame>
                 </StackLayout>
                 <StackLayout
                    Orientation="Vertical"
@@ -149,14 +149,14 @@
                         TextColor="White"
                         FontSize="Medium"
                         Text="Reenter password"/>
-                <Frame
+                    <Frame
                     Padding="0"
                     CornerRadius="15"
                     HorizontalOptions="CenterAndExpand"
                     Opacity=".9"
                     WidthRequest="200"
                     IsClippedToBounds="True">
-                    <Entry
+                        <Entry
                         x:Name="uxPasswordReentry"
                         BackgroundColor="White"
                         Placeholder="johnWicksPassword"
@@ -164,7 +164,7 @@
                         HorizontalTextAlignment="Center"
                         IsPassword="True"
                         FontSize="Medium"/>
-                </Frame>
+                    </Frame>
                 </StackLayout>
             </StackLayout>
             <Button

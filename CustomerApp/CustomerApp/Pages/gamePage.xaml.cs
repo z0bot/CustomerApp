@@ -31,8 +31,12 @@ namespace CustomerApp.Pages
         {
             if(((Button)sender).Text == winner.ToString())
             {
-                await DisplayAlert("Congratulations!", "Correct! The number was " + winner.ToString() + ".", "Yay!");
-                // Print/email coupon
+                await DisplayAlert("Congratulations!", "Correct! The number was " + winner.ToString() + ".\n"
+                    + "A coupon for your free dessert has been added to your account", "Yay!");
+                
+                // Add new coupon to account
+
+                
             }
             else
             {

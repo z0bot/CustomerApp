@@ -25,6 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Pages\PayWithPointsPage.xaml.cs">
+      <DependentUpon>PayWithPointsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\CouponSelectorPage.xaml.cs">
+      <DependentUpon>CouponSelectorPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\PushToQR.xaml.cs">
       <DependentUpon>PushToQR.xaml</DependentUpon>
     </Compile>

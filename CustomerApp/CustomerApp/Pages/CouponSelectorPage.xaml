@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="CustomerApp.Pages.CouponSelectorPage"
+             BackgroundImageSource="backgroundImage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Title"
+                FontAttributes="Bold"
+                Margin="15,15,15,0"
+                Text="Coupons"/>
+            <Label
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Medium"
+                Margin="15,0,15,0"
+                HorizontalTextAlignment="Center"
+                Text="You can apply some or all of your coupons to this contribution. Only coupons that are succesfully applied will be removed from your account"/>
+            <Label
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                TextColor="Black"
+                FontSize="Small"
+                Margin="15,0,15,15"
+                HorizontalTextAlignment="Center"
+                Text="Pull down on the list to refresh"/>
+            
+            <RefreshView
+                x:Name="orderRefreshView"
+                Command="{Binding onRefresh()}"
+                VerticalOptions="Fill"
+                HorizontalOptions="CenterAndExpand"
+                Margin="40,10,40,10">
+                <ListView
+                    x:Name="CouponsView"
+                    VerticalOptions="Fill"
+                    HasUnevenRows="True"
+                    SelectionMode="None">
+                    <ListView.ItemTemplate
+                        >
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <StackLayout
+                                            x:Name="couponLayout"
+                                            Grid.Row="0"
+                                            Orientation="Horizontal">
+                                        <Label
+                                            x:Name="uxMenuItemLabel"
+                                            FontSize="Medium"
+                                            Text="{Binding description}"/>
+                                        <Switch
+                                            x:Name="uxTogglePaid"
+                                            HorizontalOptions="End"
+                                            VerticalOptions="Start"
+                                            Margin="0,7,0,0"
+                                            HeightRequest="30"
+                                            IsToggled="{Binding selected}"
+                                            Toggled="OnToggleSelected"/>
+                                    </StackLayout>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </RefreshView>
+
+
+            <!--Refill/help buttons and finalize button-->
+            <StackLayout
+                    Orientation="Horizontal"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="EndAndExpand">
+
+                <StackLayout
+                            x:Name="refillLayout"
+                            Margin="25,0,10,0"
+                            Orientation="Vertical"
+                            VerticalOptions="EndAndExpand"
+                            HorizontalOptions="StartAndExpand">
+                    <Label
+                                Text="Refill"
+                                HorizontalTextAlignment="Center"
+                                FontAttributes="Bold"
+                                TextColor="Black"/>
+                    <ImageButton
+                                x:Name="refillButton"
+                                CornerRadius="15"
+                                Source="plusButton"
+                                BackgroundColor="Transparent"
+                                WidthRequest="70"
+                                HeightRequest="70"
+                                Clicked="OnRefillButtonClicked"/>
+                </StackLayout>
+
+
+                <Button
+                    x:Name="finalizeButton"
+                    VerticalOptions="Center"
+                    Text="Apply Coupons"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    BackgroundColor="#1fbd85"
+                    WidthRequest="130"
+                    HeightRequest="70"
+                    FontSize="Medium"
+                    CornerRadius="15"
+                    Clicked="OnFinalizeButtonClicked"/>
+
+
+                <StackLayout
+                            x:Name="serverButtonLayout"
+                            Orientation="Vertical"
+                            Margin="10,0,25,0"
+                            VerticalOptions="EndAndExpand"
+                            HorizontalOptions="EndAndExpand">
+                    
+                    <Label
+                                Text="Call Server"
+                                HorizontalTextAlignment="Center"
+                                FontAttributes="Bold"
+                                TextColor="Black"/>
+                    <ImageButton
+                                x:Name="serverButton"
+                                CornerRadius="15"
+                                BackgroundColor="Transparent"
+                                WidthRequest="70"
+                                HeightRequest="70"
+                                Source="plusButton"
+                                Clicked="OnServerButtonClicked"/>
+                </StackLayout>
+            </StackLayout>
+
+        </StackLayout>
+        
+    </ContentPage.Content>
+</ContentPage>

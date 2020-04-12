@@ -34,26 +34,30 @@ namespace CustomerApp.Pages
         }
 
         /// <summary>
-        /// 
+        /// Get the most recent order contents, then update them with what is paid for locally.
+        /// If any balance needs to be paid, navigate to the payment page. Else, go to the endpage.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         async void OnPayButtonClicked(object sender, EventArgs e)
         {
-            if (await DisplayAlert("Confirm", "You will not be able to change this contribution after leaving this screen. Continue to payment screen?", "OK", "Cancel"))
+            if (await DisplayAlert("Confirm", "You will not be able to change this contribution after leaving this screen. Continue to payment screen? You will be able to make another contribution later", "OK", "Cancel"))
             {
-                // Pull most recent order status form database
+                // Establish which items are paid for locally
                 List<string> paidForIDs = new List<string>();
 
                 foreach (OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid))
                     paidForIDs.Add(o._id);
 
-                await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
+                // Get most recent order from remote database
+                await DisplayOrder();
 
+                // Establish which items are paid for remotely
                 List<string> alreadyPaidIDs = new List<string>();
                 foreach (OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid))
                     alreadyPaidIDs.Add(o._id);
 
+                // Find the difference between remote and local
                 foreach (string ID in alreadyPaidIDs)
                 {
                     var index = paidForIDs.IndexOf(ID);
@@ -63,6 +67,7 @@ namespace CustomerApp.Pages
                     }
                 }
 
+                // Mark each newly paid for item as paid and find the new sum of their prices
                 double newContribution = 0;
                 foreach (string ID in paidForIDs)
                 {
@@ -70,11 +75,12 @@ namespace CustomerApp.Pages
                     RealmManager.Write(() => RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == ID && !o.paid).FirstOrDefault().paid = true);
                 }
 
-
                 // Update items paid for in database
                 await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());
 
 
+
+                // Navigate to payment page if a balance is due
                 if ((contribution + tip) > 0)
                 {
                     // Lock in user's payment status
@@ -90,9 +96,9 @@ namespace CustomerApp.Pages
 
                     await Navigation.PushAsync(new paymentPage(newContribution, tip));
                 }
+                else // No contribution
+                    await Navigation.PushAsync(new endPage());
             }
-            else // No contribution
-                await Navigation.PushAsync(new endPage());
         }
 
 
@@ -135,10 +141,7 @@ namespace CustomerApp.Pages
             tipEntry.Placeholder = (contribution * 0.2).ToString("C");
 
             // Update buttons
-            if ((contribution + tip) > 0)
-                payButton.Text = "Pay " + (contribution + tip).ToString("C");
-            else
-                payButton.Text = "No Contribution";
+            payButton.Text = "Pay " + (contribution + tip).ToString("C");
         }
 
 
@@ -157,6 +160,18 @@ namespace CustomerApp.Pages
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
 
+        async void CouponClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new CouponSelectorPage());
+        }
+
+        async void PointsClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new PayWithPointsPage());
+        }
+        
+
+
         /// <summary>
         /// Pulls the most recent order status, then assigns that to the items list's itemsSource
         /// Also resets contribution to 0
@@ -165,13 +180,15 @@ namespace CustomerApp.Pages
         public async Task DisplayOrder()
         {
             orderRefreshView.IsEnabled = false;
+            menuFoodItemsView.IsEnabled = false;
 
             // Fetch most recent order status
             await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
 
             await GetCouponsRequest.SendGetCouponsRequest();
+
             // Update active restaurant (sales, specials, etc.) coupons
-            foreach(Coupon c in RealmManager.All<CouponsList>().FirstOrDefault().Coupons.Where((Coupon c) => c.couponType == "Restaurant" && c.active))
+            foreach (Coupon c in RealmManager.All<CouponsList>().FirstOrDefault().Coupons.Where((Coupon c) => c.couponType == "Restaurant" && c.active))
             {
                 foreach(string reqID in c.requiredItems)
                 {
@@ -189,10 +206,11 @@ namespace CustomerApp.Pages
 
                                 RealmManager.Write(() =>
                                 {
-                                    RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.newID == appliedItem.newID).FirstOrDefault().price *= (1 - (c.discount / 100));
-                                    RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.newID == appliedItem.newID).FirstOrDefault().couponApplied = true;
-                                    RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.newID == requiredItem.newID).FirstOrDefault().couponApplied = true;
+                                    RealmManager.Find<OrderItem>(appliedItem.newID).price *= (1 - (c.discount / 100));
+                                    RealmManager.Find<OrderItem>(appliedItem.newID).couponApplied = true;
+                                    RealmManager.Find<OrderItem>(requiredItem.newID).couponApplied = true;
                                 });
+                                await Task.Delay(5);
                             }
                             if (!c.repeatable)
                                 break;
@@ -222,7 +240,13 @@ namespace CustomerApp.Pages
                                 OrderItem requiredItem = requiredItemList.FirstOrDefault();
                                 OrderItem appliedItem = appliedItemList.FirstOrDefault();
 
-
+                                RealmManager.Write(() =>
+                                {
+                                    RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.newID == appliedItem.newID).FirstOrDefault().price *= (1 - (c.discount / 100));
+                                    RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.newID == appliedItem.newID).FirstOrDefault().couponApplied = true;
+                                    RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.newID == requiredItem.newID).FirstOrDefault().couponApplied = true;
+                                });
+                                await Task.Delay(5);
                             }
                         }
 
@@ -237,7 +261,10 @@ namespace CustomerApp.Pages
 
             menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => !o.paid).ToList();
 
+            await Task.Delay(500); // Try to fix crashes related to toggling rows before the source is finished updating
+
             orderRefreshView.IsEnabled = true;
+            menuFoodItemsView.IsEnabled = true;
         }
 
 
@@ -250,16 +277,22 @@ namespace CustomerApp.Pages
         /// <param name="e"></param>
         async void OnTogglePaid(object sender, ToggledEventArgs e)
         {
+            ((Switch)sender).IsEnabled = false;
+
             // Don't do anything if Realm is writing
             if (RealmManager.Realm.IsInTransaction)
+            {
+                ((Switch)sender).IsEnabled = true;
                 return;
+            }
 
             OrderItem toggledItem = new OrderItem((OrderItem)(((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext));
 
             // Error checking
             if (toggledItem._id == null)
             {
-                await DisplayOrder();
+                ((Switch)sender).IsEnabled = true;
+                //await DisplayOrder();
                 return;
             }
                 
@@ -280,6 +313,7 @@ namespace CustomerApp.Pages
             }
 
             OnContributionCompleted();
+            ((Switch)sender).IsEnabled = true;
         }
 
         async void onRefresh()

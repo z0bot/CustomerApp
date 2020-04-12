@@ -69,14 +69,6 @@
                                                     HorizontalOptions="EndAndExpand"
                                                     FontSize="Medium"
                                                     Text="{Binding StringPrice}"/>
-                                                <!--<ImageButton
-                                                    x:Name="uxSettingsButton"
-                                                    CornerRadius="15"
-                                                    Source="gearIcon"
-                                                    BackgroundColor="Transparent"
-                                                    WidthRequest="35"
-                                                    HeightRequest="35"
-                                                    Clicked="onSettingsClicked"/>-->
                                             </StackLayout>
                                             <Label
                                             x:Name="uxMenuItemSpcInst"

@@ -116,10 +116,14 @@ namespace CustomerApp.Pages
 
 
             // Add points
-            //await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password);
-            //await UpdatePointsRequest.SendUpdatePointsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().points + (RealmManager.All<User>().FirstOrDefault().contribution * 100));
-            await UpdatePointsRequest.SendUpdatePointsRequest("5e85144e9fbc2b0004b279f4", RealmManager.All<User>().FirstOrDefault().points + (RealmManager.All<User>().FirstOrDefault().contribution * 100)); // For now just add to the first user (Karen Smith)
-            
+            await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password); // Get most recent points
+            int oldPoints = RealmManager.All<User>().FirstOrDefault().points;
+            await UpdatePointsRequest.SendUpdatePointsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().points + (RealmManager.All<User>().FirstOrDefault().contribution * PointsPerDollar.rate)); // Add new points
+            RealmManager.Write(() => 
+            {
+                RealmManager.All<User>().FirstOrDefault().points += (int)(RealmManager.All<User>().FirstOrDefault().contribution * PointsPerDollar.rate);
+            });
+
             // Unlock user from payment page
             RealmManager.Write(() =>
             {
@@ -127,6 +131,9 @@ namespace CustomerApp.Pages
                 RealmManager.All<User>().FirstOrDefault().contribution = 0;
                 RealmManager.All<User>().FirstOrDefault().tip = 0;
             });
+
+            await DisplayAlert("Points Gained!", "Hey!\n\nYou just gained " + (RealmManager.All<User>().FirstOrDefault().points - oldPoints) + " points!\n"
+                + "That makes " + RealmManager.All<User>().FirstOrDefault().points + " points available to you!", "Yay!");
 
             // Offer game
             if (await DisplayAlert("Game Opportunity", "Would you like to play a game for a chance at a free dessert?", "Yes, please!", "No thanks"))
