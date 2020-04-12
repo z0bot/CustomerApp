@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Xamarin.Forms;
 
 namespace CustomerApp
 {
@@ -42,6 +43,12 @@ namespace CustomerApp
                             Debug.WriteLine("Malformed response. Message: " + ex.Message);
                             return obj;
                         }
+                    }
+                    else if(response.StatusCode == System.Net.HttpStatusCode.Conflict)
+                    {
+                        MessagingCenter.Send<HttpResponseMessage>(response, "Conflict");
+                        return obj;
+
                     }
                     else //response has an error status
                     {
