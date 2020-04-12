@@ -8,7 +8,7 @@ namespace CustomerApp.Models.ServiceRequests
 {
     public class PostNotificationsRequest : ServiceRequest
     {
-        public override string Url => "https://dijkstras-steakhouse-restapi.herokuapp.com/menuItems";
+        public override string Url => "https://dijkstras-steakhouse-restapi.herokuapp.com/notifications";
         public override HttpMethod Method => HttpMethod.Post;
         public override Dictionary<string, string> Headers => null;
         public NotificationRequestBody Body;
