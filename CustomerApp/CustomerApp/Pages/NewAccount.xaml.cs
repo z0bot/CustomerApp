@@ -38,6 +38,8 @@ namespace CustomerApp.Pages
             }
             else if(UserPasswordCheck())
             {
+                //space checking on email
+                uxEmail.Text = uxEmail.Text.Replace(" ", "");
                 var response = await AddUserRequest.SendAddUserRequest(uxFirstName.Text, uxLastName.Text, uxEmail.Text, uxPassword.Text, uxBirthdate.Date.ToString());
                 if (response)
                 {
