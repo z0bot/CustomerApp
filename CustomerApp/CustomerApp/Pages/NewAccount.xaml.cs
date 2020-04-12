@@ -32,6 +32,10 @@ namespace CustomerApp.Pages
             {
                 await DisplayAlert("ERROR", "All entries must be filled!", "OK");
             }
+            else if(!uxEmail.Text.Contains("@"))
+            {
+                await DisplayAlert("ERROR", "Invalid email entry!", "OK");
+            }
             else if(UserPasswordCheck())
             {
                 var response = await AddUserRequest.SendAddUserRequest(uxFirstName.Text, uxLastName.Text, uxEmail.Text, uxPassword.Text, uxBirthdate.Date.ToString());
