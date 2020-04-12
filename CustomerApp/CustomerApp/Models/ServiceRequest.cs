@@ -3,6 +3,7 @@ using System.Net.Http;
 
 namespace CustomerApp.Models
 {
+    //Basic service request properties required
     public abstract class ServiceRequest
     {
         public abstract string Url { get; }

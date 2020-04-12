@@ -19,7 +19,6 @@ namespace CustomerApp.Pages
         string category;
         List<MenuFoodItem> members;
         List<Ingredient> ingredients; // Used to filter items which we don't have enough ingredients for
-        List<Button> buttons;
 
         public categoryPage(string categoryName)
         {
@@ -27,7 +26,6 @@ namespace CustomerApp.Pages
             InitializeComponent();
 
             categoryLabel.Text = categoryName;
-
             category = categoryName;
         }
 
@@ -39,18 +37,28 @@ namespace CustomerApp.Pages
             PopulateMenu();
         }
 
+        /// <summary>
+        /// Populates the list of items in this category based on the ingredients left in the inventory
+        /// Items which require ingredients we do not have will not be displayed
+        /// If no items can be displayed, a message will be shown instead
+        /// </summary>
         void PopulateMenu()
         {
             // Clear existing categories
             while (categoryItemList.Children.Count != 0)
                 categoryItemList.Children.RemoveAt(0);
 
-            buttons = new List<Button>();
 
             // Get menu items within this category.
             members = RealmManager.All<MenuItemsList>().FirstOrDefault().menuItems.Where((MenuFoodItem m) => m.category == category).ToList();
 
-            foreach(MenuFoodItem m in members)
+            // Determine which menu items we have sufficient ingredients for
+            
+            List<MenuFoodItem> memCopy = new List<MenuFoodItem>(); // Must copy the items since we cannot easily iterate and update at the same time
+            foreach (MenuFoodItem m in members)
+                memCopy.Add(new MenuFoodItem(m));
+
+            foreach(MenuFoodItem m in memCopy)
             {
                 foreach(Ingredient i in m.ingredients)
                 {
@@ -58,7 +66,7 @@ namespace CustomerApp.Pages
                     var index = ingredients.FindIndex((Ingredient j) => j._id == i._id && j.quantity > 0);
                     if(index == -1)
                     {
-                        members.Remove(m);
+                        members.RemoveAt(members.FindIndex((MenuFoodItem f) => f._id == m._id));
                         break;
                     }
                 }
@@ -82,11 +90,9 @@ namespace CustomerApp.Pages
                 }));
 
                 temp.Clicked += async (sender, args) => await Navigation.PushAsync(new menuItemPage(itemID));
-
-                buttons.Add(temp);
             }
 
-
+            // No items with sufficient ingredients
             if (members.Count() == 0)
             {
                 categoryItemList.Children.Add(new Label()
@@ -94,7 +100,7 @@ namespace CustomerApp.Pages
                     VerticalOptions = LayoutOptions.Start,
                     HorizontalOptions = LayoutOptions.Center,
                     TextColor = Color.Black,
-                    FontSize = Device.GetNamedSize(NamedSize.Header, typeof(Label)),
+                    FontSize = Device.GetNamedSize(NamedSize.Title, typeof(Label)),
                     FontAttributes = FontAttributes.Bold,
                     Margin = new Thickness(15, 15, 15, 15),
                     Text = "We've come up empty!"

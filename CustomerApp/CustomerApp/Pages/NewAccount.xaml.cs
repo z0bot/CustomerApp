@@ -1,7 +1,9 @@
 ﻿using CustomerApp.Models;
+using CustomerApp.Models.ServiceRequests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,6 +18,7 @@ namespace CustomerApp.Pages
         public NewAccount()
         {
             InitializeComponent();
+            MessagingCenterResponse();
         }
 
         private async void RegisterAcctButton_Clicked(object sender, EventArgs e)
@@ -29,14 +32,34 @@ namespace CustomerApp.Pages
             {
                 await DisplayAlert("ERROR", "All entries must be filled!", "OK");
             }
+            else if(!uxEmail.Text.Contains("@"))
+            {
+                await DisplayAlert("ERROR", "Invalid email entry!", "OK");
+            }
             else if(UserPasswordCheck())
             {
-                await Navigation.PopModalAsync();
+                //space checking on email
+                uxEmail.Text = uxEmail.Text.Replace(" ", "");
+                var response = await AddUserRequest.SendAddUserRequest(uxFirstName.Text, uxLastName.Text, uxEmail.Text, uxPassword.Text, uxBirthdate.Date.ToString());
+                if (response)
+                {
+                    await DisplayAlert("Successful", "Account has been registered!", "OK");
+                    await Navigation.PopModalAsync();
+                }
             }
             else
             {
                 await DisplayAlert("ERROR", "Passwords must match!", "Continue");
             }
+        }
+        //Used to catch errors thrown by the service request 
+        //determined by entering preexisting email tied to an account
+        public void MessagingCenterResponse()
+        {
+            MessagingCenter.Subscribe<HttpResponseMessage>(this, "Conflict", async (sender) =>
+            {
+                await DisplayAlert("Email already registered", "Please try again with a different email", "OK");
+            });
         }
         /// <summary>
         /// A check that returns true if the user passwords match and then
@@ -60,11 +83,11 @@ namespace CustomerApp.Pages
         {
             User user = new User();
 
-            user.FirstName = uxFirstName.Text;
-            user.LastName = uxLastName.Text;
-            user.Birthday = uxBirthdate.ToString();
-            user.Email = uxEmail.Text;
-            user.Password = uxPassword.Text;
+            user.first_name = uxFirstName.Text;
+            user.last_name = uxLastName.Text;
+            user.birthday = uxBirthdate.ToString();
+            user.email = uxEmail.Text;
+            user.password = uxPassword.Text;
 
             RealmManager.AddOrUpdate<User>(user);
         }
