@@ -148,15 +148,16 @@ namespace CustomerApp.Pages
         async void OnRefillButtonClicked(object sender, EventArgs e)
         {
             // Send refill request
-
-
+            string notificationType = "Refill";
+            await PostNotificationsRequest.SendNotificationRequest(notificationType, RealmManager.All<Table>().FirstOrDefault().employee_id, RealmManager.All<Table>().FirstOrDefault().tableNumberString);
             await DisplayAlert("Refill", "Server Notified of Refill Request", "OK");
         }
 
         async void OnServerButtonClicked(object sender, EventArgs e)
         {
             // Send Help Request
-
+            string notificationType = "Help requested";
+            await PostNotificationsRequest.SendNotificationRequest(notificationType, RealmManager.All<Table>().FirstOrDefault().employee_id, RealmManager.All<Table>().FirstOrDefault().tableNumberString);
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
 

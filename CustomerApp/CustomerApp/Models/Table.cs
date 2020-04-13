@@ -16,5 +16,7 @@ namespace CustomerApp.Models
         public string employee_id { get; set; }
 
         public Order order_id { get; set; }
+
+        public string tableNumberString => "Table " + table_number.ToString();
     }
 }
