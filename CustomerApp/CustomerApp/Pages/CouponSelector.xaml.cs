@@ -54,6 +54,10 @@ namespace CustomerApp.Pages
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
 
+        async void AddCouponClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new AddCouponPage());
+        }
 
         /// <summary>
         /// Pulls the most recent order status, then assigns that to the items list's itemsSource

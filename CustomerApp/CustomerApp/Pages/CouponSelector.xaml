@@ -78,6 +78,39 @@
             </RefreshView>
 
 
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackLayout
+                    Grid.Column="2"
+                    Orientation="Vertical"
+                    Margin="10,0,25,0"
+                    VerticalOptions="EndAndExpand"
+                    HorizontalOptions="EndAndExpand">
+                    <Label
+                        Text="Add Coupon"
+                        HorizontalTextAlignment="Center"
+                        FontAttributes="Bold"
+                        TextColor="Black"/>
+
+                    <ImageButton
+                            Source="coupon"
+                            HeightRequest="50"
+                            WidthRequest="50"
+                            Clicked="AddCouponClicked"
+                            HorizontalOptions="EndAndExpand"
+                            BackgroundColor="Transparent"
+                            Margin="0,0,10,10"/>
+                </StackLayout>
+            </Grid>
+
             <!--Refill/help buttons and finalize button-->
             <StackLayout
                     Orientation="Horizontal"

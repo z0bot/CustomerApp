@@ -62,14 +62,6 @@
                         Clicked="FlashlightButton_Clicked"
                         HorizontalOptions="Center"
                         CornerRadius="15"/>
-                    <Label 
-                    x:Name="loginGreetingText"
-                    Text="Scan your seat's QR code to link to your table!"
-                    Margin="40,10,40,0"
-                    FontSize="Large"
-                    VerticalTextAlignment="Center"
-                    HorizontalTextAlignment="Center"
-                    HorizontalOptions="Center" />
                 </StackLayout>
             </StackLayout>
 
