@@ -44,7 +44,15 @@ namespace CustomerApp.Pages
             // Update labels
             nameLabel.Text = baseItem.name;
             descLabel.Text = baseItem.description;
-            itemPic.Source = baseItem.picture;
+            try
+            {
+                itemPic.Source = ImageSource.FromStream(() => new System.IO.MemoryStream(Convert.FromBase64String((baseItem.picture.Split(',')[1]))));
+            }
+            catch(Exception ex)
+            {
+                // Can't do anything about this tbqh
+                System.Diagnostics.Debug.WriteLine("Invalid picture. Message: " + ex.Message);
+            }
             priceLabel.Text = baseItem.StringPrice;
             item.special_instruct = null;
         }
@@ -116,47 +124,6 @@ namespace CustomerApp.Pages
             await Navigation.PopAsync();
         }
 
-        /// <summary>
-        /// Prompts user if they want to use their points to get this item for no charge, if they have sufficient points.
-        /// Simply adds this item to the order with the 'paid' property already true, then deducts the requisite number of points from the user's account
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        async void OnPointsClicked(object sender, EventArgs e)
-        {
-
-            if ((int)RealmManager.All<User>().FirstOrDefault().points >= (int)(baseItem.price * PointsPerDollar.rate))
-            {
-                if(await DisplayAlert("Use points?", "You can use " + baseItem.price * PointsPerDollar.rate + " of your " + RealmManager.All<User>().FirstOrDefault().points + " points to get this item for free!\n"
-                    + "Would you like to redeem points in exchange for this item?\n"
-                    + "NOTE: Points cannot be refunded after being redeemed.", "Yes, please!", "No thanks"))
-                {
-                    // Get most recent order status
-                    await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
-
-                    //Store item into local database
-                    RealmManager.Write(() =>
-                    {
-                        item.paid = true;
-                        RealmManager.Realm.All<Order>().FirstOrDefault().menuItems.Add(item);
-                    });
-
-                    // Send updated order
-                    await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());
-
-
-                    // Update points total
-                    await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password);
-                    await UpdatePointsRequest.SendUpdatePointsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().points - (baseItem.price * PointsPerDollar.rate));
-
-                    LeavePage();
-                }
-            }
-            else
-                await DisplayAlert("Insufficient points", "Sorry, but you need " + baseItem.price * PointsPerDollar.rate + " points to get this item for free.\n\n"
-                    + "Your current points total is " + RealmManager.All<User>().FirstOrDefault().points + "\n\n"
-                    + "Only " + ((baseItem.price * PointsPerDollar.rate) - RealmManager.All<User>().FirstOrDefault().points) + " to go!", "OK");
-        }
         async void OnRefillButtonClicked(object sender, EventArgs e)
         {
             // Send refill request

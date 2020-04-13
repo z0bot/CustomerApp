@@ -28,8 +28,8 @@
     <Compile Update="Pages\PayWithPointsPage.xaml.cs">
       <DependentUpon>PayWithPointsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\CouponSelectorPage.xaml.cs">
-      <DependentUpon>CouponSelectorPage.xaml</DependentUpon>
+    <Compile Update="Pages\AddCouponPage.xaml.cs">
+      <DependentUpon>AddCouponPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\PushToQR.xaml.cs">
       <DependentUpon>PushToQR.xaml</DependentUpon>
@@ -41,6 +41,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\checkoutPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\CouponSelector.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\endPage.xaml">

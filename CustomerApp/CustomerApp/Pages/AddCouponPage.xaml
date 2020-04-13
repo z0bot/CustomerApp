@@ -2,9 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:gv="clr-namespace:GoogleVisionBarCodeScanner;assembly=GoogleVisionBarCodeScanner"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="CustomerApp.Pages.CouponSelectorPage"
+             x:Class="CustomerApp.Pages.AddCouponPage"
              BackgroundImageSource="backgroundImage">
     <ContentPage.Content>
         <StackLayout>
@@ -23,59 +24,54 @@
                 FontSize="Medium"
                 Margin="15,0,15,0"
                 HorizontalTextAlignment="Center"
-                Text="You can apply some or all of your coupons to this contribution. Only coupons that are succesfully applied will be removed from your account"/>
-            <Label
-                VerticalOptions="Start"
+                Text="Scan your coupon's QR code to apply it to your order!"/>
+
+
+            <StackLayout>
+                <gv:CameraView 
+                Margin="0,40,0,0"
                 HorizontalOptions="Center"
-                TextColor="Black"
-                FontSize="Small"
-                Margin="15,0,15,15"
-                HorizontalTextAlignment="Center"
-                Text="Pull down on the list to refresh"/>
-            
-            <RefreshView
-                x:Name="orderRefreshView"
-                Command="{Binding onRefresh()}"
-                VerticalOptions="Fill"
-                HorizontalOptions="CenterAndExpand"
-                Margin="40,10,40,10">
-                <ListView
-                    x:Name="CouponsView"
-                    VerticalOptions="Fill"
-                    HasUnevenRows="True"
-                    SelectionMode="None">
-                    <ListView.ItemTemplate
-                        >
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <StackLayout
-                                            x:Name="couponLayout"
-                                            Grid.Row="0"
-                                            Orientation="Horizontal">
-                                        <Label
-                                            x:Name="uxMenuItemLabel"
-                                            FontSize="Medium"
-                                            Text="{Binding description}"/>
-                                        <Switch
-                                            x:Name="uxTogglePaid"
-                                            HorizontalOptions="End"
-                                            VerticalOptions="Start"
-                                            Margin="0,7,0,0"
-                                            HeightRequest="30"
-                                            IsToggled="{Binding selected}"
-                                            Toggled="OnToggleSelected"/>
-                                    </StackLayout>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </RefreshView>
+                VerticalOptions="Start" 
+                OnDetected="CameraView_OnDetected" 
+                HeightRequest="300"
+                WidthRequest="300"
+                DefaultTorchOn="False" 
+                VibrationOnDetected="False"/>
+                <!--Customized Size-->
+                <!--<gv:CameraView HorizontalOptions="Center" WidthRequest="200" HeightRequest="200" OnDetected="CameraView_OnDetected" Grid.Row="1"/>-->
+                <StackLayout Orientation="Vertical"
+                         VerticalOptions ="Start">
+                    <Button x:Name="manualEntryButton" 
+                        Text="Enter coupon code manually"
+                        BackgroundColor="#1fbd85"
+                        TextColor="White" 
+                        Margin="0,20,0,0"
+                        FontSize="Large"
+                        WidthRequest="300"
+                        Clicked="manualEntry"
+                        HorizontalOptions="Center"
+                        CornerRadius="15"/>
+                    
+                    <Button x:Name="FlashlightButton" 
+                        Text="Flashlight"
+                        BackgroundColor="#1fbd85"
+                        TextColor="White" 
+                        Margin="0,15,0,0"
+                        FontSize="Large"
+                        WidthRequest="300"
+                        Clicked="FlashlightButton_Clicked"
+                        HorizontalOptions="Center"
+                        CornerRadius="15"/>
+                    <Label 
+                    x:Name="loginGreetingText"
+                    Text="Scan your seat's QR code to link to your table!"
+                    Margin="40,10,40,0"
+                    FontSize="Large"
+                    VerticalTextAlignment="Center"
+                    HorizontalTextAlignment="Center"
+                    HorizontalOptions="Center" />
+                </StackLayout>
+            </StackLayout>
 
 
             <!--Refill/help buttons and finalize button-->
@@ -109,7 +105,7 @@
                 <Button
                     x:Name="finalizeButton"
                     VerticalOptions="Center"
-                    Text="Apply Coupons"
+                    Text="Return to Checkout"
                     FontAttributes="Bold"
                     TextColor="White"
                     BackgroundColor="#1fbd85"

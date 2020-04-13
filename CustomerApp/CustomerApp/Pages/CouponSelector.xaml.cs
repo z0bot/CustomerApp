@@ -91,7 +91,7 @@ namespace CustomerApp.Pages
                 await DisplayCoupons();
                 return;
             }
-                
+
         }
 
         async void onRefresh()

@@ -28,7 +28,8 @@
                         x:Name="itemPic"
                         WidthRequest="260"
                         HeightRequest="300"
-                        HorizontalOptions="Center"/>
+                        HorizontalOptions="Center"
+                        Source="GoodFood"/>
 
                     <ImageButton
                         x:Name="nutritionButton"
