@@ -15,16 +15,32 @@ namespace CustomerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class orderHerePage : ContentPage
     {
+        public static Notifications notifications = new Notifications();
         public orderHerePage()
         {
             InitializeComponent();
-        }
 
+            //will get and store initial details about a table in Realm for notification use
+            //such as employee id and table number
+            MakeTableRequestOnStart();
+            
+        }
+        public async Task MakeTableRequestOnStart()
+        {
+            await GetTableRequest.SendGetTableRequest(RealmManager.All<User>().FirstOrDefault().tableNum);
+            GetNotificationParameters();
+        }
+        public void GetNotificationParameters()
+        {
+            RealmManager.Write(() =>
+            {
+                notifications.employee_id = RealmManager.All<Table>().FirstOrDefault().employee_id;
+                notifications.sender = RealmManager.All<Table>().FirstOrDefault().tableNumberString;
+            });
+        }
         /// <summary>
         /// Gets the order associated with the current table, then move to YourOrder page
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         async void OnOrderHereButtonClicked(object sender, EventArgs e)
         {
             // Clear existing data
@@ -38,19 +54,18 @@ namespace CustomerApp.Pages
 
             await Navigation.PushAsync(new YourOrderPage());
         }
-
         async void OnRefillButtonClicked(object sender, EventArgs e)
         {
-            // Send refill request
-
-
+            string notificationType = "Refill";
+            await PostNotificationsRequest.SendNotificationRequest(notificationType, RealmManager.All<Table>().FirstOrDefault().employee_id, RealmManager.All<Table>().FirstOrDefault().tableNumberString);
             await DisplayAlert("Refill", "Server Notified of Refill Request", "OK");
         }
 
         async void OnServerButtonClicked(object sender, EventArgs e)
         {
             // Send Help Request
-
+            string notificationType = "Help requested";
+            await PostNotificationsRequest.SendNotificationRequest(notificationType, RealmManager.All<Table>().FirstOrDefault().employee_id, RealmManager.All<Table>().FirstOrDefault().tableNumberString);
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
 

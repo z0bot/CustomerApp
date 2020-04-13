@@ -32,7 +32,7 @@ namespace CustomerApp.Models.ServiceRequests
             }
             else
             {
-                RealmManager.AddOrUpdate<User>(response.user);
+                RealmManager.AddOrUpdate(response.user);
                 return true;
             }
         }
