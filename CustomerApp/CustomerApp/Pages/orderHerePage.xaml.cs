@@ -15,7 +15,7 @@ namespace CustomerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class orderHerePage : ContentPage
     {
-        public static Notifications notifications;
+        public static Notifications notifications = new Notifications();
         public orderHerePage()
         {
             InitializeComponent();
