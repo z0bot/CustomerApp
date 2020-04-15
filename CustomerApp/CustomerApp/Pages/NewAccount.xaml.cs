@@ -40,7 +40,7 @@ namespace CustomerApp.Pages
             {
                 //space checking on email
                 uxEmail.Text = uxEmail.Text.Replace(" ", "");
-                var response = await AddUserRequest.SendAddUserRequest(uxFirstName.Text, uxLastName.Text, uxEmail.Text, uxPassword.Text, uxBirthdate.Date.ToString());
+                var response = await AddUserRequest.SendAddUserRequest(uxFirstName.Text, uxLastName.Text, uxEmail.Text, uxPassword.Text, uxBirthdate.Date.ToString("MM,d,yyyy"));
                 if (response)
                 {
                     await DisplayAlert("Successful", "Account has been registered!", "OK");
@@ -85,10 +85,11 @@ namespace CustomerApp.Pages
 
             user.first_name = uxFirstName.Text;
             user.last_name = uxLastName.Text;
-            user.birthday = uxBirthdate.ToString();
+            user.birthday = uxBirthdate.Date.ToString("MM,d,yyyy");
             user.email = uxEmail.Text;
             user.password = uxPassword.Text;
 
+            RealmManager.RemoveAll<User>();
             RealmManager.AddOrUpdate<User>(user);
         }
     }
