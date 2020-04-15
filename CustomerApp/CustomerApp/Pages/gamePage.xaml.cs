@@ -33,8 +33,26 @@ namespace CustomerApp.Pages
         {
             if(((Button)sender).Text == winner.ToString())
             {
-                await DisplayAlert("Congratulations!", "Correct! The number was " + winner.ToString() + ".", "Yay!");
-                // Print/email coupon
+                await DisplayAlert("Congratulations!", "Correct! The number was " + winner.ToString() + ".\n"
+                    + "A coupon for your free dessert has been added to your account", "Yay!");
+
+                // Add new coupon to account
+                // Get most recent user data (including coupons)
+                await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password);
+
+                // Post coupon, add it to the local account, then update remote database
+                string ID = await PostDessertCouponRequest.SendPostDessertCouponRequest();
+                if (ID != null)
+                {
+                    await GetCouponsByIDRequest.SendGetCouponsByIDRequest(ID);
+                    RealmManager.Write(() => RealmManager.All<User>().FirstOrDefault().coupons.Add(RealmManager.Find<Coupon>(ID)));
+                    await UpdateCouponsRequest.SendUpdateCouponsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().coupons);
+                }
+                else
+                {
+                    await DisplayAlert("Something went wrong", "Sorry, but something has gone wrong on our end. Please contact your waitstaff and show them this message so we can make this right", "OK");
+                }
+
             }
             else
             {

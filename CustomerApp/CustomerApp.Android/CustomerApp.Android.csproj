@@ -153,6 +153,8 @@
     <Content Include="FodyWeavers.xml" />
     <AndroidResource Include="Resources\drawable\gearIcon.png" />
     <AndroidResource Include="Resources\drawable\trashIcon.png" />
+    <AndroidResource Include="Resources\drawable\coupon.png" />
+    <AndroidResource Include="Resources\drawable\pointsIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

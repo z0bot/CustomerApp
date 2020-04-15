@@ -34,7 +34,7 @@ namespace CustomerApp.Pages
             base.OnAppearing();
             await GetIngredientsRequest.SendGetIngredientsRequest();
             ingredients = RealmManager.All<IngredientList>().FirstOrDefault().doc.ToList();
-            PopulateMenu();
+            await PopulateMenu();
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace CustomerApp.Pages
         /// Items which require ingredients we do not have will not be displayed
         /// If no items can be displayed, a message will be shown instead
         /// </summary>
-        void PopulateMenu()
+        async Task PopulateMenu()
         {
             // Clear existing categories
             while (categoryItemList.Children.Count != 0)
@@ -58,12 +58,26 @@ namespace CustomerApp.Pages
             foreach (MenuFoodItem m in members)
                 memCopy.Add(new MenuFoodItem(m));
 
-            foreach(MenuFoodItem m in memCopy)
+            // Fetch most recent version of the order
+            await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
+            await RealmManager.All<Order>().FirstOrDefault().UpdateIngredientTotal();
+
+
+            foreach (MenuFoodItem m in memCopy)
             {
                 foreach(Ingredient i in m.ingredients)
                 {
                     // Remove a member if we don't have the necessary ingredients
-                    var index = ingredients.FindIndex((Ingredient j) => j._id == i._id && j.quantity > 0);
+
+                    // Get the number of this ingredient we already have in the order
+                    int orderQuantity = 0;
+
+                    IngredientCount inOrder = RealmManager.All<Order>().FirstOrDefault().IngredientTotals.Where((IngredientCount ing) => ing._id == i._id).FirstOrDefault(); // Returns null if this ingredient is not in the order
+                    
+                    if (inOrder != null)
+                        orderQuantity = inOrder.quantity;
+
+                    var index = ingredients.FindIndex((Ingredient j) => j._id == i._id && (j.quantity - orderQuantity) > 0); // Check if this ingredient a): is in the ingredients list and b): has sufficient ingredients
                     if(index == -1)
                     {
                         members.RemoveAt(members.FindIndex((MenuFoodItem f) => f._id == m._id));

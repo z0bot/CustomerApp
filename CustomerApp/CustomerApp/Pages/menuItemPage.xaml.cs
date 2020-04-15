@@ -15,6 +15,7 @@ namespace CustomerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class menuItemPage : ContentPage
     {
+        
         OrderItem item; // The item as it will appear in the order
         MenuFoodItem baseItem; // The base item that will be copied into item
         
@@ -32,18 +33,26 @@ namespace CustomerApp.Pages
             baseItem = new MenuFoodItem(RealmManager.Find<MenuFoodItem>(itemID));
 
             item = new OrderItem(baseItem);
-            //Assign item new ID
-            var rand = new Random();
-            item.newID = (rand.Next(0, 1000000000)).ToString();
-            while (RealmManager.Find<OrderItem>(item.newID) != null) // If the ID already exists, try again until you get a unique ID.
-            {
-                item.newID = (rand.Next(0, 1000000000)).ToString();
-            }
 
             // Update labels
             nameLabel.Text = baseItem.name;
             descLabel.Text = baseItem.description;
-            itemPic.Source = baseItem.picture;
+            try
+            {
+                if(baseItem.picture.Contains(',')) // Old images which contain commas
+                {
+                    itemPic.Source = ImageSource.FromStream(() => new System.IO.MemoryStream(Convert.FromBase64String((baseItem.picture.Split(',')[1]))));
+                }
+                else // New images without commas
+                {
+                    itemPic.Source = ImageSource.FromStream(() => new System.IO.MemoryStream(Convert.FromBase64String((baseItem.picture))));
+                }
+            }
+            catch(Exception ex)
+            {
+                // Can't do anything about this tbqh
+                System.Diagnostics.Debug.WriteLine("Invalid picture. Message: " + ex.Message);
+            }
             priceLabel.Text = baseItem.StringPrice;
             item.special_instruct = null;
         }
@@ -80,10 +89,7 @@ namespace CustomerApp.Pages
             {
                 await DisplayAlert("Option Unavailable", "Sorry, but this option is not available since the order has already been sent", "OK");
 
-                //Navigate back to menu. Probably a more elegant method but is easy to do. Remove previous 2 pages, then pop
-                Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);
-                Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);
-                await Navigation.PopAsync();
+                LeavePage();
                 return;
             }
 
@@ -91,14 +97,29 @@ namespace CustomerApp.Pages
             await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
 
             //Store item into local database
-            RealmManager.Write(() => 
-            {
-                RealmManager.Realm.All<Order>().FirstOrDefault().menuItems.Add(item);
-            });
+            await AddToRealm(item);
 
             // Send update order
             await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());
 
+            LeavePage();
+        }
+
+        async Task AddToRealm(OrderItem item)
+        {
+            RealmManager.Write(() =>
+            {
+                RealmManager.Realm.All<Order>().FirstOrDefault().menuItems.Add(item);
+            });
+
+            await Task.Delay(50);
+        }
+
+        /// <summary>
+        /// Used to formally leave this page upon adding an item (Or failing to add one, if the order has been sent)
+        /// </summary>
+        async void LeavePage()
+        {
             //Navigate back to menu. Probably a more elegant method but is easy to do. Remove previous 2 pages, then pop
             Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);
             Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);

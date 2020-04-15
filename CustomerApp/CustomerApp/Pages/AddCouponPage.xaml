@@ -2,76 +2,71 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:gv="clr-namespace:GoogleVisionBarCodeScanner;assembly=GoogleVisionBarCodeScanner"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="CustomerApp.Pages.paymentPage"
+             x:Class="CustomerApp.Pages.AddCouponPage"
              BackgroundImageSource="backgroundImage">
     <ContentPage.Content>
-        <StackLayout
-            x:Name="mainStack">
-            <Label
-                x:Name="titleLabel"
+        <StackLayout>
+            <!--<Label
                 VerticalOptions="Start"
                 HorizontalOptions="Center"
                 TextColor="Black"
                 FontSize="Title"
                 FontAttributes="Bold"
-                Margin="15,15,15,15"
-                Text="Payment"/>
+                Margin="15,15,15,0"
+                Text="Coupons"/>-->
             <Label
-                x:Name="descLabel"
                 VerticalOptions="Start"
                 HorizontalOptions="Center"
                 TextColor="Black"
                 FontSize="Medium"
-                Margin="30,0,30,20"
-                Text="Take a picture of your card to pay for your meal"
-                HorizontalTextAlignment="Center"/>
-
-
-            <Button x:Name="scanCardButton" 
-                            Text="Scan Card"
-                            BackgroundColor="#1fbd85"
-                            TextColor="White" 
-                            Margin="0,30,0,0"
-                            FontSize="Large"
-                            WidthRequest="300"
-                            Clicked="scanCard"
-                            HorizontalOptions="Center"
-                            CornerRadius="15"/>
-
-            <Button x:Name="confirmPayButton" 
-                            Text="NULL"
-                            BackgroundColor="#1fbd85"
-                            TextColor="White" 
-                            Margin="0,30,0,0"
-                            FontSize="Medium"
-                            WidthRequest="300"
-                            Clicked="confirmButton"
-                            HorizontalOptions="Center"
-                            CornerRadius="15"/>
-
-            <Button x:Name="PayWithCashButton" 
-                            Text="Pay with cash"
-                            BackgroundColor="#1fbd85"
-                            TextColor="White" 
-                            Margin="0,30,0,0"
-                            FontSize="Large"
-                            WidthRequest="300"
-                            Clicked="payWithCashClicked"
-                            HorizontalOptions="Center"
-                            CornerRadius="15"/>
-
-            <Label
-                VerticalOptions="StartAndExpand"
-                HorizontalOptions="Center"
-                TextColor="Black"
-                FontSize="Small"
-                Margin="15,0,0,15"
+                Margin="15,15,15,0"
                 HorizontalTextAlignment="Center"
-                Text="NOTE: Any specified tip will be disregarded if paying with cash. Please give your tip directly to your server"/>
-            
-            <!--Refill/help buttons-->
+                Text="Scan your coupon's QR code to apply it to your order!"/>
+
+
+            <StackLayout>
+                <gv:CameraView 
+                Margin="0,20,0,0"
+                HorizontalOptions="Center"
+                VerticalOptions="Start" 
+                OnDetected="CameraView_OnDetected" 
+                HeightRequest="300"
+                WidthRequest="300"
+                DefaultTorchOn="False" 
+                VibrationOnDetected="False"/>
+                <!--Customized Size-->
+                <!--<gv:CameraView HorizontalOptions="Center" WidthRequest="200" HeightRequest="200" OnDetected="CameraView_OnDetected" Grid.Row="1"/>-->
+                <StackLayout Orientation="Vertical"
+                         VerticalOptions ="Start">
+                    <Button x:Name="manualEntryButton" 
+                        Text="Enter coupon code manually"
+                        BackgroundColor="#1fbd85"
+                        TextColor="White" 
+                        Margin="0,20,0,0"
+                        FontSize="Large"
+                        WidthRequest="300"
+                        Clicked="manualEntry"
+                        HorizontalOptions="Center"
+                        CornerRadius="15"/>
+                    
+                    <Button x:Name="FlashlightButton" 
+                        Text="Flashlight"
+                        BackgroundColor="#1fbd85"
+                        TextColor="White" 
+                        Margin="0,15,0,0"
+                        FontSize="Large"
+                        WidthRequest="300"
+                        Clicked="FlashlightButton_Clicked"
+                        HorizontalOptions="Center"
+                        CornerRadius="15"/>
+                </StackLayout>
+            </StackLayout>
+
+
+            <!--Refill/help buttons and finalize button-->
             <StackLayout
                     Orientation="Horizontal"
                     HorizontalOptions="Fill"
@@ -99,12 +94,27 @@
                 </StackLayout>
 
 
+                <Button
+                    x:Name="finalizeButton"
+                    VerticalOptions="Center"
+                    Text="Return to Coupons List"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    BackgroundColor="#1fbd85"
+                    WidthRequest="130"
+                    HeightRequest="70"
+                    FontSize="Medium"
+                    CornerRadius="15"
+                    Clicked="OnFinalizeButtonClicked"/>
+
+
                 <StackLayout
                             x:Name="serverButtonLayout"
                             Orientation="Vertical"
                             Margin="10,0,25,0"
                             VerticalOptions="EndAndExpand"
                             HorizontalOptions="EndAndExpand">
+                    
                     <Label
                                 Text="Call Server"
                                 HorizontalTextAlignment="Center"
@@ -120,6 +130,8 @@
                                 Clicked="OnServerButtonClicked"/>
                 </StackLayout>
             </StackLayout>
+
         </StackLayout>
+        
     </ContentPage.Content>
 </ContentPage>

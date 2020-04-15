@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="CustomerApp.Pages.checkoutPage"
+             x:Class="CustomerApp.Pages.PayWithPointsPage"
              BackgroundImageSource="backgroundImage">
     <ContentPage.Content>
         <StackLayout>
@@ -15,7 +15,7 @@
                 FontSize="Title"
                 FontAttributes="Bold"
                 Margin="15,15,15,0"
-                Text="Ticket"/>
+                Text="Points"/>
             <Label
                 VerticalOptions="Start"
                 HorizontalOptions="Center"
@@ -23,7 +23,7 @@
                 FontSize="Medium"
                 Margin="15,0,15,0"
                 HorizontalTextAlignment="Center"
-                Text="You can pay for some or all of the items your table has ordered"/>
+                Text="You can pay for items using points"/>
             <Label
                 VerticalOptions="Start"
                 HorizontalOptions="Center"
@@ -88,15 +88,16 @@
                                             WidthRequest="45"
                                             Padding="0"
                                             Text="{Binding StringPrice}"/>
-                                        <Switch
-                                            x:Name="uxTogglePaid"
+                                        <ImageButton
+                                            x:Name="uxPointsButton"
                                             HorizontalOptions="EndAndExpand"
                                             VerticalOptions="Start"
                                             Margin="0,7,0,0"
                                             HeightRequest="30"
                                             WidthRequest="45"
-                                            IsToggled="{Binding paid}"
-                                            Toggled="OnTogglePaid"/>
+                                            Source="pointsIcon"
+                                            Clicked="OnPointsPressed"
+                                            BackgroundColor="Transparent"/>
                                     </StackLayout>
                                 </Grid>
                             </ViewCell>
@@ -104,94 +105,6 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </RefreshView>
-
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <StackLayout
-                    Grid.Column="0"
-                    Orientation="Vertical"
-                    Margin="25,0,10,0"
-                    VerticalOptions="EndAndExpand"
-                    HorizontalOptions="StartAndExpand">
-                    <Label
-                        Text="Use Points"
-                        HorizontalTextAlignment="Center"
-                        FontAttributes="Bold"
-                        TextColor="Black"/>
-
-                    <ImageButton
-                            Source="pointsIcon"
-                            HeightRequest="50"
-                            WidthRequest="50"
-                            Clicked="PointsClicked"
-                            HorizontalOptions="EndAndExpand"
-                            BackgroundColor="Transparent"
-                            Margin="0,0,10,10"/>
-                </StackLayout>
-                <Label
-                    Grid.Column="1"
-                    VerticalOptions="End"
-                    HorizontalOptions="Center"
-                    TextColor="Black"
-                    FontSize="Title"
-                    FontAttributes="Bold"
-                    Margin="15,15,15,0"
-                    Text="Tip"/>
-                <StackLayout
-                    Grid.Column="2"
-                    Orientation="Vertical"
-                    Margin="10,0,25,0"
-                    VerticalOptions="EndAndExpand"
-                    HorizontalOptions="EndAndExpand">
-                    <Label
-                        Text="Use Coupons"
-                        HorizontalTextAlignment="Center"
-                        FontAttributes="Bold"
-                        TextColor="Black"/>
-            
-                        <ImageButton
-                            Source="coupon"
-                            HeightRequest="50"
-                            WidthRequest="50"
-                            Clicked="CouponClicked"
-                            HorizontalOptions="EndAndExpand"
-                            BackgroundColor="Transparent"
-                            Margin="0,0,10,10"/>
-                </StackLayout>
-            </Grid>
-            <Frame
-                        Margin="15,0,15,0"
-                        HorizontalOptions="Center"
-                    Padding="0"
-                    CornerRadius="15"
-                    WidthRequest="140">
-                        <Entry
-                        x:Name="tipEntry"
-                        HorizontalTextAlignment="Center"
-                        Focused="clearTip"
-                        BackgroundColor="White"
-                        FontSize="Medium"
-                        HorizontalOptions="Fill"
-                        Unfocused="OnTipCompleted"
-                        Keyboard="Numeric"/>
-                    </Frame>
-
-                <Label
-                VerticalOptions="Start"
-                HorizontalOptions="Center"
-                TextColor="Black"
-                FontSize="Micro"
-                Margin="15,0,15,15"
-                HorizontalTextAlignment="Center"
-                Text="Note that the placeholder value is just a suggestion. No charge will be made unless explicitly specified."/>
 
 
             <!--Refill/help buttons and pay button-->
@@ -223,16 +136,17 @@
 
 
                 <Button
-                            x:Name="payButton"
-                            VerticalOptions="Center"
-                            Text="No Contribution"
-                            FontAttributes="Bold"
-                            TextColor="White"
-                            BackgroundColor="#1fbd85"
-                            WidthRequest="130"
-                            FontSize="Medium"
-                            CornerRadius="15"
-                            Clicked="OnPayButtonClicked"/>
+                        x:Name="returnButton"
+                        VerticalOptions="Center"
+                        Text="Return to Checkout"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="#1fbd85"
+                        WidthRequest="130"
+                        HeightRequest="80"
+                        FontSize="Medium"
+                        CornerRadius="15"
+                        Clicked="OnReturnButtonClicked"/>
 
 
                 <StackLayout

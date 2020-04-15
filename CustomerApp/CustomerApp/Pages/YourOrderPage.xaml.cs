@@ -23,25 +23,158 @@ namespace CustomerApp.Pages
             // Necessary for the refreshview to work
             System.Windows.Input.ICommand cmd = new Command(onRefresh);
             orderRefreshView.Command = cmd;
-
-            
         }
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+            DateTime t = DateTime.Parse(RealmManager.All<User>().FirstOrDefault().birthday).ToUniversalTime();
+
+            if (DateTime.Now.Date == DateTime.Parse(RealmManager.All<User>().FirstOrDefault().birthday).ToUniversalTime().Date)
+            {
+                if (!RealmManager.Realm.All<Order>().FirstOrDefault().send_to_kitchen && !RealmManager.All<BirthdayBool>().FirstOrDefault().birthdayGiftClaimed)
+                {
+                    if (await DisplayAlert("Happy Birthday!", "We're so glad you decided to join us on your birthday!\n\n"
+                        + "To celebrate, we would like to offer you a complimentary dessert!\n\n"
+                        + "Would you like to claim your dessert?\n\n"
+                        + "You will not be asked again", "Yes", "No"))
+                    {
+                        // Get most recent order status
+                        await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
+
+                        // Add complimentary cookie to order
+                        await GetMenuItemsRequest.SendGetMenuItemsRequest();
+                        if (RealmManager.Find<MenuFoodItem>("5e9675ebcd0dd200049ca257") != null)
+                        {
+                            OrderItem item = new OrderItem(RealmManager.Find<MenuFoodItem>("5e9675ebcd0dd200049ca257"));
+                            item.price = 0;
+                            item.paid = true;
+
+                            //Store item into local database
+                            RealmManager.Write(() =>
+                            {
+                                RealmManager.Realm.All<Order>().FirstOrDefault().menuItems.Add(item);
+                            });
+
+                            // Send updated order
+                            await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());
+                        }
+                        else
+                        {
+                            await DisplayAlert("Something went wrong", "Sorry, but something has gone wrong on our end. Please contact your waitstaff and show them this message so we can make this right", "OK");
+                        }
+                    }
+                    RealmManager.Write(() =>
+                    {
+                        RealmManager.All<BirthdayBool>().FirstOrDefault().birthdayGiftClaimed = true;
+                    });
+                }
+            }
+            else // Set birthdayClaimed to false every day of the year but the user's birthday
+                RealmManager.Write(() =>
+                {
+                    RealmManager.All<BirthdayBool>().FirstOrDefault().birthdayGiftClaimed = false;
+                });
+
             await DisplayOrder();
         }
 
+        /// <summary>
+        /// Marks the order as 'sent' in the remote database after a confirmation message
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         async void OnSendOrderClicked(object sender, EventArgs e)
         {
-            //Navigate to order confirmation page
-            if (await DisplayAlert("WARNING: Sending Order", "Are you sure you want to send the order? Current items cannot be changed by anyone at the table.", "Yes", "No"))
+            if (!RealmManager.All<Order>().FirstOrDefault().menuItems.Count.Equals(0)) 
             {
-                // Set order status to 'sent'
-                //RealmManager.Write(() => RealmManager.All<Order>().FirstOrDefault().send_to_kitchen = true);
-                await SendOrderRequest.SendSendOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
+                // Prompt if the user wants to send the order
+                if (await DisplayAlert("WARNING: Sending Order", "Are you sure you want to send the order? Current items cannot be changed by anyone at the table.", "Yes", "No"))
+                {
+                    // Fetch most recent version of the order
+                    await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
 
-                await Navigation.PushAsync(new checkoutPage());
+                    // Update IngredientTotals sum
+                    await RealmManager.All<Order>().FirstOrDefault().UpdateIngredientTotal();
+
+                    // Fetch most recent ingredients list
+                    await GetIngredientsRequest.SendGetIngredientsRequest();
+
+                    // Remove any items we can't make due to lack of ingredients
+                    // NOTE: Not extensively tested at the moment. Could break
+                    bool itemsRemoved = false;
+                    int iterator;
+                    for (iterator = 0; iterator < RealmManager.All<Order>().FirstOrDefault().IngredientTotals.Count; ++iterator)
+                    {
+                        IngredientCount i = RealmManager.All<Order>().FirstOrDefault().IngredientTotals[iterator];
+
+                        Ingredient DBIngredient = RealmManager.All<IngredientList>().FirstOrDefault().doc.Where((Ingredient ing) => ing._id == i._id).FirstOrDefault();
+                        if (DBIngredient == null) // Ingredient not present in database
+                        {
+                            List<OrderItem> allItems = RealmManager.All<Order>().FirstOrDefault().menuItems.ToList();
+
+                            List<OrderItem> containingItems = new List<OrderItem>();
+                            foreach (OrderItem o in allItems)
+                                if (o.ingredients.Contains(i._id))
+                                    containingItems.Add(o);
+
+                            RealmManager.Remove<OrderItem>(containingItems);
+                            itemsRemoved = true;
+
+                            await RealmManager.All<Order>().FirstOrDefault().UpdateIngredientTotal();
+                            --iterator; // Go back one iteration, since we may have entirely eliminated an ingredient from the count
+                        }
+                        else
+                        {
+                            if (DBIngredient.quantity < i.quantity)
+                            {
+                                List<OrderItem> allItems = RealmManager.All<Order>().FirstOrDefault().menuItems.ToList();
+
+                                List<OrderItem> containingItems = new List<OrderItem>();
+                                foreach (OrderItem o in allItems)
+                                    if (o.ingredients.Contains(i._id))
+                                        containingItems.Add(o);
+
+                                int difference = i.quantity - DBIngredient.quantity; // Number of items containing these ingredients we should remove
+
+                                List<OrderItem> toRemove = containingItems.GetRange(0, difference); // Remove the items from the beginning of the list
+
+                                RealmManager.Remove<OrderItem>(toRemove);
+                                itemsRemoved = true;
+
+                                await RealmManager.All<Order>().FirstOrDefault().UpdateIngredientTotal();
+                                --iterator; // Go back one iteration, since we may have entirely eliminated an ingredient from the count
+                            }
+                        }
+                    }
+
+
+                    // Inform user about any removed items
+                    if (itemsRemoved)
+                    {
+                        await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());
+
+                        // Option to cancel send order if items had to be removed
+                        if (!await DisplayAlert("WARNING: Items Removed", "Some of the items you have selected could not be ordered due to a lack of ingredients\n"
+                            + "The items have been automatically removed from your order\n"
+                            + "Would you like to send the order now, or go back and review your order?", "Send now", "Review Order"))
+                        {
+                            await DisplayOrder();
+                            return;
+                        }
+                        // Else we move on
+                    }
+
+                    // Set order status to 'sent'
+                    await SendOrderRequest.SendSendOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
+
+                    await Navigation.PushAsync(new checkoutPage());
+                } 
+            }
+            else
+            {
+                await DisplayAlert("Order cannot be empty", "You must add at least one item to your order before it can be sent.", "OK");
             }
         }
 
@@ -96,7 +229,7 @@ namespace CustomerApp.Pages
                 await DisplayAlert("Option Unavailable", "Sorry, but this option is not available since the order has already been sent", "OK");
                 return;
             }
-            
+
             string instructions = await DisplayPromptAsync("Special Instructions", "Enter special instructions, such as allergen information", "OK", "Cancel", null, -1, keyboard: Keyboard.Plain, item.special_instruct);
             
             // Don't send request if nothing changed
@@ -135,6 +268,13 @@ namespace CustomerApp.Pages
             if (RealmManager.All<Order>().FirstOrDefault().send_to_kitchen)
             {
                 await DisplayAlert("Option Unavailable", "Sorry, but this option is not available since the order has already been sent", "OK");
+                return;
+            }
+
+            // Don't allow removing paid items. Might become more relevant later, but for now prevents removing items paid for with points
+            if (RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.special_instruct == item.special_instruct && o._id == item._id).FirstOrDefault().paid)
+            {
+                await DisplayAlert("Option Unavailable", "Sorry, but this option is not available since this item has already been paid for", "OK");
                 return;
             }
 

@@ -4,6 +4,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Linq;
+
 namespace CustomerApp.Models.ServiceRequests
 {
     public class UserAuthenticationRequest : ServiceRequest
@@ -32,7 +34,29 @@ namespace CustomerApp.Models.ServiceRequests
             }
             else
             {
-                RealmManager.AddOrUpdate(response.user);
+                response.user.password = password;
+
+                // Ugly code that maintains which coupons have been selected
+                if (RealmManager.Find<User>(response.user.email) != null)
+                {
+                    response.user.tableNum = RealmManager.Find<User>(response.user.email).tableNum;
+
+                    IList<Coupon> cList = RealmManager.Find<User>(response.user.email).coupons;
+                    if (!cList.Count.Equals(0))
+                    {
+                        foreach(Coupon c in cList) // List of coupons we had before
+                        {
+                            Coupon kept = response.user.coupons.Where((Coupon d) => d._id == c._id).FirstOrDefault();
+                            if (kept != null) // The account still has this coupon
+                            {
+                                response.user.coupons.Where((Coupon d) => d._id == c._id).FirstOrDefault().selected = c.selected;
+                            }
+                        }
+                    }
+                }
+
+                RealmManager.AddOrUpdate<User>(response.user);
+                await Task.Delay(100);
                 return true;
             }
         }

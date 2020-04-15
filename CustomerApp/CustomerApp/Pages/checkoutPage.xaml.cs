@@ -33,57 +33,69 @@ namespace CustomerApp.Pages
             await DisplayOrder();
         }
 
+
         /// <summary>
-        /// 
+        /// Get the most recent order contents, then update them with what is paid for locally.
+        /// If any balance needs to be paid, navigate to the payment page. Else, go to the endpage.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         async void OnPayButtonClicked(object sender, EventArgs e)
         {
-            if ((contribution + tip) > 0)
+            if (await DisplayAlert("Confirm", "You will not be able to change this contribution after leaving this screen. Continue to payment screen? You will be able to make another contribution later", "OK", "Cancel"))
             {
-                if (await DisplayAlert("Confirm", "You will not be able to change this contribution after leaving this screen. Continue to payment screen?", "OK", "Cancel"))
+
+
+                // Establish which items are paid for locally
+                List<string> paidForIDs = new List<string>();
+
+                foreach (OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid))
+                    paidForIDs.Add(o._id);
+
+                // Get most recent order from remote database
+                await DisplayOrder();
+
+                List<Coupon> used = RealmManager.All<Coupon>().Where((Coupon c) => c.couponType == "Customer" && c.selected).ToList();
+
+                foreach(Coupon c in used)
                 {
-                    // Pull most recent order status form database
-                    List<string> paidForIDs = new List<string>();
+                    await DeactivateCouponRequest.SendDeactivateCouponRequest(c._id); // Deactivate each coupon used so it cannot be used again
+                }
 
-                    foreach (OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid))
-                        paidForIDs.Add(o._id);
+                RealmManager.Remove<Coupon>(used);
 
-                    await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
 
-                    List<string> alreadyPaidIDs = new List<string>();
-                    foreach (OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid))
-                        alreadyPaidIDs.Add(o._id);
+                // Establish which items are paid for remotely
+                List<string> alreadyPaidIDs = new List<string>();
+                foreach (OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid))
+                    alreadyPaidIDs.Add(o._id);
 
-                    foreach(string ID in alreadyPaidIDs)
+                // Find the difference between remote and local
+                foreach (string ID in alreadyPaidIDs)
+                {
+                    var index = paidForIDs.IndexOf(ID);
+                    if (index != -1)
                     {
-                        var index = paidForIDs.IndexOf(ID);
-                        if(index != -1)
-                        {
-                            paidForIDs.RemoveAt(index);
-                        }
+                        paidForIDs.RemoveAt(index);
                     }
+                }
 
-                    // Do something with coupons
-                    // 
+                // Mark each newly paid for item as paid and find the new sum of their prices
+                double newContribution = 0;
+                foreach (string ID in paidForIDs)
+                {
+                    newContribution += (RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == ID && !o.paid).FirstOrDefault()).price;
+                    RealmManager.Write(() => RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == ID && !o.paid).FirstOrDefault().paid = true);
+                }
 
-                    
+                // Update items paid for in database
+                await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());
 
-                    double newContribution = 0;
-                    foreach(string ID in paidForIDs)
-                    {
-                        newContribution += (RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == ID && !o.paid).FirstOrDefault()).price;
-                        RealmManager.Write(() => RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == ID && !o.paid).FirstOrDefault().paid = true);
-                    }
 
-                    
 
-                    // Update items paid for in database
-                    await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());
-
-                    
-
+                // Navigate to payment page if a balance is due
+                if ((newContribution + tip) > 0)
+                {
                     // Lock in user's payment status
                     RealmManager.Write(() =>
                     {
@@ -92,16 +104,11 @@ namespace CustomerApp.Pages
                         RealmManager.All<User>().FirstOrDefault().paymentInProgress = true;
                     });
 
-                    // Send tip to server
-
-                    if (Math.Abs(newContribution - contribution) >= 0.01)
-                        await DisplayAlert("Notice", "Due to coupons or other items already being paid for, your payment has been changed to " + newContribution.ToString("C") + " plus your tip of " + tip.ToString("C"), "OK");
-
-                    await Navigation.PushAsync(new paymentPage(newContribution, tip));
+                    await Navigation.PushAsync(new paymentPage());
                 }
+                else // No contribution
+                    await Navigation.PushAsync(new endPage());
             }
-            else // No contribution
-                await Navigation.PushAsync(new endPage());
         }
 
 
@@ -144,10 +151,7 @@ namespace CustomerApp.Pages
             tipEntry.Placeholder = (contribution * 0.2).ToString("C");
 
             // Update buttons
-            if ((contribution + tip) > 0)
-                payButton.Text = "Pay " + (contribution + tip).ToString("C");
-            else
-                payButton.Text = "No Contribution";
+            payButton.Text = "Pay " + (contribution + tip).ToString("C");
         }
 
 
@@ -167,6 +171,18 @@ namespace CustomerApp.Pages
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
 
+        async void CouponClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new CouponSelectorPage());
+        }
+
+        async void PointsClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new PayWithPointsPage());
+        }
+        
+
+
         /// <summary>
         /// Pulls the most recent order status, then assigns that to the items list's itemsSource
         /// Also resets contribution to 0
@@ -175,17 +191,132 @@ namespace CustomerApp.Pages
         public async Task DisplayOrder()
         {
             orderRefreshView.IsEnabled = false;
+            menuFoodItemsView.IsEnabled = false;
 
             // Fetch most recent order status
             await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
+
+            await UpdateCoupons();
+            
+
 
             contribution = 0;
 
             OnContributionCompleted();
 
+            if(RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => !o.paid).ToList().Count.Equals(0)) // Navigate to endpage if no unpaid items remain
+            {
+                await Navigation.PushAsync(new endPage());
+                return;
+            }
+
             menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => !o.paid).ToList();
 
+            await Task.Delay(250); // Try to fix crashes related to toggling rows before the source is finished updating
+
             orderRefreshView.IsEnabled = true;
+            menuFoodItemsView.IsEnabled = true;
+        }
+
+        async Task UpdateCoupons()
+        {
+            await GetCouponsRequest.SendGetCouponsRequest();
+
+            // Update active restaurant (sales, specials, etc.) coupons
+            foreach (Coupon c in RealmManager.All<CouponsList>().FirstOrDefault().Coupons)
+            {
+                bool applied = false;
+                foreach (string reqID in c.requiredItems)
+                {
+                    List<OrderItem> requiredItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == reqID && !o.couponApplied && !o.paid).ToList();
+                    do
+                    {
+                        if (!requiredItemList.Count().Equals(0)) // If the order contains at least one of the required items not already used for a different coupon
+                        {
+                            foreach (string applID in c.appliedItems)
+                            {
+                                List<OrderItem> appliedItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == applID && !o.couponApplied && !o.paid).ToList();
+                                if (!appliedItemList.Count().Equals(0))
+                                {
+                                    // For now just pick the first/default item from each list. Could be optimized later
+                                    OrderItem requiredItem = requiredItemList.FirstOrDefault();
+                                    OrderItem appliedItem = appliedItemList.FirstOrDefault();
+
+                                    var newPrice = RealmManager.Find<OrderItem>(appliedItem.newID).price * (1 - (c.discount / 100));
+                                    newPrice = Math.Round(newPrice, 2);
+
+                                    RealmManager.Write(() =>
+                                    {
+                                        RealmManager.Find<OrderItem>(appliedItem.newID).price = newPrice;
+                                        RealmManager.Find<OrderItem>(appliedItem.newID).couponApplied = true;
+                                        RealmManager.Find<OrderItem>(requiredItem.newID).couponApplied = true;
+                                    });
+                                    applied = true;
+                                    await Task.Delay(5);
+                                    break;
+                                }
+                            }
+                        }
+                        requiredItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == reqID && !o.couponApplied && !o.paid).ToList();
+                    }
+                    while (!requiredItemList.Count.Equals(0) && c.repeatable);
+
+                    if (!c.repeatable && applied)
+                    {
+                        break;
+                    }
+                }
+
+            }
+
+            // Get most recent user data (including coupons)
+            //await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password);
+
+            // Update Customer coupons
+            foreach (Coupon c in RealmManager.All<Coupon>().Where((Coupon d) => d.couponType == "Customer" && d.selected))
+            {
+                bool applied = false;
+                foreach (string reqID in c.requiredItems.ToList())
+                {
+                    List<OrderItem> requiredItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == reqID && !o.couponApplied && !o.paid).ToList();
+                    do
+                    {
+                        if (!requiredItemList.Count().Equals(0)) // If the order contains at least one of the required items not already used for a different coupon
+                        {
+                            foreach (string applID in c.appliedItems)
+                            {
+                                List<OrderItem> appliedItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == applID && !o.couponApplied && !o.paid).ToList();
+                                if (!appliedItemList.Count().Equals(0))
+                                {
+                                    // For now just pick the first/default item from each list. Could be optimized later
+                                    OrderItem requiredItem = requiredItemList.FirstOrDefault();
+                                    OrderItem appliedItem = appliedItemList.FirstOrDefault();
+
+                                    var newPrice = RealmManager.Find<OrderItem>(appliedItem.newID).price * (1 - (c.discount / 100));
+                                    newPrice = Math.Round(newPrice, 2);
+
+                                    RealmManager.Write(() =>
+                                    {
+                                        RealmManager.Find<OrderItem>(appliedItem.newID).price = newPrice;
+                                        RealmManager.Find<OrderItem>(appliedItem.newID).couponApplied = true;
+                                        RealmManager.Find<OrderItem>(requiredItem.newID).couponApplied = true;
+                                    });
+                                    applied = true;
+                                    await Task.Delay(5);
+                                    break;
+                                }
+                            }
+                        }
+                        requiredItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == reqID && !o.couponApplied && !o.paid).ToList();
+                    }
+                    while (!requiredItemList.Count.Equals(0) && c.repeatable);
+
+                    if (!c.repeatable && applied)
+                    {
+                        break;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -196,16 +327,22 @@ namespace CustomerApp.Pages
         /// <param name="e"></param>
         async void OnTogglePaid(object sender, ToggledEventArgs e)
         {
+            ((Switch)sender).IsEnabled = false;
+
             // Don't do anything if Realm is writing
             if (RealmManager.Realm.IsInTransaction)
+            {
+                ((Switch)sender).IsEnabled = true;
                 return;
+            }
 
             OrderItem toggledItem = new OrderItem((OrderItem)(((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext));
 
             // Error checking
-            if (toggledItem._id == null)
+            if (toggledItem == null)
             {
-                await DisplayOrder();
+                ((Switch)sender).IsEnabled = true;
+                //await DisplayOrder();
                 return;
             }
                 
@@ -226,6 +363,7 @@ namespace CustomerApp.Pages
             }
 
             OnContributionCompleted();
+            ((Switch)sender).IsEnabled = true;
         }
 
         async void onRefresh()

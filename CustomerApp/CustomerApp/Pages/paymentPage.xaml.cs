@@ -17,14 +17,14 @@ namespace CustomerApp.Pages
     {
         static double total;
 
-        public paymentPage(double contribution, double tip)
+        public paymentPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
             confirmPayButton.IsVisible = false;
 
-            total = contribution + tip;
+            total = RealmManager.All<User>().FirstOrDefault().contribution + RealmManager.All<User>().FirstOrDefault().tip;
         }
 
         /// <summary>
@@ -66,6 +66,11 @@ namespace CustomerApp.Pages
                 {
                     await DisplayAlert("Confimed", "Payment confirmed", "OK");
 
+                    //await GetTableRequest.SendGetTableRequest(RealmManager.All<User>().FirstOrDefault().tableNum);
+
+                    // Send tip
+                    await PostTipRequest.SendPostTipRequest(RealmManager.All<Order>().FirstOrDefault().employee_id, RealmManager.All<User>().FirstOrDefault().tip);
+
                     await LeavePage();
                     return;
                 }
@@ -91,6 +96,8 @@ namespace CustomerApp.Pages
         async void payWithCashClicked(object sender, EventArgs e)
         {
             // Send notification to waitstaff
+            string notificationType = "Cash transaction";
+            await PostNotificationsRequest.SendNotificationRequest(notificationType, RealmManager.All<Table>().FirstOrDefault().employee_id, RealmManager.All<Table>().FirstOrDefault().tableNumberString);
 
             await DisplayAlert("Cash Payment", "Your server is on their way to collect your cash payment", "OK");
 
@@ -110,8 +117,33 @@ namespace CustomerApp.Pages
                 Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count() - 2]);
 
 
-            // Add points
+            if (RealmManager.All<User>().FirstOrDefault().contribution > 0) {
+                double contribution = Math.Round(RealmManager.All<User>().FirstOrDefault().contribution, 2);
+                // Add points
+                await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password); // Get most recent points
 
+                await UpdatePointsRequest.SendUpdatePointsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().points + (contribution * PointsPerDollar.rate)); // Add new points
+                RealmManager.Write(() =>
+                {
+                    RealmManager.All<User>().FirstOrDefault().points += (int)(contribution * PointsPerDollar.rate);
+                });
+
+
+                await DisplayAlert("Points Gained!", "Hey!\n\nYou just gained " + (contribution * PointsPerDollar.rate) + " points!\n"
+                    + "That makes " + RealmManager.All<User>().FirstOrDefault().points + " points available to you!", "Yay!");
+
+                // Offer game
+                if (await DisplayAlert("Game Opportunity", "Would you like to play a game for a chance at a free dessert?", "Yes, please!", "No thanks"))
+                {
+                    Navigation.InsertPageBefore(new gamePage(), this);
+                }
+                else
+                {
+                    Navigation.InsertPageBefore(new endPage(), this);
+                }
+            }
+            else
+                Navigation.InsertPageBefore(new endPage(), this);
 
             // Unlock user from payment page
             RealmManager.Write(() =>
@@ -121,15 +153,6 @@ namespace CustomerApp.Pages
                 RealmManager.All<User>().FirstOrDefault().tip = 0;
             });
 
-            // Offer game
-            if (await DisplayAlert("Game Opportunity", "Would you like to play a game for a chance at a free dessert?", "Yes, please!", "No thanks"))
-            {
-                Navigation.InsertPageBefore(new gamePage(), this);
-            }
-            else
-            {
-                Navigation.InsertPageBefore(new endPage(), this);
-            }
             await Navigation.PopAsync();
         }
 

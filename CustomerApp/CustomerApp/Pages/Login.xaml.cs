@@ -38,15 +38,13 @@ namespace CustomerApp.Pages
                 for a user that theoretically already exists
                 For now, creates new user object and stores it in realm*/
 
+                uxEmailAdress.Text = uxEmailAdress.Text.Replace(" ", "");
+
+                RealmManager.RemoveAll<User>();
+
                 var response = await UserAuthenticationRequest.SendUserAuthenticationRequest(uxEmailAdress.Text, uxPassword.Text);
                 if(response)
                 {
-                    User currentUser = new User
-                    {
-                        email = uxEmailAdress.Text,
-                        password = uxPassword.Text,
-                    };
-                    RealmManager.AddOrUpdate<User>(currentUser);
                     await Navigation.PushAsync(new QRScannerPage());
                 }
                 else

@@ -84,7 +84,7 @@ namespace CustomerApp.Pages
             await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
 
             // Check if any items are unpaid
-            numUnpaid = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o.paid == false).ToList().Count();
+            numUnpaid = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => !o.paid).ToList().Count();
             
 
             // Change button based on remaining number of items
@@ -106,10 +106,17 @@ namespace CustomerApp.Pages
             }
             else
             {
+                // Finish order
+                await GetTableRequest.SendGetTableRequest(RealmManager.All<Order>().FirstOrDefault().table_number);
+                await FinishOrderRequest.SendFinishOrderRequest(RealmManager.All<Table>().FirstOrDefault()._id);
+
+                // Change button to log out of order and remove the back to order button
                 continueButton.Text = "Log out of table";
                 continueButton.Clicked -= unpaidBalanceButton;
                 continueButton.Clicked -= logOutButton;
                 continueButton.Clicked += logOutButton;
+
+                backToOrderButton.IsVisible = false;
                 return;
             }
         }
