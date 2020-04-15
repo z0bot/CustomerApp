@@ -50,9 +50,9 @@ namespace CustomerApp.Pages
                     // Get most recent order status
                     await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
 
-                    item = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == item._id).FirstOrDefault();
+                    item = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == item._id && !o.paid).FirstOrDefault();
 
-                    if(item.paid)
+                    if(item == null || item.paid)
                     {
                         await DisplayAlert("Item already paid for", "This item was paid for by someone else already.\n\nNo points have been deducted from your account", "OK");
                         await DisplayOrder();

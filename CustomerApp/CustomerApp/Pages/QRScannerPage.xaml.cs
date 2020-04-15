@@ -20,7 +20,9 @@ namespace CustomerApp.Pages
         {
             InitializeComponent();
             GoogleVisionBarCodeScanner.Methods.SetSupportBarcodeFormat(BarcodeFormats.QRCode);
+            GoogleVisionBarCodeScanner.Methods.SetIsScanning(true);
         }
+
 
         /// <summary>
         /// initialize device flashlight
@@ -71,12 +73,14 @@ namespace CustomerApp.Pages
 
         async void manualEntry(object sender, EventArgs e)
         {
+            
             string result = await DisplayPromptAsync("Enter table number", "Enter the table number you are sitting at", "OK", "Cancel", "1, 2, 3, ... etc.", -1, keyboard: Keyboard.Numeric, null);
 
             int tablenum = -1;
             if(!int.TryParse(result, out tablenum) || tablenum < 1 || tablenum > 20)
             {
                 await DisplayAlert("Invalid Table", "Sorry, we couldn't find table " + result + ", please try again", "OK");
+                GoogleVisionBarCodeScanner.Methods.SetIsScanning(true);
                 return;
             }
 

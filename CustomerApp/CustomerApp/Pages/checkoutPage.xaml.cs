@@ -204,6 +204,12 @@ namespace CustomerApp.Pages
 
             OnContributionCompleted();
 
+            if(RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => !o.paid).ToList().Count.Equals(0)) // Navigate to endpage if no unpaid items remain
+            {
+                await Navigation.PushAsync(new endPage());
+                return;
+            }
+
             menuFoodItemsView.ItemsSource = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => !o.paid).ToList();
 
             await Task.Delay(250); // Try to fix crashes related to toggling rows before the source is finished updating

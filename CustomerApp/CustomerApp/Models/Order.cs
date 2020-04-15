@@ -16,6 +16,8 @@ namespace CustomerApp.Models
 
         public string employee_id { get; set; }
 
+        public int table_number { get; set; }
+
         public IList<OrderItem> menuItems { get; }
 
         public IList<IngredientCount> IngredientTotals { get; }
