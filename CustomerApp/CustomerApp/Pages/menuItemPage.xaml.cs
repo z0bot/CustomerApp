@@ -104,6 +104,8 @@ namespace CustomerApp.Pages
             {
                 RealmManager.Realm.All<Order>().FirstOrDefault().menuItems.Add(item);
             });
+
+            await Task.Delay(50);
         }
 
         /// <summary>

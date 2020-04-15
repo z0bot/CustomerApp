@@ -10,7 +10,7 @@ namespace CustomerApp.Models.ServiceRequests
     class PostDessertCouponRequest : ServiceRequest
     {
         //the endpoint we are trying to hit
-        public override string Url => "https://dijkstras-steakhouse-restapi.herokuapp.com/coupon/";
+        public override string Url => "https://dijkstras-steakhouse-restapi.herokuapp.com/coupons";
         //the type of request
         public override HttpMethod Method => HttpMethod.Post;
         //headers if we ever need them
@@ -21,48 +21,59 @@ namespace CustomerApp.Models.ServiceRequests
         // Constructor containing the employee ID and tip amount to be sent
         PostDessertCouponRequest()
         {
-            SerializableCoupon c = new SerializableCoupon();
+            Body = new SerializableCoupon();
 
-            Body = c;
         }
 
         // Request body content object
         public class SerializableCoupon
         {
             public string couponType = "Customer";
-            public IList<string> requiredItems = new List<string>();
-            public IList<string> appliedItems = new List<string>();
-            public double discount = 100;
+            public IList<IDResponse> requiredItems = new List<IDResponse>();
+            public IList<IDResponse> appliedItems = new List<IDResponse>();
+            public int discount = 100;
             public bool active = true;
             public bool repeatable = false;
-            public string description = "Claim 100% off one of our desserts";
+            public string description = "Enjoy 100% off of our dessert cookie";
 
             public SerializableCoupon()
             {
-                string ID = "*****COOKIE ID HERE *******";
-                requiredItems.Add(ID);
-                appliedItems.Add(ID);
+                string ID = "5e9675ebcd0dd200049ca257";
+                requiredItems.Add(new IDResponse(ID));
+                appliedItems.Add(new IDResponse(ID));
+            }
+            
+        }
+
+        public class IDResponse
+        {
+            public string _id;
+
+            public IDResponse() { }
+
+            public IDResponse(string ID)
+            {
+                _id = ID;
             }
         }
 
-
         // Posts a tip to the database
-        public static async Task<bool> SendPostDessertCouponRequest()
+        public static async Task<string> SendPostDessertCouponRequest()
         {
             //make a new request object
             var serviceRequest = new PostDessertCouponRequest();
             //get a response
-            var response = await ServiceRequestHandler.MakeServiceCall<DeleteResponse>(serviceRequest, serviceRequest.Body);
+            var response = await ServiceRequestHandler.MakeServiceCall<IDResponse>(serviceRequest, serviceRequest.Body);
 
-            if(response == null)
+            if(response._id == null)
             {
                 //call failed
-                return false;
+                return null;
             }
             else
             {
                 //call succeeded
-                return true;
+                return response._id;
             }
         }
     }

@@ -40,12 +40,18 @@ namespace CustomerApp.Pages
                 // Get most recent user data (including coupons)
                 await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password);
 
-                // Add coupon, then update remote database
-                /*string ID = "*****COOKIE ID HERE *******";
-                //await PostDessertCouponRequest.SendPostDessertCouponRequest();
-                await GetCouponsByIDRequest.SendGetCouponsByIDRequest(ID);
-                RealmManager.Write(() => RealmManager.All<User>().FirstOrDefault().coupons.Add(RealmManager.Find<Coupon>(ID)));
-                await UpdateCouponsRequest.SendUpdateCouponsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().coupons);*/
+                // Post coupon, add it to the local account, then update remote database
+                string ID = await PostDessertCouponRequest.SendPostDessertCouponRequest();
+                if (ID != null)
+                {
+                    await GetCouponsByIDRequest.SendGetCouponsByIDRequest(ID);
+                    RealmManager.Write(() => RealmManager.All<User>().FirstOrDefault().coupons.Add(RealmManager.Find<Coupon>(ID)));
+                    await UpdateCouponsRequest.SendUpdateCouponsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().coupons);
+                }
+                else
+                {
+                    await DisplayAlert("Something went wrong", "Sorry, but something has gone wrong on our end. Please contact your waitstaff and show them this message so we can make this right", "OK");
+                }
 
             }
             else

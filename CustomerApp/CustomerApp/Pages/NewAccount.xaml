@@ -176,8 +176,9 @@
                 FontSize="Medium"
                 BackgroundColor="#1fbd85"
                 CornerRadius=" 15"
-                Padding="100,0,100,0"
+                Padding="10,0,10,0"
                 Margin="0,0,0,10"
+                WidthRequest="150"
                 VerticalOptions="EndAndExpand" 
                 HorizontalOptions="Center"/>
         </StackLayout>
