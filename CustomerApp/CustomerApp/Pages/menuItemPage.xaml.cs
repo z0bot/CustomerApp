@@ -39,7 +39,14 @@ namespace CustomerApp.Pages
             descLabel.Text = baseItem.description;
             try
             {
-                itemPic.Source = ImageSource.FromStream(() => new System.IO.MemoryStream(Convert.FromBase64String((baseItem.picture.Split(',')[1]))));
+                if(baseItem.picture.Contains(',')) // Old images which contain commas
+                {
+                    itemPic.Source = ImageSource.FromStream(() => new System.IO.MemoryStream(Convert.FromBase64String((baseItem.picture.Split(',')[1]))));
+                }
+                else // New images without commas
+                {
+                    itemPic.Source = ImageSource.FromStream(() => new System.IO.MemoryStream(Convert.FromBase64String((baseItem.picture))));
+                }
             }
             catch(Exception ex)
             {
