@@ -40,26 +40,19 @@ namespace CustomerApp.Pages
                         // Get most recent order status
                         await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
 
-                        // Create complimentary dessert item
+                        /*// Create complimentary dessert item
                         OrderItem item = new OrderItem();
-
-                        //Assign item new ID
-                        var rand = new Random();
-                        item.newID = (rand.Next(0, 1000000000)).ToString();
-                        while (RealmManager.Find<OrderItem>(item.newID) != null) // If the ID already exists, try again until you get a unique ID.
-                        {
-                            item.newID = (rand.Next(0, 1000000000)).ToString();
-                        }
 
                         item.name = "Complimentary Dessert";
                         item.price = 0;
                         item.paid = true;
+                        item._id = "";
 
                         //Store item into local database
                         RealmManager.Write(() =>
                         {
                             RealmManager.Realm.All<Order>().FirstOrDefault().menuItems.Add(item);
-                        });
+                        });*/
 
                         // Send updated order
                         await UpdateOrderMenuItemsRequest.SendUpdateOrderMenuItemsRequest(RealmManager.All<Order>().FirstOrDefault()._id, RealmManager.All<Order>().FirstOrDefault().menuItems.ToList());

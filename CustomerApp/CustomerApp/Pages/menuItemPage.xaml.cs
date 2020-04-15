@@ -33,13 +33,6 @@ namespace CustomerApp.Pages
             baseItem = new MenuFoodItem(RealmManager.Find<MenuFoodItem>(itemID));
 
             item = new OrderItem(baseItem);
-            //Assign item new ID
-            var rand = new Random();
-            item.newID = (rand.Next(0, 1000000000)).ToString();
-            while (RealmManager.Find<OrderItem>(item.newID) != null) // If the ID already exists, try again until you get a unique ID.
-            {
-                item.newID = (rand.Next(0, 1000000000)).ToString();
-            }
 
             // Update labels
             nameLabel.Text = baseItem.name;

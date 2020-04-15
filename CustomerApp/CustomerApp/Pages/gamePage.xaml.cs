@@ -35,10 +35,18 @@ namespace CustomerApp.Pages
             {
                 await DisplayAlert("Congratulations!", "Correct! The number was " + winner.ToString() + ".\n"
                     + "A coupon for your free dessert has been added to your account", "Yay!");
-                
-                // Add new coupon to account
 
-                
+                // Add new coupon to account
+                // Get most recent user data (including coupons)
+                await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password);
+
+                // Add coupon, then update remote database
+                /*string ID = "*****COOKIE ID HERE *******";
+                //await PostDessertCouponRequest.SendPostDessertCouponRequest();
+                await GetCouponsByIDRequest.SendGetCouponsByIDRequest(ID);
+                RealmManager.Write(() => RealmManager.All<User>().FirstOrDefault().coupons.Add(RealmManager.Find<Coupon>(ID)));
+                await UpdateCouponsRequest.SendUpdateCouponsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().coupons);*/
+
             }
             else
             {

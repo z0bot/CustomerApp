@@ -23,7 +23,7 @@
                 FontSize="Medium"
                 Margin="15,0,15,0"
                 HorizontalTextAlignment="Center"
-                Text="You can apply some or all of your coupons to this contribution. Only coupons that are succesfully applied will be removed from your account"/>
+                Text="You can apply some or all of your coupons to this contribution. Note that any coupon activated will be removed from your account"/>
             <Label
                 VerticalOptions="Start"
                 HorizontalOptions="Center"
@@ -60,15 +60,19 @@
                                         <Label
                                             x:Name="uxMenuItemLabel"
                                             FontSize="Medium"
+                                            HorizontalOptions="Start"
+                                            VerticalOptions="Center"
                                             Text="{Binding description}"/>
-                                        <Switch
-                                            x:Name="uxTogglePaid"
-                                            HorizontalOptions="End"
+                                        <ImageButton
+                                            x:Name="uxCouponButton"
+                                            HorizontalOptions="EndAndExpand"
                                             VerticalOptions="Start"
                                             Margin="0,7,0,0"
                                             HeightRequest="30"
-                                            IsToggled="{Binding selected}"
-                                            Toggled="OnToggleSelected"/>
+                                            WidthRequest="45"
+                                            Source="coupon"
+                                            Clicked="OnApplyCouponPressed"
+                                            BackgroundColor="Transparent"/>
                                     </StackLayout>
                                 </Grid>
                             </ViewCell>
@@ -142,7 +146,7 @@
                 <Button
                     x:Name="finalizeButton"
                     VerticalOptions="Center"
-                    Text="Apply Coupons"
+                    Text="Return to Order"
                     FontAttributes="Bold"
                     TextColor="White"
                     BackgroundColor="#1fbd85"

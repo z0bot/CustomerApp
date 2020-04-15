@@ -55,7 +55,7 @@
                     Margin="30,0,30,0"
                     x:Name="descLabel"
                     TextColor="Black"
-                    FontSize="Medium"
+                    FontSize="Small"
                     FontAttributes="Bold"
                     Text="Description Goes Here"
                     LineBreakMode="WordWrap"/>

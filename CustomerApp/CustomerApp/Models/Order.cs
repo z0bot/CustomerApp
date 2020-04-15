@@ -14,6 +14,8 @@ namespace CustomerApp.Models
 
         public bool send_to_kitchen { get; set; }
 
+        public string employee_id { get; set; }
+
         public IList<OrderItem> menuItems { get; }
 
         public IList<IngredientCount> IngredientTotals { get; }

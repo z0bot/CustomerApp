@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Realms;
+using System.Linq;
 
 namespace CustomerApp.Models
 {
@@ -25,6 +26,21 @@ namespace CustomerApp.Models
 
         public bool active { get; set; }
 
-        public bool selected { get; set; } = false; // Used for Customer coupons. Indicates that the customer wants to apply these to their order
+        public bool selected { get; set; } // Used for Customer coupons. Indicates that the customer wants to apply these to their order
+
+        public Coupon() { }
+
+        public Coupon(Coupon c)
+        {
+            _id = c._id;
+            description = c.description;
+            requiredItems = c.requiredItems.ToList();
+            appliedItems = c.appliedItems.ToList();
+            couponType = c.couponType;
+            discount = c.discount;
+            repeatable = c.repeatable;
+            active = c.active;
+            selected = c.selected;
+        }
     }
 }

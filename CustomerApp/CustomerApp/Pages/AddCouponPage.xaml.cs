@@ -16,7 +16,6 @@ namespace CustomerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AddCouponPage : ContentPage
     {
-        double contribution = 0, tip = 0;
 
         public AddCouponPage()
         {
@@ -35,7 +34,8 @@ namespace CustomerApp.Pages
         async void OnRefillButtonClicked(object sender, EventArgs e)
         {
             // Send refill request
-
+            string notificationType = "Refill";
+            await PostNotificationsRequest.SendNotificationRequest(notificationType, RealmManager.All<Table>().FirstOrDefault().employee_id, RealmManager.All<Table>().FirstOrDefault().tableNumberString);
 
             await DisplayAlert("Refill", "Server Notified of Refill Request", "OK");
         }
@@ -43,7 +43,8 @@ namespace CustomerApp.Pages
         async void OnServerButtonClicked(object sender, EventArgs e)
         {
             // Send Help Request
-
+            string notificationType = "Help requested";
+            await PostNotificationsRequest.SendNotificationRequest(notificationType, RealmManager.All<Table>().FirstOrDefault().employee_id, RealmManager.All<Table>().FirstOrDefault().tableNumberString);
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
 
@@ -69,6 +70,9 @@ namespace CustomerApp.Pages
 
             string result = obj[0].DisplayValue;
 
+            // Get most recent user data (including coupons)
+            var success = await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password);
+
             if (!(await GetCouponsByIDRequest.SendGetCouponsByIDRequest(result)))
             {
                 await DisplayAlert("Invalid Coupon", "Sorry, we couldn't find that coupon, please try again", "OK");
@@ -76,38 +80,69 @@ namespace CustomerApp.Pages
                 return;
             }
 
-            // Add coupon
+            
 
-            await DisplayAlert("Coupon Succesfully Applied!", "You've succesfully applied this coupon!", "OK");
-            GoogleVisionBarCodeScanner.Methods.SetIsScanning(false);
+            // Ensure coupon is unique and active
+            if (success && RealmManager.All<User>().FirstOrDefault().coupons.Where((Coupon c) => c._id == result).ToList().Count().Equals(0) && (RealmManager.Find<Coupon>(result)).active)
+            {
+                // Add coupon
+                RealmManager.Write(() => RealmManager.All<User>().FirstOrDefault().coupons.Add(RealmManager.Find<Coupon>(result)));
 
-            // Turn off flashlight if it is on
-            if (GoogleVisionBarCodeScanner.Methods.IsTorchOn())
-                GoogleVisionBarCodeScanner.Methods.ToggleFlashlight();
+                await UpdateCouponsRequest.SendUpdateCouponsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().coupons);
 
-            await Navigation.PopModalAsync();
+                await DisplayAlert("Coupon Succesfully Applied!", "You've succesfully applied this coupon!", "OK");
+                GoogleVisionBarCodeScanner.Methods.SetIsScanning(false);
+
+                // Turn off flashlight if it is on
+                if (GoogleVisionBarCodeScanner.Methods.IsTorchOn())
+                    GoogleVisionBarCodeScanner.Methods.ToggleFlashlight();
+
+                await Navigation.PopAsync();
+            }
+            else
+            {
+                await DisplayAlert("Inactive Coupon", "Sorry, but this coupon has already been redeemed\nVerify that you have the correct coupon, or call your server for assistance", "OK");
+                GoogleVisionBarCodeScanner.Methods.SetIsScanning(true);
+            }
         }
 
         async void manualEntry(object sender, EventArgs e)
         {
             string result = await DisplayPromptAsync("Enter coupon ID", "Enter your coupon code here:\n\nWe suggest copying the code from your email", "OK", "Cancel", null, -1, keyboard: Keyboard.Numeric, null);
 
-            if (!(await GetCouponsByIDRequest.SendGetCouponsByIDRequest(result)))
+            // Get most recent user data (including coupons)
+            var success = await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password);
+
+            if (result != null && !(await GetCouponsByIDRequest.SendGetCouponsByIDRequest(result)))
             {
                 await DisplayAlert("Invalid Coupon", "Sorry, we couldn't find that coupon, please try again", "OK");
+                GoogleVisionBarCodeScanner.Methods.SetIsScanning(true);
                 return;
             }
 
-            // Add coupon
+            
+            // Ensure coupon is unique and active
+            if (success && RealmManager.All<User>().FirstOrDefault().coupons.Where((Coupon c) => c._id == result).Count().Equals(0) && (RealmManager.Find<Coupon>(result)).active)
+            {
+                // Add coupon
+                RealmManager.Write(() => RealmManager.All<User>().FirstOrDefault().coupons.Add(RealmManager.Find<Coupon>(result)));
 
-            await DisplayAlert("Coupon Succesfully Applied!", "You've succesfully applied this coupon!", "OK");
-            GoogleVisionBarCodeScanner.Methods.SetIsScanning(false);
+                await UpdateCouponsRequest.SendUpdateCouponsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().coupons);
 
-            // Turn off flashlight if it is on
-            if (GoogleVisionBarCodeScanner.Methods.IsTorchOn())
-                GoogleVisionBarCodeScanner.Methods.ToggleFlashlight();
+                await DisplayAlert("Coupon Succesfully Applied!", "You've succesfully applied this coupon!", "OK");
+                GoogleVisionBarCodeScanner.Methods.SetIsScanning(false);
 
-            await Navigation.PopModalAsync();
+                // Turn off flashlight if it is on
+                if (GoogleVisionBarCodeScanner.Methods.IsTorchOn())
+                    GoogleVisionBarCodeScanner.Methods.ToggleFlashlight();
+
+                await Navigation.PopAsync();
+            }
+            else
+            {
+                await DisplayAlert("Inactive Coupon", "Sorry, but this coupon has already been redeemed\nVerify that you have the correct coupon, or call your server for assistance", "OK");
+                GoogleVisionBarCodeScanner.Methods.SetIsScanning(true);
+            }
         }
     }
 }

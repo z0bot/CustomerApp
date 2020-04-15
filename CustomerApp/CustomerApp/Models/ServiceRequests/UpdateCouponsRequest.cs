@@ -33,7 +33,7 @@ namespace CustomerApp.Models.ServiceRequests
         // Request body content object
         public class UpdaterObject
         {
-            public string propName = "Coupons";
+            public string propName = "coupons";
             public IList<SerializableCoupon> value { get; set; }
 
             public UpdaterObject(IList<Coupon> Coupons)

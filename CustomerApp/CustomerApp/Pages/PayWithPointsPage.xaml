@@ -136,16 +136,17 @@
 
 
                 <Button
-                            x:Name="returnButton"
-                            VerticalOptions="Center"
-                            Text="Return to Checkout"
-                            FontAttributes="Bold"
-                            TextColor="White"
-                            BackgroundColor="#1fbd85"
-                            WidthRequest="130"
-                            FontSize="Medium"
-                            CornerRadius="15"
-                            Clicked="OnReturnButtonClicked"/>
+                        x:Name="returnButton"
+                        VerticalOptions="Center"
+                        Text="Return to Checkout"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="#1fbd85"
+                        WidthRequest="130"
+                        HeightRequest="80"
+                        FontSize="Medium"
+                        CornerRadius="15"
+                        Clicked="OnReturnButtonClicked"/>
 
 
                 <StackLayout

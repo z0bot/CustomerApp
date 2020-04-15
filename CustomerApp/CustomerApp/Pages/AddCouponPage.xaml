@@ -9,27 +9,27 @@
              BackgroundImageSource="backgroundImage">
     <ContentPage.Content>
         <StackLayout>
-            <Label
+            <!--<Label
                 VerticalOptions="Start"
                 HorizontalOptions="Center"
                 TextColor="Black"
                 FontSize="Title"
                 FontAttributes="Bold"
                 Margin="15,15,15,0"
-                Text="Coupons"/>
+                Text="Coupons"/>-->
             <Label
                 VerticalOptions="Start"
                 HorizontalOptions="Center"
                 TextColor="Black"
                 FontSize="Medium"
-                Margin="15,0,15,0"
+                Margin="15,15,15,0"
                 HorizontalTextAlignment="Center"
                 Text="Scan your coupon's QR code to apply it to your order!"/>
 
 
             <StackLayout>
                 <gv:CameraView 
-                Margin="0,40,0,0"
+                Margin="0,20,0,0"
                 HorizontalOptions="Center"
                 VerticalOptions="Start" 
                 OnDetected="CameraView_OnDetected" 
@@ -97,7 +97,7 @@
                 <Button
                     x:Name="finalizeButton"
                     VerticalOptions="Center"
-                    Text="Return to Checkout"
+                    Text="Return to Coupons List"
                     FontAttributes="Bold"
                     TextColor="White"
                     BackgroundColor="#1fbd85"

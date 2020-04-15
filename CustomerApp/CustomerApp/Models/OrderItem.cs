@@ -10,7 +10,7 @@ namespace CustomerApp.Models
     public class OrderItem : RealmObject
     {
         [PrimaryKey]
-        public string newID { get; set; }
+        public string newID { get; set; } = Guid.NewGuid().ToString();
 
         public IList<string> ingredients { get; }
 

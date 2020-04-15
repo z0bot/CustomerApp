@@ -10,5 +10,12 @@ namespace CustomerApp.Models
     {
         public IList<Coupon> Coupons { get; }
 
+        public CouponsList() { }
+
+
+        public CouponsList(List<Coupon> c)
+        {
+            Coupons = c;
+        }
     }
 }

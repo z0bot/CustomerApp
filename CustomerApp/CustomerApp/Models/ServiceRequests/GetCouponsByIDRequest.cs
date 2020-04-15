@@ -11,7 +11,7 @@ namespace CustomerApp.Models.ServiceRequests
     {
         public string ID;
         //the endpoint we are trying to hit
-        public override string Url => "https://dijkstras-steakhouse-restapi.herokuapp.com/coupons" + ID;
+        public override string Url => "https://dijkstras-steakhouse-restapi.herokuapp.com/coupons/" + ID;
         //the type of request
         public override HttpMethod Method => HttpMethod.Get;
         //headers if we ever need them
@@ -29,7 +29,7 @@ namespace CustomerApp.Models.ServiceRequests
             //get a response
             var response = await ServiceRequestHandler.MakeServiceCall<Coupon>(serviceRequest);
 
-            if(response == null)
+            if(response._id == null) // No null or inactive coupons
             {
                 //call failed
                 return false;

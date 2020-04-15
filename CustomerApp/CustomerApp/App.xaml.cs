@@ -32,16 +32,22 @@ namespace CustomerApp
                 {
                     if (RealmManager.All<User>().FirstOrDefault().paymentInProgress) // Lock user to payment page if they have not yet finished paying
                     {
-                        MainPage = new NavigationPage(new paymentPage(RealmManager.All<User>().FirstOrDefault().contribution, RealmManager.All<User>().FirstOrDefault().tip));
+                        MainPage = new NavigationPage(new paymentPage());
                     }
                     else // Go to Order Here page
+                    {
                         MainPage = new NavigationPage(new orderHerePage());
+                    }
                 }
                 else
+                {
                     MainPage = new NavigationPage(new Login());
+                }
             }
             else
+            {
                 MainPage = new NavigationPage(new Login());
+            }
         }
 
 

@@ -32,7 +32,9 @@ namespace CustomerApp.Models.ServiceRequests
             {
                 //add the response into the local database
                 RealmManager.RemoveAll<CouponsList>();
-                RealmManager.AddOrUpdate<CouponsList>(response);
+                CouponsList l = new CouponsList((response.Coupons.Where((Coupon c) => c.active && c.couponType == "Restaurant").ToList()));
+                //l.Coupons = response.Coupons.Where((Coupon c) => c.active && c.couponType == "Restaurant").ToList; // 
+                RealmManager.AddOrUpdate<CouponsList>(l);
                 //call succeeded
                 return true;
             }

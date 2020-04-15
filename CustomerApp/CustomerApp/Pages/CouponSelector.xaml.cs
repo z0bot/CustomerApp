@@ -15,8 +15,6 @@ namespace CustomerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CouponSelectorPage : ContentPage
     {
-        double contribution = 0, tip = 0;
-
         public CouponSelectorPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
@@ -35,14 +33,33 @@ namespace CustomerApp.Pages
 
         async void OnFinalizeButtonClicked(object sender, EventArgs e)
         {
+            List<Coupon> selectedList = new List<Coupon>();
 
-            await Navigation.PopModalAsync();
+            foreach (Coupon c in RealmManager.All<User>().FirstOrDefault().coupons.Where((Coupon c) => c.selected).ToList())
+                selectedList.Add(new Coupon(c));
+
+            // Get most recent coupons list
+            await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password);
+
+            //CouponsView.ItemsSource = null;
+
+            RealmManager.Write(() => RealmManager.All<User>().FirstOrDefault().coupons.Clear());
+
+            foreach (Coupon c in selectedList)
+            {
+                c.selected = true;
+                RealmManager.AddOrUpdate<Coupon>(c);
+            }
+
+
+            await Navigation.PopAsync();
         }
 
         async void OnRefillButtonClicked(object sender, EventArgs e)
         {
             // Send refill request
-
+            string notificationType = "Refill";
+            await PostNotificationsRequest.SendNotificationRequest(notificationType, RealmManager.All<Table>().FirstOrDefault().employee_id, RealmManager.All<Table>().FirstOrDefault().tableNumberString);
 
             await DisplayAlert("Refill", "Server Notified of Refill Request", "OK");
         }
@@ -50,17 +67,18 @@ namespace CustomerApp.Pages
         async void OnServerButtonClicked(object sender, EventArgs e)
         {
             // Send Help Request
-
+            string notificationType = "Help requested";
+            await PostNotificationsRequest.SendNotificationRequest(notificationType, RealmManager.All<Table>().FirstOrDefault().employee_id, RealmManager.All<Table>().FirstOrDefault().tableNumberString);
             await DisplayAlert("Help Request", "Server Notified of Help Request", "OK");
         }
 
         async void AddCouponClicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new AddCouponPage());
+            await Navigation.PushAsync(new AddCouponPage());
         }
 
         /// <summary>
-        /// Pulls the most recent order status, then assigns that to the items list's itemsSource
+        /// Pulls the most recent coupons list, then assigns that to the coupon list's itemsSource
         /// Also resets contribution to 0
         /// </summary>
         /// <returns></returns>
@@ -68,35 +86,38 @@ namespace CustomerApp.Pages
         {
             orderRefreshView.IsEnabled = false;
 
-            //await GetCouponsRequest.SendGetCouponsRequest();
+            // Get most recent user data (including coupons)
+            await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password);
 
-            CouponsView.ItemsSource = RealmManager.All<User>().FirstOrDefault().coupons.ToList();
+            CouponsView.ItemsSource = RealmManager.All<Coupon>().Where((Coupon c) => c.couponType == "Customer" && !c.selected).ToList();
 
             orderRefreshView.IsEnabled = true;
         }
 
-        /// <summary>
-        /// Called upon toggling a switch.
-        /// Note that the toggle itself is tied to an order item's paid attribute, so we do not need ot manually change it
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        async void OnToggleSelected(object sender, ToggledEventArgs e)
+        async void OnApplyCouponPressed(object sender, EventArgs e)
         {
-            // Don't do anything if Realm is writing
-            if (RealmManager.Realm.IsInTransaction)
-                return;
+            Coupon selectedCoupon = new Coupon((Coupon)(((ViewCell)(((ImageButton)sender).Parent.Parent.Parent)).BindingContext));
 
-            Coupon toggledItem = (Coupon)(((ViewCell)(((Switch)sender).Parent.Parent.Parent)).BindingContext);
-
-            // Error checking
-            if (toggledItem._id == null)
+            if (!selectedCoupon.selected)
             {
-                await DisplayCoupons();
-                return;
+                selectedCoupon.selected = true;
+
+                RealmManager.AddOrUpdate<Coupon>(selectedCoupon);
+
+                RealmManager.Write(() => RealmManager.All<User>().FirstOrDefault().coupons.Remove(selectedCoupon));
+
+                await UpdateCouponsRequest.SendUpdateCouponsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().coupons);
+
+                await DisplayAlert("Coupon Succesfully Applied!", "You have succesfully applied this coupon to your order!", "OK");
+            }
+            else
+            {
+                await DisplayAlert("Coupon Already Applied", "Sorry, but this coupon has already been applied. Please select a different coupon", "OK");
             }
 
+            await DisplayCoupons();
         }
+
 
         async void onRefresh()
         {
@@ -105,5 +126,6 @@ namespace CustomerApp.Pages
 
             orderRefreshView.IsRefreshing = false;
         }
+
     }
 }

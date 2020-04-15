@@ -17,14 +17,14 @@ namespace CustomerApp.Pages
     {
         static double total;
 
-        public paymentPage(double contribution, double tip)
+        public paymentPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
 
             confirmPayButton.IsVisible = false;
 
-            total = contribution + tip;
+            total = RealmManager.All<User>().FirstOrDefault().contribution + RealmManager.All<User>().FirstOrDefault().tip;
         }
 
         /// <summary>
@@ -66,10 +66,10 @@ namespace CustomerApp.Pages
                 {
                     await DisplayAlert("Confimed", "Payment confirmed", "OK");
 
-                    await GetTableRequest.SendGetTableRequest(RealmManager.All<User>().FirstOrDefault().tableNum);
+                    //await GetTableRequest.SendGetTableRequest(RealmManager.All<User>().FirstOrDefault().tableNum);
 
                     // Send tip
-                    await PostTipRequest.SendPostTipRequest(RealmManager.All<Table>().FirstOrDefault().employee_id, RealmManager.All<User>().FirstOrDefault().tip);
+                    await PostTipRequest.SendPostTipRequest(RealmManager.All<Order>().FirstOrDefault().employee_id, RealmManager.All<User>().FirstOrDefault().tip);
 
                     await LeavePage();
                     return;
@@ -96,6 +96,8 @@ namespace CustomerApp.Pages
         async void payWithCashClicked(object sender, EventArgs e)
         {
             // Send notification to waitstaff
+            string notificationType = "Cash transaction";
+            await PostNotificationsRequest.SendNotificationRequest(notificationType, RealmManager.All<Table>().FirstOrDefault().employee_id, RealmManager.All<Table>().FirstOrDefault().tableNumberString);
 
             await DisplayAlert("Cash Payment", "Your server is on their way to collect your cash payment", "OK");
 
@@ -116,17 +118,18 @@ namespace CustomerApp.Pages
 
 
             if (RealmManager.All<User>().FirstOrDefault().contribution > 0) {
+                double contribution = Math.Round(RealmManager.All<User>().FirstOrDefault().contribution, 2);
                 // Add points
                 await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password); // Get most recent points
-                int oldPoints = RealmManager.All<User>().FirstOrDefault().points;
-                await UpdatePointsRequest.SendUpdatePointsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().points + (RealmManager.All<User>().FirstOrDefault().contribution * PointsPerDollar.rate)); // Add new points
+
+                await UpdatePointsRequest.SendUpdatePointsRequest(RealmManager.All<User>().FirstOrDefault()._id, RealmManager.All<User>().FirstOrDefault().points + (contribution * PointsPerDollar.rate)); // Add new points
                 RealmManager.Write(() =>
                 {
-                    RealmManager.All<User>().FirstOrDefault().points += (int)(RealmManager.All<User>().FirstOrDefault().contribution * PointsPerDollar.rate);
+                    RealmManager.All<User>().FirstOrDefault().points += (int)(contribution * PointsPerDollar.rate);
                 });
 
 
-                await DisplayAlert("Points Gained!", "Hey!\n\nYou just gained " + (RealmManager.All<User>().FirstOrDefault().points - oldPoints) + " points!\n"
+                await DisplayAlert("Points Gained!", "Hey!\n\nYou just gained " + (contribution * PointsPerDollar.rate) + " points!\n"
                     + "That makes " + RealmManager.All<User>().FirstOrDefault().points + " points available to you!", "Yay!");
 
                 // Offer game
