@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CustomerApp.Models.ServiceRequests
 {
-    class GetMenuItemsRequest : ServiceRequest
+    public class GetMenuItemsRequest : ServiceRequest
     {
         //the endpoint we are trying to hit
         public override string Url => "https://dijkstras-steakhouse-restapi.herokuapp.com/menuItems";

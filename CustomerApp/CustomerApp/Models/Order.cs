@@ -7,7 +7,7 @@ using Realms;
 
 namespace CustomerApp.Models
 {
-    class Order : RealmObject
+    public class Order : RealmObject
     {
         [PrimaryKey]
         public string _id { get; set; }

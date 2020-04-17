@@ -6,7 +6,7 @@ using Realms;
 
 namespace CustomerApp.Models
 {
-    class MenuItemsList : RealmObject
+    public class MenuItemsList : RealmObject
     {
         public IList<MenuFoodItem> menuItems { get; }
     }
