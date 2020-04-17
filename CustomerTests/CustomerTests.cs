@@ -26,10 +26,10 @@ namespace CustomerTests
         private CustomerApp.Models.MenuItemsList testMenuList;
 
         [SetUp]
-        async public Task Setup()
+        public void Setup()
         {
             //RealmManager.RemoveAll<MenuList>();
-            GetMenuItemsRequest.SendGetMenuItemsRequest();
+            Task.Run(() => GetMenuItemsRequest.SendGetMenuItemsRequest());
 
             testMenuList = RealmManager.All<MenuItemsList>().First();
 
@@ -159,15 +159,18 @@ namespace CustomerTests
         /// menuPage_ViewMenuItems
         /// Tests if menu items are present
         /// in server
+        /// NOTE: must be updated to reflect the actual count of items in the server
         /// </summary>
 
         [Test]
         public void menuPage_ViewMenuItems()
         {
-            //await GetMenuItemsRequest.SendGetMenuItemsRequest();
+            int currentMenuItems = 12;
+
+            Task.Run(() => GetMenuItemsRequest.SendGetMenuItemsRequest());
 
             int menuItemCount = testMenuList.menuItems.Count();
-            Assert.AreEqual(menuItemCount, 10);
+            Assert.AreEqual(menuItemCount, currentMenuItems);
 
         }
 
@@ -209,7 +212,7 @@ namespace CustomerTests
         [Test]
         public void CheckOut_MenuItemsAdd()
         {
-            //await GetMenuItemsRequest.SendGetMenuItemsRequest();
+            Task.Run(() => GetMenuItemsRequest.SendGetMenuItemsRequest());
             
 
             CustomerApp.Models.Order testOrder = new Order();
@@ -230,7 +233,7 @@ namespace CustomerTests
         [Test]
         public void CheckOut_MenuItemsRemove()
         {
-            //await GetMenuItemsRequest.SendGetMenuItemsRequest();
+            Task.Run(() => GetMenuItemsRequest.SendGetMenuItemsRequest());
 
             CustomerApp.Models.Order testOrder = new Order();
             CustomerApp.Models.MenuFoodItem testItem = testMenuList.menuItems[0];
