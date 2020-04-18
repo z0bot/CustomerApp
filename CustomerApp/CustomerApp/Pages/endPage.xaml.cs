@@ -106,18 +106,33 @@ namespace CustomerApp.Pages
             }
             else
             {
-                // Finish order
-                await GetTableRequest.SendGetTableRequest(RealmManager.All<Order>().FirstOrDefault().table_number);
-                await FinishOrderRequest.SendFinishOrderRequest(RealmManager.All<Table>().FirstOrDefault()._id);
+                int numUnprepared = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => !o.prepared).ToList().Count();
 
-                // Change button to log out of order and remove the back to order button
-                continueButton.Text = "Log out of table";
-                continueButton.Clicked -= unpaidBalanceButton;
-                continueButton.Clicked -= logOutButton;
-                continueButton.Clicked += logOutButton;
+                if (numUnprepared == 0)
+                {
+                    // Finish order
+                    await GetTableRequest.SendGetTableRequest(RealmManager.All<Order>().FirstOrDefault().table_number);
+                    await FinishOrderRequest.SendFinishOrderRequest(RealmManager.All<Table>().FirstOrDefault()._id);
 
-                backToOrderButton.IsVisible = false;
-                return;
+                    pleaseWaitLabel.IsVisible = false;
+                    continueButton.IsVisible = true;
+                    continueButton.IsEnabled = true;
+
+                    // Change button to log out of order and remove the back to order button
+                    continueButton.Text = "Log out of table";
+                    continueButton.Clicked -= unpaidBalanceButton;
+                    continueButton.Clicked -= logOutButton;
+                    continueButton.Clicked += logOutButton;
+
+                    backToOrderButton.IsVisible = false;
+                    return;
+                }
+                else
+                {
+                    pleaseWaitLabel.IsVisible = true;
+                    continueButton.IsEnabled = false;
+                    continueButton.Text = "Pull down on this button once your order is complete to log out";
+                }
             }
         }
 

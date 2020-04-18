@@ -53,7 +53,9 @@ namespace CustomerApp.Pages
                     paidForIDs.Add(o._id);
 
                 // Get most recent order from remote database
-                await DisplayOrder();
+                //await DisplayOrder();
+                // Fetch most recent order status
+                await GetOrderRequest.SendGetOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
 
                 List<Coupon> used = RealmManager.All<Coupon>().Where((Coupon c) => c.couponType == "Customer" && c.selected).ToList();
 

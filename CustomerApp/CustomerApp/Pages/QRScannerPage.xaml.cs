@@ -23,6 +23,17 @@ namespace CustomerApp.Pages
             GoogleVisionBarCodeScanner.Methods.SetIsScanning(true);
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            GoogleVisionBarCodeScanner.Methods.SetIsScanning(true);
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            GoogleVisionBarCodeScanner.Methods.SetIsScanning(false);
+        }
 
         /// <summary>
         /// initialize device flashlight
