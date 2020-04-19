@@ -9,3 +9,6 @@ After logging into a table, users can send a help or refill notification to the 
 
 # Compilation
 Clone the repository and compile via Visual Studio, then deploy or install the package.
+
+# Install
+Via APK: Copy the APK to your phone, then install. Install in spite of the warnings, the app is safe.
