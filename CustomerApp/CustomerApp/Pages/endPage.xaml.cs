@@ -58,8 +58,28 @@ namespace CustomerApp.Pages
                     RealmManager.RemoveAll<Order>();
                     RealmManager.RemoveAll<Table>();
                     RealmManager.RemoveAll<User>();
-                    await Navigation.PushAsync(new Login());
+                    await InsertPageBeneathAndPop();
                 }
+        }
+
+        private async Task InsertPageBeneathAndPop()
+        {
+            //get current app navigation stack
+            INavigation navigation = Xamarin.Forms.Application.Current.MainPage.Navigation;
+            //get current page
+            Page currentpage = navigation.NavigationStack.ElementAt(navigation.NavigationStack.Count - 1);
+
+            //remove anything beneath current page. Should always be no more than 3 things in stack at this point
+            while (navigation.NavigationStack.ElementAt(0) != currentpage)
+            {
+                navigation.RemovePage(navigation.NavigationStack.ElementAt(0));
+            }
+
+            Page LoginPage = new Login();
+            //insert loginPage beneath current page and pop to login page
+            navigation.InsertPageBefore(LoginPage, currentpage);
+            await System.Threading.Tasks.Task.Delay(100);
+            await navigation.PopAsync();
         }
 
         // Called when button is refreshed by pulling down

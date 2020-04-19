@@ -21,7 +21,7 @@ namespace CustomerApp.Pages
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
-
+             
             // Necessary for the refreshview to work
             System.Windows.Input.ICommand cmd = new Command(onRefresh);
             orderRefreshView.Command = cmd;
@@ -224,100 +224,110 @@ namespace CustomerApp.Pages
         {
             await GetCouponsRequest.SendGetCouponsRequest();
 
-            // Update active restaurant (sales, specials, etc.) coupons
-            foreach (Coupon c in RealmManager.All<CouponsList>().FirstOrDefault().Coupons)
+            foreach(Coupon c in RealmManager.All<CouponsList>().FirstOrDefault().Coupons)
             {
-                bool applied = false;
+                List<OrderItem> requiredItemList = new List<OrderItem>();
                 foreach (string reqID in c.requiredItems)
                 {
-                    List<OrderItem> requiredItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == reqID && !o.couponApplied && !o.paid).ToList();
-                    do
+                    foreach(OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => !o.paid && !o.couponApplied && o._id == reqID).ToList())
                     {
-                        if (!requiredItemList.Count().Equals(0)) // If the order contains at least one of the required items not already used for a different coupon
-                        {
-                            foreach (string applID in c.appliedItems)
-                            {
-                                List<OrderItem> appliedItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == applID && !o.couponApplied && !o.paid).ToList();
-                                if (!appliedItemList.Count().Equals(0))
-                                {
-                                    // For now just pick the first/default item from each list. Could be optimized later
-                                    OrderItem requiredItem = requiredItemList.FirstOrDefault();
-                                    OrderItem appliedItem = appliedItemList.FirstOrDefault();
-
-                                    var newPrice = RealmManager.Find<OrderItem>(appliedItem.newID).price * (1 - (c.discount / 100));
-                                    newPrice = Math.Round(newPrice, 2);
-
-                                    RealmManager.Write(() =>
-                                    {
-                                        RealmManager.Find<OrderItem>(appliedItem.newID).price = newPrice;
-                                        RealmManager.Find<OrderItem>(appliedItem.newID).couponApplied = true;
-                                        RealmManager.Find<OrderItem>(requiredItem.newID).couponApplied = true;
-                                    });
-                                    applied = true;
-                                    await Task.Delay(5);
-                                    break;
-                                }
-                            }
-                        }
-                        requiredItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == reqID && !o.couponApplied && !o.paid).ToList();
-                    }
-                    while (!requiredItemList.Count.Equals(0) && c.repeatable);
-
-                    if (!c.repeatable && applied)
-                    {
-                        break;
+                        requiredItemList.Add(o);
                     }
                 }
 
+                if (requiredItemList.Count.Equals(0))
+                    continue;
+
+                List<OrderItem> appliedItemList = new List<OrderItem>();
+                foreach (string reqID in c.appliedItems)
+                {
+                    foreach (OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => !o.paid && !o.couponApplied && o._id == reqID).ToList())
+                    {
+                        appliedItemList.Add(o);
+                    }
+                }
+
+                if (appliedItemList.Count.Equals(0))
+                    continue;
+
+                int reqIt = 0;
+                int appIt = 0;
+                do
+                {
+                    OrderItem currentReq = requiredItemList[reqIt];
+                    
+                    OrderItem currentApp = appliedItemList[appIt];
+
+                    var newPrice = RealmManager.Find<OrderItem>(currentApp.newID).price * (1 - (c.discount / 100));
+                    newPrice = Math.Round(newPrice, 2);
+
+                    RealmManager.Write(() =>
+                    {
+                        RealmManager.Find<OrderItem>(currentApp.newID).price = newPrice;
+                        RealmManager.Find<OrderItem>(currentApp.newID).couponApplied = true;
+                        RealmManager.Find<OrderItem>(currentReq.newID).couponApplied = true;
+                    });
+                    await Task.Delay(5);
+
+                    ++appIt;
+                    ++reqIt;
+                    if (reqIt >= requiredItemList.Count || appIt >= appliedItemList.Count)
+                        break;
+                }
+                while (c.repeatable);
             }
 
-            // Get most recent user data (including coupons)
-            //await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password);
-
-            // Update Customer coupons
-            foreach (Coupon c in RealmManager.All<Coupon>().Where((Coupon d) => d.couponType == "Customer" && d.selected))
+            foreach (Coupon c in RealmManager.All<Coupon>().Where((Coupon c) => c.selected && c.couponType == "Customer"))
             {
-                bool applied = false;
-                foreach (string reqID in c.requiredItems.ToList())
+                List<OrderItem> requiredItemList = new List<OrderItem>();
+                foreach (string reqID in c.requiredItems)
                 {
-                    List<OrderItem> requiredItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == reqID && !o.couponApplied && !o.paid).ToList();
-                    do
+                    foreach (OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => !o.paid && !o.couponApplied && o._id == reqID).ToList())
                     {
-                        if (!requiredItemList.Count().Equals(0)) // If the order contains at least one of the required items not already used for a different coupon
-                        {
-                            foreach (string applID in c.appliedItems)
-                            {
-                                List<OrderItem> appliedItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == applID && !o.couponApplied && !o.paid).ToList();
-                                if (!appliedItemList.Count().Equals(0))
-                                {
-                                    // For now just pick the first/default item from each list. Could be optimized later
-                                    OrderItem requiredItem = requiredItemList.FirstOrDefault();
-                                    OrderItem appliedItem = appliedItemList.FirstOrDefault();
-
-                                    var newPrice = RealmManager.Find<OrderItem>(appliedItem.newID).price * (1 - (c.discount / 100));
-                                    newPrice = Math.Round(newPrice, 2);
-
-                                    RealmManager.Write(() =>
-                                    {
-                                        RealmManager.Find<OrderItem>(appliedItem.newID).price = newPrice;
-                                        RealmManager.Find<OrderItem>(appliedItem.newID).couponApplied = true;
-                                        RealmManager.Find<OrderItem>(requiredItem.newID).couponApplied = true;
-                                    });
-                                    applied = true;
-                                    await Task.Delay(5);
-                                    break;
-                                }
-                            }
-                        }
-                        requiredItemList = RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => o._id == reqID && !o.couponApplied && !o.paid).ToList();
-                    }
-                    while (!requiredItemList.Count.Equals(0) && c.repeatable);
-
-                    if (!c.repeatable && applied)
-                    {
-                        break;
+                        requiredItemList.Add(o);
                     }
                 }
+
+                if (requiredItemList.Count.Equals(0))
+                    continue;
+
+                List<OrderItem> appliedItemList = new List<OrderItem>();
+                foreach (string reqID in c.appliedItems)
+                {
+                    foreach (OrderItem o in RealmManager.All<Order>().FirstOrDefault().menuItems.Where((OrderItem o) => !o.paid && !o.couponApplied && o._id == reqID).ToList())
+                    {
+                        appliedItemList.Add(o);
+                    }
+                }
+
+                if (appliedItemList.Count.Equals(0))
+                    continue;
+
+                int reqIt = 0;
+                int appIt = 0;
+                do
+                {
+                    OrderItem currentReq = requiredItemList[reqIt];
+
+                    OrderItem currentApp = appliedItemList[appIt];
+
+                    var newPrice = RealmManager.Find<OrderItem>(currentApp.newID).price * (1 - (c.discount / 100));
+                    newPrice = Math.Round(newPrice, 2);
+
+                    RealmManager.Write(() =>
+                    {
+                        RealmManager.Find<OrderItem>(currentApp.newID).price = newPrice;
+                        RealmManager.Find<OrderItem>(currentApp.newID).couponApplied = true;
+                        RealmManager.Find<OrderItem>(currentReq.newID).couponApplied = true;
+                    });
+                    await Task.Delay(5);
+
+                    ++appIt;
+                    ++reqIt;
+                    if (reqIt >= requiredItemList.Count || appIt >= appliedItemList.Count)
+                        break;
+                }
+                while (c.repeatable);
             }
         }
 

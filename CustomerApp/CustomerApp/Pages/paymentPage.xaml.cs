@@ -66,10 +66,11 @@ namespace CustomerApp.Pages
                 {
                     await DisplayAlert("Confimed", "Payment confirmed", "OK");
 
-                    //await GetTableRequest.SendGetTableRequest(RealmManager.All<User>().FirstOrDefault().tableNum);
-
-                    // Send tip
-                    await PostTipRequest.SendPostTipRequest(RealmManager.All<Order>().FirstOrDefault().employee_id, RealmManager.All<User>().FirstOrDefault().tip);
+                    if(RealmManager.All<User>().FirstOrDefault().tip > 0)
+                    {
+                        // Send tip
+                        await PostTipRequest.SendPostTipRequest(RealmManager.All<Order>().FirstOrDefault().employee_id, RealmManager.All<User>().FirstOrDefault().tip);
+                    }
 
                     await LeavePage();
                     return;
