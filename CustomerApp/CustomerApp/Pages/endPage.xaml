@@ -44,11 +44,21 @@
                         CornerRadius="15"
                         Clicked="logOutButton"/>
                     
+                    
                 </ScrollView>
             </RefreshView>
+            <Label
+                        x:Name="pleaseWaitLabel"
+                        VerticalOptions="Start"
+                        HorizontalOptions="Center"
+                        TextColor="Black"
+                        FontSize="Medium"
+                        Margin="15,15,15,15"
+                        HorizontalTextAlignment="Center"
+                        Text="Please wait while your food is being prepared."
+                        IsVisible="False"/>
 
-            
-            
+
 
             <!--Refill/help buttons-->
             <StackLayout

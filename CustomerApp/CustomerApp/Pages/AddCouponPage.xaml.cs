@@ -23,12 +23,25 @@ namespace CustomerApp.Pages
             InitializeComponent();
 
             GoogleVisionBarCodeScanner.Methods.SetSupportBarcodeFormat(BarcodeFormats.QRCode);
+            GoogleVisionBarCodeScanner.Methods.SetIsScanning(true);
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            GoogleVisionBarCodeScanner.Methods.SetIsScanning(true);
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            GoogleVisionBarCodeScanner.Methods.SetIsScanning(false);
         }
 
         async void OnFinalizeButtonClicked(object sender, EventArgs e)
         {
 
-            await Navigation.PopModalAsync();
+            await Navigation.PopAsync();
         }
 
         async void OnRefillButtonClicked(object sender, EventArgs e)
@@ -113,7 +126,7 @@ namespace CustomerApp.Pages
             // Get most recent user data (including coupons)
             var success = await UserAuthenticationRequest.SendUserAuthenticationRequest(RealmManager.All<User>().FirstOrDefault().email, RealmManager.All<User>().FirstOrDefault().password);
 
-            if (result != null && !(await GetCouponsByIDRequest.SendGetCouponsByIDRequest(result)))
+            if (result == null || !(await GetCouponsByIDRequest.SendGetCouponsByIDRequest(result)))
             {
                 await DisplayAlert("Invalid Coupon", "Sorry, we couldn't find that coupon, please try again", "OK");
                 GoogleVisionBarCodeScanner.Methods.SetIsScanning(true);
