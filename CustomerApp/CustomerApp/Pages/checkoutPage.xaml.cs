@@ -21,7 +21,7 @@ namespace CustomerApp.Pages
         {
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
-
+             
             // Necessary for the refreshview to work
             System.Windows.Input.ICommand cmd = new Command(onRefresh);
             orderRefreshView.Command = cmd;
