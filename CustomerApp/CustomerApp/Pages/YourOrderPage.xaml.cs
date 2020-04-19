@@ -166,6 +166,9 @@ namespace CustomerApp.Pages
                         // Else we move on
                     }
 
+                    //DECREMENT HERE
+                    await DecrementIngredients();
+
                     // Set order status to 'sent'
                     await SendOrderRequest.SendSendOrderRequest(RealmManager.All<Order>().FirstOrDefault()._id);
 
@@ -175,6 +178,15 @@ namespace CustomerApp.Pages
             else
             {
                 await DisplayAlert("Order cannot be empty", "You must add at least one item to your order before it can be sent.", "OK");
+            }
+        }
+        public async Task DecrementIngredients()
+        {
+            //get the total amount of ingredients used per order
+            foreach(IngredientCount i in RealmManager.All<Order>().FirstOrDefault().IngredientTotals)
+            {
+                int newQuantity = RealmManager.Find<Ingredient>(i._id).quantity - i.quantity;
+                await UpdateIngredientRequest.SendUpdateIngredientRequest(i._id, "quantity", newQuantity.ToString());
             }
         }
 
