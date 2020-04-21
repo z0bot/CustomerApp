@@ -29,6 +29,8 @@ namespace CustomerApp.Models
 
         public string category { get; set; }
 
+        public bool hotItem { get; set; } = false;
+
         // Default constructor
         public MenuFoodItem() { }
 
