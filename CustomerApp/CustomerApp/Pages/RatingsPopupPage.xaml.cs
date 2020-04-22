@@ -16,7 +16,7 @@ namespace CustomerApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class RatingsPopupPage : Rg.Plugins.Popup.Pages.PopupPage
     {
-        int rating = 0;
+        int Q1Rating = 0, Q2Rating = 0, Q3Rating = 0;
         public RatingsPopupPage()
         {
             InitializeComponent();
@@ -32,7 +32,7 @@ namespace CustomerApp.Pages
         {
             string empID = RealmManager.All<Order>().FirstOrDefault().employee_id;
             string orderID = RealmManager.All<Order>().FirstOrDefault()._id;
-            await PostReviewRequest.SendPostReviewRequest(orderID, empID, rating, uxReasonEntry.Text);
+            await PostReviewRequest.SendPostReviewRequest(orderID, empID, Q1Rating, uxQ1ReasonEntry.Text, Q2Rating, uxQ2ReasonEntry.Text, Q3Rating, uxQ3ReasonEntry.Text);
 
 
             await DisplayAlert("Sucess!","Thanks for your review", "OK");
@@ -40,56 +40,160 @@ namespace CustomerApp.Pages
             await PopupNavigation.Instance.PopAllAsync();
         }
 
-        private void uxRatingButton1_Clicked(object sender, EventArgs e)
+        private void uxQ1RatingButton1_Clicked(object sender, EventArgs e)
         {
-            uxRatingButton1.Source = "goldStar";
-            uxRatingButton2.Source = "greyStar";
-            uxRatingButton3.Source = "greyStar";
-            uxRatingButton4.Source = "greyStar";
-            uxRatingButton5.Source = "greyStar";
-            rating = 1;
+            uxQ1RatingButton1.Source = "goldStar";
+            uxQ1RatingButton2.Source = "greyStar";
+            uxQ1RatingButton3.Source = "greyStar";
+            uxQ1RatingButton4.Source = "greyStar";
+            uxQ1RatingButton5.Source = "greyStar";
+            Q1Rating = 1;
         }
 
-        private void uxRatingButton2_Clicked(object sender, EventArgs e)
+        private void uxQ1RatingButton2_Clicked(object sender, EventArgs e)
         {
-            uxRatingButton1.Source = "goldStar";
-            uxRatingButton2.Source = "goldStar";
-            uxRatingButton3.Source = "greyStar";
-            uxRatingButton4.Source = "greyStar";
-            uxRatingButton5.Source = "greyStar";
-            rating = 2;
+            uxQ1RatingButton1.Source = "goldStar";
+            uxQ1RatingButton2.Source = "goldStar";
+            uxQ1RatingButton3.Source = "greyStar";
+            uxQ1RatingButton4.Source = "greyStar";
+            uxQ1RatingButton5.Source = "greyStar";
+            Q1Rating = 2;
         }
 
         //btn3
-        private void uxRatingButton3_Clicked(object sender, EventArgs e)
+        private void uxQ1RatingButton3_Clicked(object sender, EventArgs e)
         {
-            uxRatingButton1.Source = "goldStar";
-            uxRatingButton2.Source = "goldStar";
-            uxRatingButton3.Source = "goldStar";
-            uxRatingButton4.Source = "greyStar";
-            uxRatingButton5.Source = "greyStar";
-            rating = 3;
+            uxQ1RatingButton1.Source = "goldStar";
+            uxQ1RatingButton2.Source = "goldStar";
+            uxQ1RatingButton3.Source = "goldStar";
+            uxQ1RatingButton4.Source = "greyStar";
+            uxQ1RatingButton5.Source = "greyStar";
+            Q1Rating = 3;
         }
 
         //btn4
-        private void uxRatingButton4_Clicked(object sender, EventArgs e)
+        private void uxQ1RatingButton4_Clicked(object sender, EventArgs e)
         {
-            uxRatingButton1.Source = "goldStar";
-            uxRatingButton2.Source = "goldStar";
-            uxRatingButton3.Source = "goldStar";
-            uxRatingButton4.Source = "goldStar";
-            uxRatingButton5.Source = "greyStar";
-            rating = 4;
+            uxQ1RatingButton1.Source = "goldStar";
+            uxQ1RatingButton2.Source = "goldStar";
+            uxQ1RatingButton3.Source = "goldStar";
+            uxQ1RatingButton4.Source = "goldStar";
+            uxQ1RatingButton5.Source = "greyStar";
+            Q1Rating = 4;
         }
         //btn5
-        private void uxRatingButton5_Clicked(object sender, EventArgs e)
+        private void uxQ1RatingButton5_Clicked(object sender, EventArgs e)
         {
-            uxRatingButton1.Source = "goldStar";
-            uxRatingButton2.Source = "goldStar";
-            uxRatingButton3.Source = "goldStar";
-            uxRatingButton4.Source = "goldStar";
-            uxRatingButton5.Source = "goldStar";
-            rating = 5;
+            uxQ1RatingButton1.Source = "goldStar";
+            uxQ1RatingButton2.Source = "goldStar";
+            uxQ1RatingButton3.Source = "goldStar";
+            uxQ1RatingButton4.Source = "goldStar";
+            uxQ1RatingButton5.Source = "goldStar";
+            Q1Rating = 5;
+        }
+
+        private void uxQ2RatingButton1_Clicked(object sender, EventArgs e)
+        {
+            uxQ2RatingButton1.Source = "goldStar";
+            uxQ2RatingButton2.Source = "greyStar";
+            uxQ2RatingButton3.Source = "greyStar";
+            uxQ2RatingButton4.Source = "greyStar";
+            uxQ2RatingButton5.Source = "greyStar";
+            Q2Rating = 1;
+        }
+
+        private void uxQ2RatingButton2_Clicked(object sender, EventArgs e)
+        {
+            uxQ2RatingButton1.Source = "goldStar";
+            uxQ2RatingButton2.Source = "goldStar";
+            uxQ2RatingButton3.Source = "greyStar";
+            uxQ2RatingButton4.Source = "greyStar";
+            uxQ2RatingButton5.Source = "greyStar";
+            Q2Rating = 2;
+        }
+
+        //btn3
+        private void uxQ2RatingButton3_Clicked(object sender, EventArgs e)
+        {
+            uxQ2RatingButton1.Source = "goldStar";
+            uxQ2RatingButton2.Source = "goldStar";
+            uxQ2RatingButton3.Source = "goldStar";
+            uxQ2RatingButton4.Source = "greyStar";
+            uxQ2RatingButton5.Source = "greyStar";
+            Q2Rating = 3;
+        }
+
+        //btn4
+        private void uxQ2RatingButton4_Clicked(object sender, EventArgs e)
+        {
+            uxQ2RatingButton1.Source = "goldStar";
+            uxQ2RatingButton2.Source = "goldStar";
+            uxQ2RatingButton3.Source = "goldStar";
+            uxQ2RatingButton4.Source = "goldStar";
+            uxQ2RatingButton5.Source = "greyStar";
+            Q2Rating = 4;
+        }
+        //btn5
+        private void uxQ2RatingButton5_Clicked(object sender, EventArgs e)
+        {
+            uxQ2RatingButton1.Source = "goldStar";
+            uxQ2RatingButton2.Source = "goldStar";
+            uxQ2RatingButton3.Source = "goldStar";
+            uxQ2RatingButton4.Source = "goldStar";
+            uxQ2RatingButton5.Source = "goldStar";
+            Q2Rating = 5;
+        }
+
+        private void uxQ3RatingButton1_Clicked(object sender, EventArgs e)
+        {
+            uxQ3RatingButton1.Source = "goldStar";
+            uxQ3RatingButton2.Source = "greyStar";
+            uxQ3RatingButton3.Source = "greyStar";
+            uxQ3RatingButton4.Source = "greyStar";
+            uxQ3RatingButton5.Source = "greyStar";
+            Q3Rating = 1;
+        }
+
+        private void uxQ3RatingButton2_Clicked(object sender, EventArgs e)
+        {
+            uxQ3RatingButton1.Source = "goldStar";
+            uxQ3RatingButton2.Source = "goldStar";
+            uxQ3RatingButton3.Source = "greyStar";
+            uxQ3RatingButton4.Source = "greyStar";
+            uxQ3RatingButton5.Source = "greyStar";
+            Q3Rating = 2;
+        }
+
+        //btn3
+        private void uxQ3RatingButton3_Clicked(object sender, EventArgs e)
+        {
+            uxQ3RatingButton1.Source = "goldStar";
+            uxQ3RatingButton2.Source = "goldStar";
+            uxQ3RatingButton3.Source = "goldStar";
+            uxQ3RatingButton4.Source = "greyStar";
+            uxQ3RatingButton5.Source = "greyStar";
+            Q3Rating = 3;
+        }
+
+        //btn4
+        private void uxQ3RatingButton4_Clicked(object sender, EventArgs e)
+        {
+            uxQ3RatingButton1.Source = "goldStar";
+            uxQ3RatingButton2.Source = "goldStar";
+            uxQ3RatingButton3.Source = "goldStar";
+            uxQ3RatingButton4.Source = "goldStar";
+            uxQ3RatingButton5.Source = "greyStar";
+            Q3Rating = 4;
+        }
+        //btn5
+        private void uxQ3RatingButton5_Clicked(object sender, EventArgs e)
+        {
+            uxQ3RatingButton1.Source = "goldStar";
+            uxQ3RatingButton2.Source = "goldStar";
+            uxQ3RatingButton3.Source = "goldStar";
+            uxQ3RatingButton4.Source = "goldStar";
+            uxQ3RatingButton5.Source = "goldStar";
+            Q3Rating = 5;
         }
     }
 }
