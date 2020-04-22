@@ -73,6 +73,7 @@
                         />
                 </StackLayout>
                 <Entry
+                    x:Name="uxUserReview"
                     Margin="0,40,0,0"
                     Placeholder="We'll take compliments for free!"
                     >
