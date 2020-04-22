@@ -24,7 +24,7 @@ namespace CustomerApp.Pages
 
         private async void uxDeclineBtn_Clicked(object sender, EventArgs e)
         {
-            //await Navigation.PopModalAsync();
+            //special type of pop out of page due to plugin
             await PopupNavigation.Instance.PopAllAsync();
         }
 
@@ -36,7 +36,7 @@ namespace CustomerApp.Pages
 
 
             await DisplayAlert("Sucess!","Thanks for your review", "OK");
-            //await Navigation.PopModalAsync();
+            //special type of pop out of page due to plugin
             await PopupNavigation.Instance.PopAllAsync();
         }
 
