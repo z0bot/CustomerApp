@@ -27,12 +27,14 @@ namespace CustomerApp.Pages
             System.Windows.Input.ICommand cmd = new Command(onRefresh);
             refresher.Command = cmd;
             updateLabel();
+
+            Task.Run(async () => await PopupNavigation.Instance.PushAsync(new RatingsPopupPage()));
         }
         protected async override void OnAppearing()
         {
             base.OnAppearing();
             //await Navigation.PushModalAsync(new RatingsPopupPage());
-            await PopupNavigation.Instance.PushAsync(new RatingsPopupPage());
+            
         }
         /// <summary>
         /// Called when at least 1 item remains unpaid after the order is updated
