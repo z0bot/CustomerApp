@@ -92,11 +92,11 @@ namespace CustomerApp.Pages
                 Button temp;
                 string itemName = members[i].name;
                 string itemID = members[i]._id;
-                if (members[i].hotItem)
+                if (members[i].isHot)
                 {
                     categoryItemList.Children.Add(temp = (new Button()
                     {
-                        Text = members[i].name + " HOT! | " + members[i].StringPrice,
+                        Text = members[i].name + " 🔥 |" + members[i].StringPrice,
                         Margin = new Thickness(20, 0, 20, 20),
                         FontAttributes = FontAttributes.Bold,
                         TextColor = Color.White,
