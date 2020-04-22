@@ -79,9 +79,9 @@
                         Clicked="uxQ1RatingButton5_Clicked"
                         Source="greyStar.jpeg"
                         />
-                        </StackLayout>
-                        <Entry
-                    x:Name="uxQ1ReasonEntry"
+                </StackLayout>
+                <Entry
+                    x:Name="uxUserReview"
                     Margin="0,40,0,0"
                     Placeholder="We'll take compliments for free!"
                     >

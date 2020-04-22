@@ -22,12 +22,14 @@ namespace CustomerApp.Pages
             InitializeComponent();
         }
 
+        //inidicates no review was submitted so just pop back 
         private async void uxDeclineBtn_Clicked(object sender, EventArgs e)
         {
             //special type of pop out of page due to plugin
             await PopupNavigation.Instance.PopAllAsync();
         }
 
+        //review was written. send review service request here
         private async void uxSubmitBtn_Clicked(object sender, EventArgs e)
         {
             string empID = RealmManager.All<Order>().FirstOrDefault().employee_id;
