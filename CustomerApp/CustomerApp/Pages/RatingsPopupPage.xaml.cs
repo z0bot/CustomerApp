@@ -33,65 +33,48 @@ namespace CustomerApp.Pages
 
         private void uxRatingButton1_Clicked(object sender, EventArgs e)
         {
-            setButtonOne();
-        }
-        public void setButtonOne()
-        {
             uxRatingButton1.Source = "goldStar";
+            uxRatingButton2.Source = "greyStar";
+            uxRatingButton3.Source = "greyStar";
+            uxRatingButton4.Source = "greyStar";
+            uxRatingButton5.Source = "greyStar";
         }
 
         private void uxRatingButton2_Clicked(object sender, EventArgs e)
         {
-            setButtonOne();
-            setButtonTwo();
-        }
-        public void setButtonTwo()
-        {
+            uxRatingButton1.Source = "goldStar";
             uxRatingButton2.Source = "goldStar";
-            //uxRatingButton3.Source = "greyStar";
-            //uxRatingButton4.Source = "greyStar";
-            //uxRatingButton5.Source = "greyStar";
+            uxRatingButton3.Source = "greyStar";
+            uxRatingButton4.Source = "greyStar";
+            uxRatingButton5.Source = "greyStar";
         }
 
         //btn3
         private void uxRatingButton3_Clicked(object sender, EventArgs e)
         {
-            setButtonOne();
-            setButtonTwo();
-            setButtonThree();
-        }
-        public void setButtonThree()
-        {
+            uxRatingButton1.Source = "goldStar";
+            uxRatingButton2.Source = "goldStar";
             uxRatingButton3.Source = "goldStar";
-            //uxRatingButton4.Source = "greyStar";
-            //uxRatingButton5.Source = "greyStar";
+            uxRatingButton4.Source = "greyStar";
+            uxRatingButton5.Source = "greyStar";
         }
 
         //btn4
         private void uxRatingButton4_Clicked(object sender, EventArgs e)
         {
-            setButtonOne();
-            setButtonTwo();
-            setButtonThree();
-            setButtonFour();
-        }
-        public void setButtonFour()
-        {
+            uxRatingButton1.Source = "goldStar";
+            uxRatingButton2.Source = "goldStar";
+            uxRatingButton3.Source = "goldStar";
             uxRatingButton4.Source = "goldStar";
-            //uxRatingButton5.Source = "greyStar";
+            uxRatingButton5.Source = "greyStar";
         }
-
         //btn5
         private void uxRatingButton5_Clicked(object sender, EventArgs e)
         {
-            setButtonOne();
-            setButtonTwo();
-            setButtonThree();
-            setButtonFour();
-            setButtonFive();
-        }
-        public void setButtonFive()
-        {
+            uxRatingButton1.Source = "goldStar";
+            uxRatingButton2.Source = "goldStar";
+            uxRatingButton3.Source = "goldStar";
+            uxRatingButton4.Source = "goldStar";
             uxRatingButton5.Source = "goldStar";
         }
     }
