@@ -20,14 +20,14 @@ namespace CustomerApp.Pages
 
         private async void uxDeclineBtn_Clicked(object sender, EventArgs e)
         {
-            //await Navigation.PopModalAsync();
+            //special type of pop out of page due to plugin
             await PopupNavigation.Instance.PopAllAsync();
         }
 
         private async void uxSubmitBtn_Clicked(object sender, EventArgs e)
         {
             await DisplayAlert("Sucess!","Thanks for your review", "OK");
-            //await Navigation.PopModalAsync();
+            //special type of pop out of page due to plugin
             await PopupNavigation.Instance.PopAllAsync();
         }
 

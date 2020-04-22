@@ -17,7 +17,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Frame
-            BackgroundColor="White"
+            BackgroundColor="#f5f5f5"
             Grid.Row="0">
             <StackLayout
                 Margin="0,40,0,0"
