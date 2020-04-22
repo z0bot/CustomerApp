@@ -81,7 +81,7 @@
                         />
                 </StackLayout>
                 <Entry
-                    x:Name="uxUserReview"
+                    x:Name="uxQ1UserReview"
                     Margin="0,40,0,0"
                     Placeholder="We'll take compliments for free!"
                     >
@@ -147,7 +147,7 @@
                         />
                         </StackLayout>
                         <Entry
-                    x:Name="uxQ2ReasonEntry"
+                    x:Name="uxQ2UserReview"
                     Margin="0,40,0,0"
                     Placeholder="In case you can't say it to their face."
                     >
@@ -213,7 +213,7 @@
                         />
                         </StackLayout>
                         <Entry
-                    x:Name="uxQ3ReasonEntry"
+                    x:Name="uxQ3UserReview"
                     Margin="0,40,0,0"
                     Placeholder="Don't worry, it can't hear you now."
                     >

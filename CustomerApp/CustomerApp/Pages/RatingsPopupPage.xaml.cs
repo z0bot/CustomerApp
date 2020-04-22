@@ -34,7 +34,7 @@ namespace CustomerApp.Pages
         {
             string empID = RealmManager.All<Order>().FirstOrDefault().employee_id;
             string orderID = RealmManager.All<Order>().FirstOrDefault()._id;
-            await PostReviewRequest.SendPostReviewRequest(orderID, empID, Q1Rating, uxQ1ReasonEntry.Text, Q2Rating, uxQ2ReasonEntry.Text, Q3Rating, uxQ3ReasonEntry.Text);
+            await PostReviewRequest.SendPostReviewRequest(orderID, empID, Q1Rating, uxQ1UserReview.Text, Q2Rating, uxQ2UserReview.Text, Q3Rating, uxQ3UserReview.Text);
 
 
             await DisplayAlert("Sucess!","Thanks for your review", "OK");
