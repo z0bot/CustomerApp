@@ -10,6 +10,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 using CustomerApp.Models.ServiceRequests;
+using Rg.Plugins.Popup.Services;
 
 namespace CustomerApp.Pages
 {
@@ -26,8 +27,15 @@ namespace CustomerApp.Pages
             System.Windows.Input.ICommand cmd = new Command(onRefresh);
             refresher.Command = cmd;
             updateLabel();
-        }
 
+            Task.Run(async () => await PopupNavigation.Instance.PushAsync(new RatingsPopupPage()));
+        }
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            //await Navigation.PushModalAsync(new RatingsPopupPage());
+            
+        }
         /// <summary>
         /// Called when at least 1 item remains unpaid after the order is updated
         /// </summary>

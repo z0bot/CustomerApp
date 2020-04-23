@@ -57,6 +57,9 @@
     <PackageReference Include="BarcodeScanner.XF">
       <Version>4.2.2.2</Version>
     </PackageReference>
+    <PackageReference Include="Rg.Plugins.Popup">
+      <Version>2.0.0.2</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.CardIO.Android">
       <Version>5.5.1</Version>
     </PackageReference>
@@ -155,6 +158,8 @@
     <AndroidResource Include="Resources\drawable\trashIcon.png" />
     <AndroidResource Include="Resources\drawable\coupon.png" />
     <AndroidResource Include="Resources\drawable\pointsIcon.png" />
+    <AndroidResource Include="Resources\drawable\goldStar.jpeg" />
+    <AndroidResource Include="Resources\drawable\greyStar.jpeg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
