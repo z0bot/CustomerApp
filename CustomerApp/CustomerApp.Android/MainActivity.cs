@@ -30,6 +30,10 @@ namespace CustomerApp.Droid
             Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, savedInstanceState);
             //finish google plugin
 
+            //added for rating pop up
+            Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
+            //finish for rating pop up
+
             // Necessary for Swipe view on YourOrder page
             Forms.SetFlags("SwipeView_Experimental");
 
