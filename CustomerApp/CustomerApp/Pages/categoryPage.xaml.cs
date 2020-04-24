@@ -92,16 +92,32 @@ namespace CustomerApp.Pages
                 Button temp;
                 string itemName = members[i].name;
                 string itemID = members[i]._id;
-                categoryItemList.Children.Add(temp = (new Button()
+                if (members[i].isHot)
                 {
-                    Text = members[i].name + " | " + members[i].StringPrice,
-                    Margin = new Thickness(20, 0, 20, 20),
-                    FontAttributes = FontAttributes.Bold,
-                    TextColor = Color.White,
-                    WidthRequest = 140,
-                    BackgroundColor = Color.FromHex("1fbd85"),
-                    CornerRadius = 15
-                }));
+                    categoryItemList.Children.Add(temp = (new Button()
+                    {
+                        Text = members[i].name + " 🔥 |" + members[i].StringPrice,
+                        Margin = new Thickness(20, 0, 20, 20),
+                        FontAttributes = FontAttributes.Bold,
+                        TextColor = Color.White,
+                        WidthRequest = 160,
+                        BackgroundColor = Color.FromHex("f01111"), // Red
+                        CornerRadius = 15
+                    }));
+                }
+                else
+                {
+                    categoryItemList.Children.Add(temp = (new Button()
+                    {
+                        Text = members[i].name + " | " + members[i].StringPrice,
+                        Margin = new Thickness(20, 0, 20, 20),
+                        FontAttributes = FontAttributes.Bold,
+                        TextColor = Color.White,
+                        WidthRequest = 160,
+                        BackgroundColor = Color.FromHex("1fbd85"),
+                        CornerRadius = 15
+                    }));
+                }
 
                 temp.Clicked += async (sender, args) => await Navigation.PushAsync(new menuItemPage(itemID));
             }
